@@ -1,12 +1,14 @@
 id,country,code,city,citylabel,year,month,date,lat,long,n_neighb,lab_idexx,lab_membrane,col,lab,hh,sc,co
-1,Cambodia,KHM,Siem Reap,Siem Reap 16,2016,8,8/1/2016,13.3671,103.8448,5,0,1,1,1,1,0,0
-2,Bangladesh,BGD,Dhaka,Dhaka 17,2017,3,3/1/2017,23.8103,90.4125,10,1,0,1,1,1,1,1
-3,Ghana,GHA,Accra,Accra 16,2016,3,3/1/2016,5.6037,-0.187,5,0,1,1,1,1,1,1
-4,Zambia,ZMB,Lusaka,Lusaka 18,2018,4,4/1/2018,-15.40669,28.28713,1,1,0,1,1,1,1,1
-5,Mozambique,MOZ,Maputo,Maputo 15,2015,3,3/1/2015,-25.953724,32.588711,2,0,1,1,1,1,0,0
-6,Ghana,GHA,Accra,Accra 18,2018,10,10/1/2018,5.6037,-0.187,2,0,1,1,1,1,1,1
-7,Ghana,GHA,Kumasi,Kumasi 18,2018,10,10/1/2018,6.68848,-1.62443,4,0,1,1,1,1,1,1
-8,Mozambique,MOZ,Maputo,Maputo 16,2016,5,5/1/2016,-25.953724,32.588711,2,0,1,1,1,1,0,0
-9,Uganda,UGA,Kampala,Kampala 18,2018,10,10/1/2018,0.347596,32.58252,5,0,1,1,1,1,1,1
-10,USA,USA,Atlanta,Atlanta 16,2016,11,11/1/2016,33.753746,-84.38633,1,0,1,1,1,1,0,0
-11,India,IND,Vellore,Vellore 14,2014,2,2/1/2014,12.934968,79.146881,2,0,1,1,1,1,1,1
+1,Cambodia,KHM,Siem Reap,Siem Reap 16,2016,8,8/1/16,13.3671,103.8448,5,0,1,1,1,1,0,0
+2,Bangladesh,BGD,Dhaka,Dhaka 17,2017,3,3/1/17,23.8103,90.4125,10,1,0,1,1,1,1,1
+3,Ghana,GHA,Accra,Accra 16,2016,3,3/1/16,5.6037,-0.187,5,0,1,1,1,1,1,1
+4,Zambia,ZMB,Lusaka,Lusaka 18,2018,4,4/1/18,-15.40669,28.28713,1,1,0,1,1,1,1,1
+5,Mozambique,MOZ,Maputo,Maputo 15,2015,3,3/1/15,-25.953724,32.588711,2,0,1,1,1,1,0,0
+6,Ghana,GHA,Accra,Accra 18,2018,10,10/1/18,5.6037,-0.187,2,0,1,1,1,1,1,1
+7,Ghana,GHA,Kumasi,Kumasi 18,2018,10,10/1/18,6.68848,-1.62443,4,0,1,1,1,1,1,1
+8,Mozambique,MOZ,Maputo,Maputo 16,2016,5,5/1/16,-25.953724,32.588711,2,0,1,1,1,1,0,0
+9,Uganda,UGA,Kampala,Kampala 18,2018,10,10/1/18,0.347596,32.58252,5,0,1,1,1,1,1,1
+10,USA,USA,Atlanta,Atlanta 16,2016,11,11/1/16,33.753746,-84.38633,1,1,0,1,1,1,0,0
+11,India,IND,Vellore,Vellore 14,2014,2,2/1/14,12.934968,79.146881,2,0,1,1,1,1,1,1
+12,Senegal,SEN,Dakar,Dakar 19,2019,11,11/1/19,,,5,0,1,1,1,1,1,1
+13,Zambia,ZMB,Lusaka,Lusaka 19,2019,10,10/1/19,-15.40669,28.28713,3,1,0,1,1,1,1,1
