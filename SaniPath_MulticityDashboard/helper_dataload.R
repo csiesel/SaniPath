@@ -1,15 +1,16 @@
 # data load
 library(readxl)
+library(dplyr)
 
 # load
-meta_dply <- read.csv( "data/meta_deployments.csv", stringsAsFactors = F)
-meta_neighb <- read.csv( "data/meta_neighborhoods.csv", stringsAsFactors = F)
-meta_sampleID <- read.csv( "data/meta_sampleID.csv", stringsAsFactors = F)
+meta_dply <- read.csv( "SaniPath_MulticityDashboard/data/meta_deployments.csv", stringsAsFactors = F)
+meta_neighb <- read.csv( "SaniPath_MulticityDashboard/data/meta_neighborhoods.csv", stringsAsFactors = F)
+meta_sampleID <- read.csv( "SaniPath_MulticityDashboard/data/meta_sampleID.csv", stringsAsFactors = F)
 
-df.behav <- read.csv( "data/behavior_all_city_percent_02122020.csv", stringsAsFactors = F) #done
-df.ecdata <- read.csv( "data/ec_data_2020-02-12.csv", stringsAsFactors = F) #done
-df.col <- read.csv( "data/col_merged_2020-02-12.csv", stringsAsFactors = F) #done
-df.exposure <- read.csv("data/multicity_exposure_2020-02-18.csv", stringsAsFactors = F) #done
+df.behav <- read.csv( "SaniPath_MulticityDashboard/data/behavior_all_city_percent_02122020.csv", stringsAsFactors = F) #done
+df.ecdata <- read.csv( "SaniPath_MulticityDashboard/data/ec_data_2020-02-12.csv", stringsAsFactors = F) #done
+df.col <- read.csv( "SaniPath_MulticityDashboard/data/col_merged_2020-02-12.csv", stringsAsFactors = F) #done
+df.exposure <- read.csv("SaniPath_MulticityDashboard/data/multicity_exposure_2020-02-18.csv", stringsAsFactors = F) #done
 
 # **************************************************************************************************
 # modify data
@@ -41,6 +42,23 @@ meta_sampleID <- meta_sampleID %>%
 df.ecdata <- df.ecdata %>% 
         left_join(., meta_sampleID, by = c("sample_type" = "id")) %>%
         left_join(., meta_dply[, c("id", "country", "city", "citylabel")], by = c("dply_num" = "id"))
+
+# Casey is doing this to standardize E. coli data (x-min/max-min)
+df.ecdata$std_ec_conc <- 0
+max_min <- df.ecdata %>% group_by(sample_type) %>% summarise(max=max(ec_conc, na.rm=TRUE), min=min(ec_conc, na.rm=TRUE))
+for(i in 1:nrow(df.ecdata)){
+  if(is.na(df.ecdata$ec_conc[i])){
+    df.ecdata$std_ec_conc[i]=NA
+  }
+  else{
+    max<-
+    df.ecdata$std_ec_conc[i]=()
+  }
+}
+
+
+
+
 
 # df.ecdata$sample_type[df.ecdata$sample_type == 3 & df.ecdata$col_sample_type_alt != "Drinking Water" 
                       # & df.ecdata$col_sample_type_alt != "" ] <- 33
