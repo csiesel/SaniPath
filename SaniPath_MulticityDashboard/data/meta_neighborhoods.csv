@@ -1,0 +1,40 @@
+id,deployment_id,deployment,neighborhood_id,neighb_UID,neighborhood,note,lat,long,SES,population,pop_male,pop_female,households,size_m2,size_km2,pop_density_pop-km2,source
+1,1,Cambodia,1,101,Chong Kaosou,Informal,13.35694,103.8862,very low income,,,,,,,,
+2,1,Cambodia,2,102,Kumruthemey (informal),Informal,13.37706,103.8562,very low income,,,,,,,,
+3,1,Cambodia,3,103,Kumruthemey (formal),Formal,13.37586,103.8568,low income,,,,,,,,
+4,1,Cambodia,4,104,Steung Thumey,Formal,13.35206,103.8496,middle income,,,,,,,,
+5,1,Cambodia,5,105,Veal/ Trapangses,Formal,13.3843,103.8522,middle income,,,,,,,,
+6,2,Bangladesh,1,201,Kalshi,North,23.82373,90.37833,,8333,4143,4190,,,,,
+7,2,Bangladesh,2,202,Badda,North,23.77097,90.43085,,,,,,,,,
+8,2,Bangladesh,3,203,Gabtoli,North,23.7802,90.34167,,,,,,,,,
+9,2,Bangladesh,4,204,Uttarkhan,North,23.86942,90.43011,,78933,41362,37571,,,20.01343813,3944,
+10,2,Bangladesh,5,205,Gulshan,North,23.78448,90.41635,,253050,140322,112728,,,,,
+11,2,Bangladesh,6,206,Kamalapur,South,23.72565,90.42654,,2503,1642,861,,,,,
+12,2,Bangladesh,7,207,Shampur,South,23.70232,90.42838,,,,,,,,,
+13,2,Bangladesh,8,208,Hazaribagh,South,23.72505,90.37286,,185639,100776,84863,,,,,
+14,2,Bangladesh,9,209,Motijhil,South,23.73579,90.42147,,,,,,,,,
+15,2,Bangladesh,10,210,Dhanmondi,South,23.74656,90.37253,,147643,79465,68178,,,,,
+16,3,Ghana,1,301,Shiabu,,5.526296,-0.2572123,,4868,2402,2466,1361,161052,0.161052,30226,GSS 2010
+17,3,Ghana,2,302,Chorkor,,5.527812,-0.2446458,,26855,12610,14245,7395,735750,0.73575,36500,GSS 2010
+18,3,Ghana,3,303,Kokomlemle,,5.576793,-0.2103562,,35320,16588,18732,9477,1723450,1.72345,20494,GSS 2010
+19,3,Ghana,4,304,Ringway,,5.55928,-0.1869135,,2825,1432,1393,782,973460,0.97346,2902,GSS 2010
+20,3,Ghana,5,305,Adabraka,,5.56203,-0.2127647,,36510,17582,18928,10736,2047416,2.047416,17832,GSS 2010
+21,4,Zambia,1,401,Kanyama,,-15.43244,28.23897,,366170,180880,185290,,,,,
+22,5,Mozambique,1,501,Intervention,,-25.94437,32.5596,,,,,,,,,
+23,5,Mozambique,2,502,Control,,-25.94347,32.58266,,,,,,,,,
+24,6,Ghana,1,601,Mataheko,,5.56333,-0.240257,,14839,6998,7841,4289,830154,0.830154,17875,GSS 2010
+25,6,Ghana,2,602,Osu Alata,,5.550101,-0.182799,,54899,25809,29090,16959,2745005,2.745005,20000,GSS 2010
+26,7,Ghana,1,701,FanteNewTown,,6.693458,-1.618455,,19690,9286,10404,5500,,,,GSS 2010
+27,7,Ghana,2,702,MoshieZongo,,6.723112,-1.603422,,15385,7693,769,2506,,,,GSS 2010
+28,7,Ghana,3,703,Dakodwom,,6.670354,-1.630222,,2554,1209,134,612,,,,GSS 2010
+29,7,Ghana,4,704,Ahodwo,,6.657931,-1.618092,,7794,3967,2157,2157,,,,GSS 2010
+30,8,Mozambique,1,801,Intervention,,-25.94359,32.56064,,,,,,,,,
+31,8,Mozambique,2,802,Control,,-25.94474,32.58004,,,,,,,,,
+32,9,Uganda,1,901,Makindye,,0.3005187,32.62259,,,,,,,,,
+33,9,Uganda,2,902,Central,,0.3444703,32.5875,,,,,,,,,
+34,9,Uganda,3,903,Kawempe,,0.3555728,32.56152,,,,,,,,,
+35,9,Uganda,4,904,Rubaga,,0.2827107,32.55198,,,,,,,,,
+36,9,Uganda,5,905,Nakawa,,0.334497,32.6342,,,,,,,,,
+37,10,USA,1,1001,Peoplestown,,33.7249,-84.38518,,,,,,,,,
+38,11,India,1,1101,Old Town,,12.8977,77.78324,,,,,,,,,
+39,11,India,2,1102,Chinna Allapuram,,12.89986,79.12477,,,,,,,,,
