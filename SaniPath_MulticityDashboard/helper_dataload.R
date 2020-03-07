@@ -51,8 +51,9 @@ for(i in 1:nrow(df.ecdata)){
     df.ecdata$std_ec_conc[i]=NA
   }
   else{
-    max<-
-    df.ecdata$std_ec_conc[i]=()
+    max<-log10(max_min$max[which(max_min$sample_type==df.ecdata$sample_type[i])])
+    min<-log10(max_min$min[which(max_min$sample_type==df.ecdata$sample_type[i])])
+    df.ecdata$std_ec_conc[i]=(log10(df.ecdata$ec_conc[i])-min)/(max-min) 
   }
 }
 
