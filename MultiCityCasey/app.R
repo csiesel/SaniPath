@@ -95,7 +95,7 @@ server <- function(input, output) {
         df.ecdata %>% filter(city %in% citychoice()) %>%
             
 
-            ggplot(., aes(y=factor(hood), x=log10(ec_conc), fill=city)) +
+            ggplot(., aes(y=factor(hood), x=log10(ec_conc))) +
             stat_density_ridges(aes(fill=city), quantile_lines=TRUE, quantiles=2) +
             # geom_point(aes(color=city) ) +
             # facet_grid( ~ sample_type_name, scales = "free_x", space = "free_x") +
