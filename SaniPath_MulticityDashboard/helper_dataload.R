@@ -12,6 +12,9 @@ df.ecdata <- read.csv( "data/ec_data_2020-02-12.csv", stringsAsFactors = F) #don
 df.col <- read.csv( "data/col_merged_2020-02-12.csv", stringsAsFactors = F) #done
 df.exposure <- read.csv("data/multicity_exposure_2020-02-18.csv", stringsAsFactors = F) #done
 
+cities <- unique(meta_dply$city)
+hoods <- unique(meta_neighb$neighborhood)
+cities2 <- factor(cities)
 # **************************************************************************************************
 # modify data
 colnames(df.behav) <- c("city", "sample_type", "pop", "sum", "10+", "6-10", "<5", "Never")
@@ -57,7 +60,15 @@ for(i in 1:nrow(df.ecdata)){
   }
 }
 
-
+df.ecdata$hood <- ""
+for(i in 1:nrow(df.ecdata)){
+  if(is.na(df.ecdata$neighb_UID[i])){
+    df.ecdata$hood[i]=""
+  }
+  else{
+    df.ecdata$hood[i] = meta_neighb$neighborhood[which(meta_neighb$neighb_UID==df.ecdata$neighb_UID[i])]
+  }
+}
 
 
 
