@@ -3,14 +3,14 @@ library(readxl)
 library(dplyr)
 
 # load
-meta_dply <- read.csv( "SaniPath_MulticityDashboard/data/meta_deployments.csv", stringsAsFactors = F)
-meta_neighb <- read.csv( "SaniPath_MulticityDashboard/data/meta_neighborhoods.csv", stringsAsFactors = F)
-meta_sampleID <- read.csv( "SaniPath_MulticityDashboard/data/meta_sampleID.csv", stringsAsFactors = F)
+meta_dply <- read.csv( "data/meta_deployments.csv", stringsAsFactors = F)
+meta_neighb <- read.csv( "data/meta_neighborhoods.csv", stringsAsFactors = F)
+meta_sampleID <- read.csv( "data/meta_sampleID.csv", stringsAsFactors = F)
 
-df.behav <- read.csv( "SaniPath_MulticityDashboard/data/behavior_all_city_percent_02122020.csv", stringsAsFactors = F) #done
-df.ecdata <- read.csv( "SaniPath_MulticityDashboard/data/ec_data_2020-02-12.csv", stringsAsFactors = F) #done
-df.col <- read.csv( "SaniPath_MulticityDashboard/data/col_merged_2020-02-12.csv", stringsAsFactors = F) #done
-df.exposure <- read.csv("SaniPath_MulticityDashboard/data/multicity_exposure_2020-02-18.csv", stringsAsFactors = F) #done
+df.behav <- read.csv( "data/behavior_all_city_percent_02122020.csv", stringsAsFactors = F) #done
+df.ecdata <- read.csv( "data/ec_data_2020-02-12.csv", stringsAsFactors = F) #done
+df.col <- read.csv( "data/col_merged_2020-02-12.csv", stringsAsFactors = F) #done
+df.exposure <- read.csv("data/multicity_exposure_2020-02-18.csv", stringsAsFactors = F) #done
 
 # **************************************************************************************************
 # modify data

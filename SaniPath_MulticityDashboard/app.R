@@ -206,9 +206,12 @@ server <- function(input, output) {
         
         # **************************************************************************************************
         
-        myColors <- brewer.pal(9, "Set1")   #ifelse(prop == TRUE, "Set2", "Set1")
-        names(myColors) <- unique(meta_dply$city)
-        colScale <- scale_fill_manual(values = myColors)
+        colourCount = length(unique(meta_dply$city))
+        getPalette = colorRampPalette(brewer.pal(9, "Set1"))
+        colScale <- scale_fill_manual(values=getPalette(colourCount))
+        # myColors <- brewer.pal(13, "Set1")   #ifelse(prop == TRUE, "Set2", "Set1")
+        # names(myColors) <- unique(meta_dply$city)
+        # colScale <- scale_fill_manual(values = myColors)
         
         
         output$plot_ecoli <- renderPlot({
@@ -224,7 +227,7 @@ server <- function(input, output) {
                         theme(axis.text.x = element_text(angle = 90, hjust = 0.95, vjust = 0.2),
                               axis.text=element_text(size=8),
                               strip.background = element_rect(fill="white")) +
-                       colScale
+                        colScale
                 })
         
         output$plot_ecoli_plotly1 <- renderPlotly({
