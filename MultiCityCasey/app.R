@@ -89,15 +89,17 @@ server <- function(input, output) {
             }
 
         colourCount = length(unique(meta_dply$city))
-        getPalette = colorRampPalette(brewer.pal(9, "Set1"))
+        getPalette = colorRampPalette(brewer.pal(9, "Set3"))
         colScale <- scale_fill_manual(values=getPalette(colourCount))
     
         df.ecdata %>% filter(city %in% citychoice()) %>%
-            ggplot(., aes(y=factor(hood), x=log10(ec_conc))) +
+            
+
+            ggplot(., aes(y=factor(hood), x=log10(ec_conc), fill=city)) +
             stat_density_ridges(aes(fill=city), quantile_lines=TRUE, quantiles=2) +
             # geom_point(aes(color=city) ) +
-            # facet_grid( ~ sample_type_name, scales = "free_x", space = "free_x") + 
-            facet_wrap( ~ sample_type_name, scales = "free", nrow=4, ncol=3) + 
+            # facet_grid( ~ sample_type_name, scales = "free_x", space = "free_x") +
+            facet_wrap( ~ sample_type_name, scales = "free", nrow=4, ncol=3) +
             labs(fill = "City",
                  x = "E. coli (Log10)",
                  y = "") +
@@ -105,7 +107,7 @@ server <- function(input, output) {
             theme(axis.text.x = element_text(angle = 90, hjust = 0.95, vjust = 0.2),
                   axis.text=element_text(size=8),
                   strip.background = element_rect(fill="white")) +
-            colScale    
+            colScale
     
     
     
