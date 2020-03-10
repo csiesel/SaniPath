@@ -1,6 +1,7 @@
 library(shiny)
 library(shinydashboard)
 library(plotly)
+library(shinythemes)
 library(tidyverse)
 library(reshape2)
 library(leaflet)
@@ -13,19 +14,34 @@ library(ggridges)
 # load data
 source("helper_dataload.R")
 
-
-ui <- shinyUI(navbarPage("SaniPath Dashboard",
-    tabPanel("E. coli Contamination Map"),
-        fluidRow(column(6,leafletOutput("mapecoli"), sidebarPanel(
-                                                                  h4("Select City/Cities"),
-                                                                  checkboxGroupInput("city", NULL,
-                                                                                     c(cities)))),
-                column(6, plotOutput("ecoli_boxplot", height="1200px")))
+ui <- shinyUI(navbarPage(theme=shinytheme("flatly"),
+    "SaniPath Dashboard",
+    tabPanel("E. coli Contamination"),
+        fluidRow(
+            column(2,
+                   wellPanel(
+                       h4("Select City/Cities"),
+                       checkboxGroupInput("city", NULL, c(cities))
+                    )
+                   ),
+            column(10,
+                   h4("Map of samples and sample contamination score"),
+                   leafletOutput("mapecoli"))),
+        fluidRow(
+            wellPanel(
+            h4("E. coli contamination by sample type", align="center"),
+            plotOutput("ecoli_boxplot"),
+            HTML("<p align=center>
+                    <i>
+                    <font size=2 color=darkred>
+                    NOTE: Units are as Log10 E. coli/100mL except for the following: Street Food and Raw Produce (Log10 E. coli/serving),
+                    Latrine Swabs (Log10 E. coli/swab), Soil (Log10 E. coli/gram)
+                    </font>
+                    </i>
+                    </p>")))
     
     
-    
-    
-))
+    ))
 
 
 
@@ -45,19 +61,21 @@ server <- function(input, output) {
         colnames(df)[colnames(df)=="X_col_location_latitude"] <- "lat"
         colnames(df)[colnames(df)=="X_col_location_longitude"] <- "lon"
         
-        df$ec_log <- log10(df$ec_conc)
-        df <- df %>% filter_all(all_vars(!is.na(ec_conc)))
-        cutoff <- quantile(df$ec_log, c(0, .33, .66, 1)) 
-        
-        df <- df %>% mutate(ghana_label = case_when(ec_log <= cutoff[[2]] ~ 1, 
-                                                    ec_log > cutoff[[2]] & ec_log <= cutoff[[3]] ~ 2,
-                                                    ec_log > cutoff[[3]] & ec_log <= cutoff[[4]] ~ 3))
-        df <- df %>% mutate(ghana_color = case_when(ghana_label == 1 ~ "green", 
-                                                    ghana_label == 2 ~ "yellow",
-                                                    ghana_label == 3 ~ "red"))
-        cutoff1 <- c(0, cutoff[[2]], cutoff[[3]])
+        ###### Commenting out wolfgang's code
+        df <- df %>% filter_all(all_vars(!is.na(std_ec_conc)))
+        #Setting standard cutoffs
+        cutoff <- c(0, .25, .50, 0.75, 1)
+        df <- df %>% mutate(dot_label = case_when(std_ec_conc <= cutoff[[2]] ~ 1,
+                                                  std_ec_conc > cutoff[[2]] & std_ec_conc <= cutoff[[3]] ~ 2,
+                                                  std_ec_conc > cutoff[[3]] & std_ec_conc <= cutoff[[4]] ~ 3,
+                                                  std_ec_conc > cutoff[[4]] & std_ec_conc <= cutoff[[5]] ~ 4))
+        df <- df %>% mutate(dot_color = case_when(dot_label == 1 ~ "green",
+                                                  dot_label == 2 ~ "yellow",
+                                                  dot_label == 3 ~ "orange",
+                                                  dot_label == 4 ~ "red"))
+        cutoff1 <- c(0, cutoff[[2]], cutoff[[3]], cutoff[[4]])
         cutoff1 <- sprintf("%.2f", round(cutoff1, 2))
-        color1 <- c("green", "yellow", "red")
+        color1 <- c("green", "yellow", "orange", "red")
         
         # outlier 
         df$lat[df$UID == "11_02_1018"] <- 12.915
@@ -70,8 +88,8 @@ server <- function(input, output) {
             #                  options = providerTileOptions(opacity = 0.35)) %>%
             # addProviderTiles(providers$Stamen.TonerLabels) %>%
             addCircles(~lon, ~lat,
-                       popup = paste0(df$sample_type_name, ", ", sprintf("%.2f", round(df$ec_log, 2)), " E.coli", " (log10)"),
-                       weight = 3, radius=20, color=~ghana_color, stroke = TRUE, fillOpacity = 1) %>%
+                       popup = paste0(df$sample_type_name, ", ", sprintf("%.2f", round(df$std_ec_conc, 2)), " E.coli", " (log10)"),
+                       weight = 3, radius=20, color=~dot_color, stroke = TRUE, fillOpacity = 1) %>%
             addLegend("bottomright", colors = color1, labels = cutoff1,
                       title = "Ecoli Value Cutoff") %>%
             addScaleBar("bottomleft")
@@ -83,6 +101,8 @@ server <- function(input, output) {
     })
     output$mapecoli <- renderLeaflet(ecoli_map())
     
+    
+    # Plotting the density ridge plots for ecoli
     ecoli_plot <- reactive({
         if(is.null(input$city)){
                 return(NULL)
@@ -96,14 +116,15 @@ server <- function(input, output) {
             
 
             ggplot(., aes(y=factor(hood), x=log10(ec_conc))) +
-            stat_density_ridges(aes(fill=city), quantile_lines=TRUE, quantiles=2) +
+            geom_density_ridges(aes(fill=city), quantile_lines=TRUE, quantiles=2, panel_scaling=FALSE) +
             # geom_point(aes(color=city) ) +
             # facet_grid( ~ sample_type_name, scales = "free_x", space = "free_x") +
-            facet_wrap( ~ sample_type_name, scales = "free", nrow=4, ncol=3) +
+            facet_wrap( ~ sample_type_name, scales = "free_y", nrow=4, ncol=3) +
             labs(fill = "City",
                  x = "E. coli (Log10)",
                  y = "") +
             theme_bw() +
+            scale_x_continuous(breaks = c(0,2,4,6,8,10)) +
             theme(axis.text.x = element_text(angle = 90, hjust = 0.95, vjust = 0.2),
                   axis.text=element_text(size=8),
                   strip.background = element_rect(fill="white")) +
