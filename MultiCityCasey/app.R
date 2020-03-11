@@ -1,5 +1,6 @@
 library(shiny)
 library(shinydashboard)
+library(fullPage)
 library(plotly)
 library(shinythemes)
 library(tidyverse)
@@ -14,9 +15,11 @@ library(ggridges)
 # load data
 source("helper_dataload.R")
 
-ui <- shinyUI(navbarPage(theme=shinytheme("flatly"),
+ui <- 
+
+    shinyUI(navbarPage(theme=shinytheme("flatly"),
     "SaniPath Dashboard",
-    tabPanel("E. coli Contamination"),
+    tabPanel("E. coli Contamination", icon=icon("bar-chart"),
         fluidRow(
             column(2,
                    wellPanel(
@@ -26,7 +29,9 @@ ui <- shinyUI(navbarPage(theme=shinytheme("flatly"),
                    ),
             column(10,
                    h4("Map of samples and sample contamination score"),
-                   leafletOutput("mapecoli"))),
+                   leafletOutput("mapecoli")
+                   )
+            ), #end of fluidRow1
         fluidRow(
             wellPanel(
             h4("E. coli contamination by sample type", align="center"),
@@ -38,20 +43,22 @@ ui <- shinyUI(navbarPage(theme=shinytheme("flatly"),
                     Latrine Swabs (Log10 E. coli/swab), Soil (Log10 E. coli/gram)
                     </font>
                     </i>
-                    </p>")))
+                    </p>"))
+        ) #end of fluidRow2
+    ),#end of E. coli tabpanel
     
-    
+    tabPanel("Behavior", icon=icon("pie-chart"),
+        fluidRow(plotlyOutput("bx_plot"))
+    ) #end of Bx tabpanel
     ))
 
 
 
 # Define server logic required to draw a histogram
 server <- function(input, output) {
-    
-    
-    
-    ##### E. coli Maps and graphs (city-specific)
     citychoice <- reactive({input$city})
+    ################# E. coli Maps and graphs (city-specific) #####
+    # Plotting the map for ecoli
     ecoli_map <- reactive({
         df.ecdata<- filter(df.ecdata, city %in% citychoice())
 
@@ -88,7 +95,7 @@ server <- function(input, output) {
             #                  options = providerTileOptions(opacity = 0.35)) %>%
             # addProviderTiles(providers$Stamen.TonerLabels) %>%
             addCircles(~lon, ~lat,
-                       popup = paste0(df$sample_type_name, ", ", sprintf("%.2f", round(df$std_ec_conc, 2)), " E.coli", " (log10)"),
+                       popup = paste0(df$sample_type_name, ", ", sprintf("%.2f", round(df$std_ec_conc, 2)), " Normalized E.coli", " (log10)"),
                        weight = 3, radius=20, color=~dot_color, stroke = TRUE, fillOpacity = 1) %>%
             addLegend("bottomright", colors = color1, labels = cutoff1,
                       title = "Ecoli Value Cutoff") %>%
@@ -105,8 +112,9 @@ server <- function(input, output) {
     # Plotting the density ridge plots for ecoli
     ecoli_plot <- reactive({
         if(is.null(input$city)){
-                return(NULL)
+               return(NULL)
             }
+
 
         colourCount = length(unique(meta_dply$city))
         getPalette = colorRampPalette(brewer.pal(9, "Set3"))
@@ -119,7 +127,7 @@ server <- function(input, output) {
             geom_density_ridges(aes(fill=city), quantile_lines=TRUE, quantiles=2, panel_scaling=FALSE) +
             # geom_point(aes(color=city) ) +
             # facet_grid( ~ sample_type_name, scales = "free_x", space = "free_x") +
-            facet_wrap( ~ sample_type_name, scales = "free_y", nrow=4, ncol=3) +
+            facet_wrap( ~ sample_type_name, scales = "fixed", nrow=4, ncol=3) +
             labs(fill = "City",
                  x = "E. coli (Log10)",
                  y = "") +
@@ -129,12 +137,38 @@ server <- function(input, output) {
                   axis.text=element_text(size=8),
                   strip.background = element_rect(fill="white")) +
             colScale
-    
-    
-    
-    
+
     })
     output$ecoli_boxplot <- renderPlot(ecoli_plot())
+    
+    
+    
+    ################# Behavior graphs (city-specific) #####
+    # Plotting the bx graph by city/neighborhood
+    bx_plot <- reactive({
+        df.behav %>% 
+            filter(., city %in% citychoice()) %>%
+            melt(., id.vars = c("city", "sample_type", "pop")) %>%
+            na.omit(value) %>%
+            #!!!!!Change below to x=hood when I figure this out !!!!!!!!!!!!!!!!!!!!!
+            ggplot(., aes(x = city, y = value, fill = variable)) + 
+            geom_bar(stat = "identity") +
+            facet_grid(pop ~ sample_type, scales = "free", space = "free") + 
+            theme_bw() +
+            labs(fill = "Frequency",
+                 x = "",
+                 y = "Percent") +
+            # theme(strip.text.y = element_text(size = 7)) +
+            scale_fill_brewer(palette="Set2") +
+            theme(axis.text.x = element_text(angle = 90, hjust = 0.95, vjust = 0.2),
+                  strip.text.x = element_text(size = 8),
+                  strip.text.y = element_text(size = 8),
+                  strip.background = element_rect(fill="white"),
+                  legend.position="bottom") + 
+            scale_y_continuous(labels = scales::percent)
+        
+    })
+    output$bx_plot <- renderPlotly(bx_plot())
 }
 
 # Run the application 
