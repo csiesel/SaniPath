@@ -1,6 +1,5 @@
 library(shiny)
 library(shinydashboard)
-library(fullPage)
 library(plotly)
 library(shinythemes)
 library(tidyverse)
@@ -15,9 +14,7 @@ library(ggridges)
 # load data
 source("helper_dataload.R")
 
-ui <- 
-
-    shinyUI(navbarPage(theme=shinytheme("flatly"),
+ui <- shinyUI(navbarPage(theme=shinytheme("flatly"), collapsible=TRUE,
     "SaniPath Dashboard",
     tabPanel("E. coli Contamination", icon=icon("bar-chart"),
         fluidRow(
@@ -35,20 +32,16 @@ ui <-
         fluidRow(
             wellPanel(
             h4("E. coli contamination by sample type", align="center"),
-            plotOutput("ecoli_boxplot"),
-            HTML("<p align=center>
-                    <i>
-                    <font size=2 color=darkred>
+            plotOutput("ecoli_boxplot", height="700px"),
+            HTML("<p align=center> <i> <font size=2 color=darkred>
                     NOTE: Units are as Log10 E. coli/100mL except for the following: Street Food and Raw Produce (Log10 E. coli/serving),
                     Latrine Swabs (Log10 E. coli/swab), Soil (Log10 E. coli/gram)
-                    </font>
-                    </i>
-                    </p>"))
+                    </font> </i> </p>"))
         ) #end of fluidRow2
     ),#end of E. coli tabpanel
     
     tabPanel("Behavior", icon=icon("pie-chart"),
-        fluidRow(plotlyOutput("bx_plot"))
+        fluidRow(plotOutput("bx_plot"))
     ) #end of Bx tabpanel
     ))
 
@@ -80,8 +73,9 @@ server <- function(input, output) {
                                                   dot_label == 2 ~ "yellow",
                                                   dot_label == 3 ~ "orange",
                                                   dot_label == 4 ~ "red"))
-        cutoff1 <- c(0, cutoff[[2]], cutoff[[3]], cutoff[[4]])
-        cutoff1 <- sprintf("%.2f", round(cutoff1, 2))
+        cutoff1 <- c(paste0("<=", cutoff[[2]]), paste0(cutoff[[2]], " - ", cutoff[[3]]),
+                     paste0(cutoff[[3]], " - ", cutoff[[4]]), paste0(cutoff[[4]], " - 1"))
+        # cutoff1 <- sprintf("%.2f", round(cutoff1, 2))
         color1 <- c("green", "yellow", "orange", "red")
         
         # outlier 
@@ -168,7 +162,7 @@ server <- function(input, output) {
             scale_y_continuous(labels = scales::percent)
         
     })
-    output$bx_plot <- renderPlotly(bx_plot())
+    output$bx_plot <- renderPlot(bx_plot())
 }
 
 # Run the application 

@@ -10,8 +10,10 @@ meta_sampleID <- read.csv( "data/meta_sampleID.csv", stringsAsFactors = F)
 df.behav <- read.csv( "data/behavior_all_city_percent_02122020.csv", stringsAsFactors = F) #done
 df.ecdata <- read.csv( "data/ec_data_2020-02-12.csv", stringsAsFactors = F) #done
 df.col <- read.csv( "data/col_merged_2020-02-12.csv", stringsAsFactors = F) #done
-df.exposure <- read.csv("data/multicity_exposure_2020-02-18.csv", stringsAsFactors = F) #done
+df.exposure <- read.csv("data/multicity_exposure_2020-03-05.csv", stringsAsFactors = F) #done
 
+#Casey added
+meta_full <- merge(meta_dply, meta_neighb, by.x="id", by.y="deployment_id")
 cities <- unique(meta_dply$city)
 hoods <- unique(meta_neighb$neighborhood)
 cities2 <- factor(cities)

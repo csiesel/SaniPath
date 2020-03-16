@@ -6,15 +6,23 @@ library(dplyr)
 meta_dply <- read.csv( "data/meta_deployments.csv", stringsAsFactors = F)
 meta_neighb <- read.csv( "data/meta_neighborhoods.csv", stringsAsFactors = F)
 meta_sampleID <- read.csv( "data/meta_sampleID.csv", stringsAsFactors = F)
-
 df.behav <- read.csv( "data/behavior_all_city_percent_02122020.csv", stringsAsFactors = F) #done
 df.ecdata <- read.csv( "data/ec_data_2020-02-12.csv", stringsAsFactors = F) #done
 df.col <- read.csv( "data/col_merged_2020-02-12.csv", stringsAsFactors = F) #done
-df.exposure <- read.csv("data/multicity_exposure_2020-02-18.csv", stringsAsFactors = F) #done
+df.exposure <- read.csv("data/multicity_exposure_2020-03-05.csv", stringsAsFactors = F) #done
 
+#Casey added
+df.hh <- read.csv( "data/h_merged_2020-02-10.csv", stringsAsFactors = F)
+df.sc <- read.csv( "data/s_merged_2020-02-10.csv", stringsAsFactors = F)
+df.cc <- read.csv( "data/c_merged_2020-02-10.csv", stringsAsFactors = F)
+meta_full <- merge(meta_dply, meta_neighb, by.x="id", by.y="deployment_id")
 cities <- unique(meta_dply$city)
 hoods <- unique(meta_neighb$neighborhood)
-cities2 <- factor(cities)
+colourCount = length(unique(meta_dply$city))
+getPalette = colorRampPalette(brewer.pal(9, "Set3"))
+colScale <- scale_fill_manual(values=getPalette(colourCount))
+
+
 # **************************************************************************************************
 # modify data
 colnames(df.behav) <- c("city", "sample_type", "pop", "sum", "10+", "6-10", "<5", "Never")
@@ -71,6 +79,57 @@ for(i in 1:nrow(df.ecdata)){
 }
 
 
+
+# **************************************************************************************************
+# determining dominant pathways
+df.exposure$citylabel <-  factor(df.exposure$citylabel, levels = unique(df.exposure$citylabel))
+
+df.exposure <- df.exposure %>% 
+  mutate(sample_type_name = factor(.$sample_type_name, levels = factor(unique(sample_type_name))))
+df.exposure <- df.exposure %>%
+  group_by(neighborhood, age) %>%
+  mutate(sum = sum(dose)) %>%
+  mutate(perc = (dose / sum) * 100) %>%
+  mutate(logexp = log10(popDose)) %>%
+  mutate(dominantcount=0) %>%
+  mutate(dominant="")
+
+multiFinal = list()
+sites <- unique(df.exposure$citylabel)
+neighborhoods <- unique(df.exposure$neighborhood)
+
+
+for(q in 1:length(neighborhoods)){
+  tempmulti1 <- filter(df.exposure, neighborhood == neighborhoods[q], pop=='a')
+  tempmulti2 <- filter(df.exposure, neighborhood == neighborhoods[q], pop=='c')
+  for(a in 1:nrow(tempmulti1)){
+    maxExpA = max(tempmulti1$logexp)
+    botRangeA = maxExpA - 1
+    if(tempmulti1$logexp[a]>= botRangeA){
+      tempmulti1$dominant[a] = "Yes"
+      tempmulti1$dominantcount[a] = 1
+    }
+    else{
+      tempmulti1$dominant[a] = "No"
+    }
+  }
+  
+  for(c in 1:nrow(tempmulti2)){
+    maxExpC = max(tempmulti2$logexp)
+    botRangeC = maxExpC - 1
+    if(tempmulti2$logexp[c]>= botRangeC){
+      tempmulti2$dominant[c] = "Yes"
+      tempmulti2$dominantcount[c] = 1
+    }
+    else{
+      tempmulti2$dominant[c] = "No"
+    }
+  }
+  multiFinal[[(length(multiFinal)+1)]] <- tempmulti1
+  multiFinal[[(length(multiFinal)+1)]] <- tempmulti2
+}
+
+df.dominant = do.call(rbind, multiFinal)
 
 # df.ecdata$sample_type[df.ecdata$sample_type == 3 & df.ecdata$col_sample_type_alt != "Drinking Water" 
                       # & df.ecdata$col_sample_type_alt != "" ] <- 33
