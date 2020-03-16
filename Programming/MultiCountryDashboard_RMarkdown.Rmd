@@ -1,0 +1,198 @@
+---
+output: html_document
+runtime: shiny
+---
+
+<style type="text/css">
+.main-container {
+  max-width: 1800px;
+  margin-left: 0;
+  margin-right: 0;
+}
+</style>
+
+```{r setup, include=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+```{r echo=FALSE, warning=FALSE, error=FALSE, message=FALSE, out.height=1000}
+library(shiny)
+library(shinydashboard)
+library(ggplot2)
+library(readxl)
+library(dplyr)
+library(plotly)
+library(shinyjs)
+library(RColorBrewer)
+shinyApp(
+
+
+# Define UI for application that draws a histogram
+ui <- dashboardPage(title="SaniPath Multi-City Comparison",
+                    
+                    dashboardHeader(title="Multi-City Comparison"),
+                    dashboardSidebar(
+                      checkboxGroupInput("site", "Select Study Site(s)", c("Dhaka, Bangladesh"="Dhaka, Bangladesh", "Siem Reap, Cambodia"="Siem Reap, Cambodia", 
+                                                                           "Accra, Ghana"="Accra, Ghana", "Kumasi, Ghana"="Kumasi, Ghana", "Vellore, India"="Vellore, India","Maputo, Mozambique"="Maputo, Mozambique",
+                                                                           "Atlanta, USA"="Atlanta, USA", "Lusaka, Zambia"="Lusaka, Zambia"),
+                                         selected=c("Dhaka, Bangladesh"="Dhaka, Bangladesh", "Siem Reap, Cambodia"="Siem Reap, Cambodia", 
+                                                    "Accra, Ghana"="Accra, Ghana", "Kumasi, Ghana"="Kumasi, Ghana", "Vellore, India"="Vellore, India","Maputo, Mozambique"="Maputo, Mozambique",
+                                                    "Atlanta, USA"="Atlanta, USA", "Lusaka, Zambia"="Lusaka, Zambia")),
+                      radioButtons("age", "Select an Age Group", c("Adults"="a", "Children"="c", "Both"="b")),
+                      radioButtons("pathway", "Select a Pathway", c("Bathing Water"="bathing", "Open Drains"="drain",
+                                                                    "Public Latrines"="latrine", "Produce"="produce","Surface Water"="surface",
+                                                                    "Street Food"="streetfood", "Municipal Water"="municipal",
+                                                                    "Other Drinking Water"="otherdrinking", "Flood Water"="flood", "Ocean Water"="ocean"))
+                      
+                    ),
+                    dashboardBody(
+                      plotlyOutput("pplot", width="100%", height="800")
+                    )
+                    
+    ),
+
+
+##### NORMAL VERSION #####
+
+####### Define server logic required to draw a plots #######
+server <- function(input, output) {
+library(shiny)
+library(shinydashboard)
+library(ggplot2)
+library(readxl)
+library(dplyr)
+library(plotly)
+library(shinyjs)
+library(RColorBrewer)
+  ## ~~Importing the file and creating a new factor for age for legend text~~ ##
+  multi <- read_excel(paste0(getwd(),"/cross_country_data.xlsx"), col_names=TRUE, na="NA")
+  multi$age2 <- factor(multi$age, levels=c("a","c"),labels=c("Adults","Children"))
+  
+  
+  #### TRYING SOMETHING WITH AUTOGENERATING COLORS
+  # multi$color<- multi$site
+  # cols <- RColorBrewer::brewer.pal(length(unique(multi$color)), name = "Set3")
+  # multi$color <- factor(multi$color,labels = c(cols))
+  # taco <-as.vector.factor(x=multi$site,y=multi$color)
+  # taco <- c("Dhaka, Bangladesh"="red")
+  
+  
+  
+  ## ~~Creating a vector to reference specific colors for specific sites~~ ##
+  markcolor <- c("Dhaka, Bangladesh"="#a6cee3", "Siem Reap, Cambodia"="#b2df8a", "Accra, Ghana"="#fb9a99", "Kumasi, Ghana"="#e0e557",
+                 "Vellore, India"="#fdbf6f","Maputo, Mozambique"="#cab2d6","Atlanta, USA"="#ffffcc", "Lusaka, Zambia"='#00b79c')
+  linecolor <-c("Dhaka, Bangladesh"="#1f78b4", "Siem Reap, Cambodia"="#33a02c", "Accra, Ghana"="#e31a1c", "Kumasi, Ghana"="#9aa000",
+                "Vellore, India"="#ff7f00","Maputo, Mozambique"="#6a3d9a", "Atlanta, USA"="#fed976", "Lusaka, Zambia"='#008470')
+  
+  ### ~~CREATING REACTIVE CHOICES~~ ##
+  agechoice <- reactive({input$age})
+  pchoice <- reactive({input$pathway})
+  schoice <- reactive({input$site})
+  
+  
+  pplots <- reactive({
+    if (agechoice() == 'a' & pchoice()!='otherdrinking'){
+      multi2 <- filter(multi, age=="a", pathway==pchoice(), site %in% schoice())
+      pplot<-ggplot(multi2, aes(x=dose, y=percent, colour=site, fill=site, label=neighborhood,
+                                text=paste("Log Dose E. coli: ",dose, '\nPercent Exposed: ', percent ,'%',
+                                           '\nSite: ', site, '\nNeighborhood: ', neighborhood)))+
+        scale_color_manual(values= linecolor)+
+        scale_fill_manual(values=markcolor)+
+        geom_point(size=5, shape=21)+ ylim(0,100)+
+        scale_x_continuous(limits=c(0,15),breaks=seq(0,15,2))+
+        labs(title=paste0(toupper(pchoice()),", Adults") ,x="Log Dose E. coli",y="Percent Exposed")+
+        labs(fill="Study Site")+
+        labs(color=NULL)
+      ggplotly(pplot, tooltip="text") #layout(legend=list(orientation='h',y=0.1,xanchor='center'))
+    }
+    else if (agechoice() == 'a' & pchoice()=='otherdrinking'){
+      multi2 <- filter(multi, age=="a", pathway==pchoice(), site %in% schoice())
+      pplot<-ggplot(multi2, aes(x=dose, y=percent, colour=site, fill=site, label=neighborhood, shape=otherdrink,
+                                text=paste("Log Dose E. coli: ",dose, '\nPercent Exposed: ', percent ,'%',
+                                           '\nDrinking Water Type: ', otherdrink, '\nSite: ', site, '\nNeighborhood: ', neighborhood)))+
+        scale_color_manual(values= linecolor)+
+        scale_fill_manual(values=markcolor)+
+        geom_point(size=5, shape=21)+ ylim(0,100)+
+        scale_x_continuous(limits=c(0,15),breaks=seq(0,15,2))+
+        labs(title=paste0(toupper(pchoice()),", Adults") ,x="Log Dose E. coli",y="Percent Exposed")+
+        labs(fill="Study Site")+
+        labs(color=NULL)
+      ggplotly(pplot, tooltip='text')
+    }
+    else if (agechoice() == 'c' & pchoice()!='otherdrinking'){
+      multi2 <- filter(multi, age=="c", pathway==pchoice(), site %in% schoice())
+      pplot<-ggplot(multi2, aes(x=dose, y=percent, colour=site, fill=site, label=neighborhood,
+                                text=paste("Log Dose E. coli: ",dose, '\nPercent Exposed: ', percent ,'%',
+                                           '\nSite: ', site, '\nNeighborhood: ', neighborhood)))+
+        scale_color_manual(values= linecolor)+
+        scale_fill_manual(values=markcolor)+
+        geom_point(size=5, shape=21)+ ylim(0,100)+
+        scale_x_continuous(limits=c(0,15),breaks=seq(0,15,2))+
+        labs(title=paste0(toupper(pchoice()),", Children") ,x="Log Dose E. coli",y="Percent Exposed")+
+        labs(fill="Study Site")+
+        labs(color=NULL)
+      ggplotly(pplot, tooltip="text")
+    }
+    else if (agechoice() == 'c' & pchoice()=='otherdrinking'){
+      multi2 <- filter(multi, age=="c", pathway==pchoice(), site %in% schoice())
+      pplot<-ggplot(multi2, aes(x=dose, y=percent, colour=site, fill=site, label=neighborhood, shape=otherdrink,
+                                text=paste("Log Dose E. coli: ",dose, '\nPercent Exposed: ', percent ,'%',
+                                           '\nDrinking Water Type: ', otherdrink, '\nSite: ', site, '\nNeighborhood: ', neighborhood)))+
+        scale_color_manual(values= linecolor)+
+        scale_fill_manual(values=markcolor)+
+        geom_point(size=5, shape=21)+ ylim(0,100)+
+        scale_x_continuous(limits=c(0,15),breaks=seq(0,15,2))+
+        labs(title=paste0(toupper(pchoice()),", Children") ,x="Log Dose E. coli",y="Percent Exposed")+
+        labs(fill="Study Site")+
+        labs(color=NULL)
+      ggplotly(pplot, tooltip='text')
+    }
+    else if (agechoice() == 'b' & pchoice()!='otherdrinking'){
+      multi2 <- filter(multi, pathway==pchoice(), site %in% schoice())
+      pplot<-ggplot(multi2, aes(x=dose, y=percent, colour=site, shape=age2, fill=site, label=neighborhood,
+                                text=paste("Log Dose E. coli: ",dose, '\nPercent Exposed: ', percent ,'%',
+                                           '\nSite: ', site, '\nNeighborhood: ', neighborhood)))+
+        scale_shape_manual(values=c(21,22))+
+        scale_color_manual(values=linecolor)+
+        scale_fill_manual(values=markcolor)+
+        geom_point(size=5)+ylim(0,100)+
+        scale_x_continuous(limits=c(0,15),breaks=seq(0,15,2))+
+        labs(title=paste0(toupper(pchoice()),", Adults and Children") ,x="Log Dose E. coli",y="Percent Exposed")+
+        labs(fill="Study Site")+
+        labs(color=NULL)+
+        labs(shape=NULL)
+      ggplotly(pplot, tooltip='text')
+    }
+    else{
+      multi2 <- filter(multi, pathway==pchoice(), site %in% schoice())
+      pplot<-ggplot(multi2, aes(x=dose, y=percent, colour=site, shape=age2, fill=site, label=neighborhood,
+                                text=paste("Log Dose E. coli: ",dose, '\nPercent Exposed: ', percent ,'%',
+                                           '\nDrinking Water Type: ', otherdrink, '\nSite: ', site, '\nNeighborhood: ', neighborhood)))+
+        scale_shape_manual(values=c(21,22))+
+        scale_color_manual(values=linecolor)+
+        scale_fill_manual(values=markcolor)+
+        geom_point(size=5)+ylim(0,100)+
+        scale_x_continuous(limits=c(0,15),breaks=seq(0,15,2))+
+        labs(title=paste0(toupper(pchoice()),", Adults and Children") ,x="Log Dose E. coli",y="Percent Exposed")+
+        labs(fill="Study Site")+
+        labs(color=NULL)+
+        labs(shape=NULL)
+      ggplotly(pplot, tooltip='text')
+    }
+    
+  })
+  
+  
+  output$pplot <- renderPlotly(pplots())
+  
+  
+},
+  options = list(
+    width = "100%", height = 1000
+  )
+)
+```
+
+
+

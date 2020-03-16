@@ -1,0 +1,83 @@
+neighb,s,sample,neighborhood,age,pop,n.sample,perExposed,Dose
+901,d,Drain Water,Makindye,Adults,a,9,0.645,734679.3763
+901,d,Drain Water,Makindye,Children,c,9,0.733,29670804.19
+901,f,Flood Water,Makindye,Adults,a,10,0.614,47130.39737
+901,f,Flood Water,Makindye,Children,c,10,0.678,751325.5938
+901,l,Public Latrine,Makindye,Adults,a,7,0.81,404.5996726
+901,l,Public Latrine,Makindye,Children,c,7,0.746,2900.262713
+901,p,Produce,Makindye,Adults,a,9,0.695,5244520.609
+901,p,Produce,Makindye,Children,c,9,0.661,1734157.685
+901,s,Surface Water,Makindye,Adults,a,5,0.435,781348.6958
+901,s,Surface Water,Makindye,Children,c,5,0.466,1825916.934
+901,sf,Street Food,Makindye,Adults,a,7,0.962,3150223018
+901,sf,Street Food,Makindye,Children,c,7,0.977,118374322
+901,bw,Bathing Water,Makindye,Adults,a,,,
+901,bw,Bathing Water,Makindye,Children,c,,,
+901,odw,Drinking Water (Spring),Makindye,Adults,a,,,
+901,odw,Drinking Water (Spring),Makindye,Children,c,,,
+902,d,Drain Water,Central,Adults,a,7,0.582,72651.47613
+902,d,Drain Water,Central,Children,c,7,0.707,811049.9232
+902,dw,Municipal and Piped Water,Central,Adults,a,10,0.885,141.6061371
+902,dw,Municipal and Piped Water,Central,Children,c,10,0.933,54.05071586
+902,f,Flood Water,Central,Adults,a,10,0.553,44645.91652
+902,f,Flood Water,Central,Children,c,10,0.644,1304194.027
+902,l,Public Latrine,Central,Adults,a,9,0.524,1608.226954
+902,l,Public Latrine,Central,Children,c,9,0.615,899.7006075
+902,p,Produce,Central,Adults,a,6,0.72,105969902.4
+902,p,Produce,Central,Children,c,6,0.664,87971678.66
+902,sf,Street Food,Central,Adults,a,6,0.94,4688091912
+902,sf,Street Food,Central,Children,c,6,0.957,597794304
+902,bw,Bathing Water,Central,Adults,a,,1,4
+902,bw,Bathing Water,Central,Children,c,,1,4.2
+902,odw,Drinking Water (Spring),Central,Adults,a,,38.7,5.4
+902,odw,Drinking Water (Spring),Central,Children,c,,37.4,5.6
+903,d,Drain Water,Kawempe,Adults,a,8,0.628,6219456.664
+903,d,Drain Water,Kawempe,Children,c,8,0.817,102579065.8
+903,dw,Municipal and Piped Water,Kawempe,Adults,a,9,0.599,135.7377516
+903,dw,Municipal and Piped Water,Kawempe,Children,c,9,0.726,53.0015749
+903,f,Flood Water,Kawempe,Adults,a,10,0.91,41115.73059
+903,f,Flood Water,Kawempe,Children,c,10,0.908,1010512.028
+903,l,Public Latrine,Kawempe,Adults,a,10,0.481,7172.954976
+903,l,Public Latrine,Kawempe,Children,c,10,0.519,14003.36392
+903,p,Produce,Kawempe,Adults,a,8,0.682,257566.9074
+903,p,Produce,Kawempe,Children,c,8,0.79,33598.64626
+903,s,Surface Water,Kawempe,Adults,a,4,0.189,263740.4444
+903,s,Surface Water,Kawempe,Children,c,4,0.208,354667.9842
+903,sf,Street Food,Kawempe,Adults,a,6,0.895,5685.476748
+903,sf,Street Food,Kawempe,Children,c,6,0.915,4549.09754
+903,bw,Bathing Water,Kawempe,Adults,a,,1,1.7
+903,bw,Bathing Water,Kawempe,Children,c,,1,1.9
+903,odw,Drinking Water (Spring),Kawempe,Adults,a,,89.5,4
+903,odw,Drinking Water (Spring),Kawempe,Children,c,,77.8,4
+904,d,Drain Water,Rubaga,Adults,a,6,0.55,518055.5274
+904,d,Drain Water,Rubaga,Children,c,6,0.597,7119288.645
+904,dw,Municipal and Piped Water,Rubaga,Adults,a,10,0.707,136.4900048
+904,dw,Municipal and Piped Water,Rubaga,Children,c,10,0.785,52.55957269
+904,f,Flood Water,Rubaga,Adults,a,7,0.386,40055991.97
+904,f,Flood Water,Rubaga,Children,c,7,0.516,158461088.9
+904,l,Public Latrine,Rubaga,Adults,a,10,0.53,1.992686785
+904,l,Public Latrine,Rubaga,Children,c,10,0.651,3.811202138
+904,p,Produce,Rubaga,Adults,a,7,0.649,384119.2337
+904,p,Produce,Rubaga,Children,c,7,0.582,126128.3004
+904,sf,Street Food,Rubaga,Adults,a,7,0.924,582980.7587
+904,sf,Street Food,Rubaga,Children,c,7,0.97,177567.5361
+904,bw,Bathing Water,Rubaga,Adults,a,,1,4.8
+904,bw,Bathing Water,Rubaga,Children,c,,1,4.5
+904,odw,Drinking Water (Spring),Rubaga,Adults,a,,55,6.9
+904,odw,Drinking Water (Spring),Rubaga,Children,c,,61.2,5.5
+905,d,Drain Water,Nakawa,Adults,a,12,0.51,530987.1974
+905,d,Drain Water,Nakawa,Children,c,12,0.697,1072257.043
+905,dw,Municipal and Piped Water,Nakawa,Adults,a,10,0.911,811.4111545
+905,dw,Municipal and Piped Water,Nakawa,Children,c,10,0.937,264.3623154
+905,f,Flood Water,Nakawa,Adults,a,9,0.603,14573.94999
+905,f,Flood Water,Nakawa,Children,c,9,0.697,263393.7087
+905,l,Public Latrine,Nakawa,Adults,a,10,0.518,697.5060943
+905,l,Public Latrine,Nakawa,Children,c,10,0.528,117247.3506
+905,p,Produce,Nakawa,Adults,a,10,0.687,31560322.27
+905,p,Produce,Nakawa,Children,c,10,0.724,5724087.175
+905,sf,Street Food,Nakawa,Adults,a,10,0.963,11548.29087
+905,sf,Street Food,Nakawa,Children,c,10,0.983,9670.769219
+905,bw,Bathing Water,Nakawa,Adults,a,,1,3.7
+905,bw,Bathing Water,Nakawa,Children,c,,1,4.1
+905,odw,Drinking Water (Spring),Nakawa,Adults,a,,31.5,6
+905,odw,Drinking Water (Spring),Nakawa,Children,c,,51.6,5.7

@@ -1,0 +1,227 @@
+"","site","neighborhood","age","pathway","otherdrink","percent","dose","dominant","dominantcount","exposure","logexp"
+"1","Dhaka, Bangladesh","Dhanmondi","a","bathing",NA,100,4,"No",0,1e+06,6
+"2","Dhaka, Bangladesh","Dhanmondi","a","drain",NA,35,7.07,"Yes",1,411214144.228836,8.61406804435028
+"3","Dhaka, Bangladesh","Dhanmondi","a","flood",NA,51,5.57,"No",0,18948296.6839558,7.27757017609794
+"4","Dhaka, Bangladesh","Dhanmondi","a","latrine",NA,11,0.129,"No",0,14.8044638946154,1.17039268515823
+"5","Dhaka, Bangladesh","Dhanmondi","a","produce",NA,93,6.9,"Yes",1,738725258.293582,8.86848294855394
+"6","Dhaka, Bangladesh","Dhanmondi","a","surface",NA,35,3.91,"No",0,284490.680657435,5.45406804435028
+"7","Dhaka, Bangladesh","Dhanmondi","a","streetfood",NA,53,7.31,"Yes",1,1082121110.67485,9.03427586960079
+"8","Dhaka, Bangladesh","Dhanmondi","a","municipal",NA,97,5.5,"No",0,30674093.3036333,7.48677173426625
+"9","Dhaka, Bangladesh","Dhanmondi","a","otherdrinking","otherdrinking",31,3.32,"No",0,64768.1800564752,4.81136169383427
+"10","Dhaka, Bangladesh","Kalshi_Mirpure","a","bathing",NA,100,3.04,"No",0,109647.819614319,5.04
+"11","Dhaka, Bangladesh","Kalshi_Mirpure","a","drain",NA,92,6.17,"Yes",1,136077971.711475,8.13378782734556
+"12","Dhaka, Bangladesh","Kalshi_Mirpure","a","flood",NA,94,4.37,"No",0,2203575.08640073,6.3431278535997
+"13","Dhaka, Bangladesh","Kalshi_Mirpure","a","latrine",NA,91,1.41,"No",0,2339.06016231967,3.36904139232109
+"14","Dhaka, Bangladesh","Kalshi_Mirpure","a","produce",NA,92,6.4,"Yes",1,231093551.698882,8.36378782734556
+"15","Dhaka, Bangladesh","Kalshi_Mirpure","a","surface",NA,49,5.9,"Yes",1,38922083.5014898,7.59019608002851
+"16","Dhaka, Bangladesh","Kalshi_Mirpure","a","streetfood",NA,75,6.17,"Yes",1,110933129.112616,8.0450612633917
+"17","Dhaka, Bangladesh","Kalshi_Mirpure","a","municipal",NA,79,3.85,"No",0,559277.169663469,5.74762709129044
+"18","Dhaka, Bangladesh","Kalshi_Mirpure","a","otherdrinking","otherdrinking",50,5.56,"No",0,18153902.7385051,7.25897000433602
+"19","Dhaka, Bangladesh","Badda","a","bathing",NA,100,1.89,"No",0,7762.47116628692,3.89
+"20","Dhaka, Bangladesh","Badda","a","drain",NA,80,6.75,"Yes",1,449873060.152279,8.65308998699194
+"21","Dhaka, Bangladesh","Badda","a","flood",NA,96,4.24,"No",0,1668288.7955994,6.22227123303957
+"22","Dhaka, Bangladesh","Badda","a","latrine",NA,90,1.99,"No",0,8795.1349886023,3.94424250943932
+"23","Dhaka, Bangladesh","Badda","a","produce",NA,86,6.91,"Yes",1,699034243.901126,8.84449845124357
+"24","Dhaka, Bangladesh","Badda","a","surface",NA,70,6.96,"Yes",1,638407587.549137,8.80509804001426
+"25","Dhaka, Bangladesh","Badda","a","streetfood",NA,68,5.76,"No",0,39129915.7389266,7.59250891270624
+"26","Dhaka, Bangladesh","Badda","a","municipal",NA,84,4.76,"No",0,4833695.47363212,6.68427928606188
+"27","Dhaka, Bangladesh","Badda","a","otherdrinking","otherdrinking",52,5.09,"No",0,6397397.60822438,6.8060033436348
+"28","Dhaka, Bangladesh","Gabtoli","a","bathing",NA,100,1.36,"No",0,2290.86765276777,3.36
+"29","Dhaka, Bangladesh","Gabtoli","a","drain",NA,83,6.48,"No",0,250655992.793368,8.39907809237607
+"30","Dhaka, Bangladesh","Gabtoli","a","flood",NA,96,6.96,"No",0,875530405.781673,8.94227123303957
+"31","Dhaka, Bangladesh","Gabtoli","a","latrine",NA,98,1.52,"No",0,3245.08499052939,3.5112260756925
+"32","Dhaka, Bangladesh","Gabtoli","a","produce",NA,86,7.16,"Yes",1,1243078202.8415,9.09449845124357
+"33","Dhaka, Bangladesh","Gabtoli","a","surface",NA,69,8.16,"Yes",1,9973534418.1469,9.99884909073726
+"34","Dhaka, Bangladesh","Gabtoli","a","streetfood",NA,86,7.38,"Yes",1,2062996310.35676,9.31449845124357
+"35","Dhaka, Bangladesh","Gabtoli","a","municipal",NA,28,3.36,"No",0,64144.2942774976,4.80715803134222
+"36","Dhaka, Bangladesh","Gabtoli","a","otherdrinking","otherdrinking",96,3.25,"No",0,170714.823363737,5.23227123303957
+"37","Dhaka, Bangladesh","UttarKhan","a","bathing",NA,100,3.98,"No",0,954992.586021436,5.98
+"38","Dhaka, Bangladesh","UttarKhan","a","drain",NA,57,5.78,"No",0,34345896.4062384,7.53587485567249
+"39","Dhaka, Bangladesh","UttarKhan","a","flood",NA,85,3.62,"No",0,354338.975949785,5.54941892571429
+"40","Dhaka, Bangladesh","UttarKhan","a","latrine",NA,30,2.5,"No",0,9486.83298050514,3.97712125471966
+"41","Dhaka, Bangladesh","UttarKhan","a","produce",NA,78,6.01,"No",0,79816853.3978988,7.90209460269048
+"42","Dhaka, Bangladesh","UttarKhan","a","surface",NA,58,5.58,"No",0,22050984.9865926,7.34342799356294
+"43","Dhaka, Bangladesh","UttarKhan","a","streetfood",NA,66,7.21,"Yes",1,1070394664.25689,9.02954393554187
+"44","Dhaka, Bangladesh","UttarKhan","a","municipal",NA,90,7.4,"Yes",1,2260697788.35862,9.35424250943933
+"45","Dhaka, Bangladesh","UttarKhan","a","otherdrinking","otherdrinking",57,2.61,"No",0,23220.6758348344,4.36587485567249
+"46","Dhaka, Bangladesh","Gulshan","a","bathing",NA,100,1.84,"No",0,6918.30970918937,3.84
+"47","Dhaka, Bangladesh","Gulshan","a","drain",NA,5,4.41,"No",0,128519.789138443,5.10897000433602
+"48","Dhaka, Bangladesh","Gulshan","a","flood",NA,30,3.12,"No",0,39547.7021566922,4.59712125471966
+"49","Dhaka, Bangladesh","Gulshan","a","latrine",NA,13,-0.0969,"No",0,10.4002397831163,1.01704335230684
+"50","Dhaka, Bangladesh","Gulshan","a","produce",NA,99,6.48,"Yes",1,298975220.3198,8.47563519459755
+"51","Dhaka, Bangladesh","Gulshan","a","surface",NA,6,5.13,"No",0,809377.729554992,5.90815125038364
+"52","Dhaka, Bangladesh","Gulshan","a","streetfood",NA,48,4.35,"No",0,1074586.1465128,6.03124123737559
+"53","Dhaka, Bangladesh","Gulshan","a","municipal",NA,100,3.23,"No",0,169824.365246174,5.23
+"54","Dhaka, Bangladesh","Gulshan","a","otherdrinking","otherdrinking",12,1.46,"No",0,346.083780375193,2.53918124604762
+"55","Dhaka, Bangladesh","Kamalapur","a","bathing",NA,100,3.8,"No",0,630957.344480193,5.8
+"56","Dhaka, Bangladesh","Kamalapur","a","drain",NA,67,6.89,"No",0,520085568.141223,8.71607480270083
+"57","Dhaka, Bangladesh","Kamalapur","a","flood",NA,88,5.3,"No",0,17558308.3717261,7.24448267215017
+"58","Dhaka, Bangladesh","Kamalapur","a","latrine",NA,89,3.53,"No",0,301571.29896389,5.47939000664491
+"59","Dhaka, Bangladesh","Kamalapur","a","produce",NA,89,7.44,"Yes",1,2451263545.97097,9.38939000664491
+"60","Dhaka, Bangladesh","Kamalapur","a","surface",NA,43,7.26,"No",0,782471369.202293,8.89346845557959
+"61","Dhaka, Bangladesh","Kamalapur","a","streetfood",NA,83,5.73,"No",0,44573639.098731,7.64907809237607
+"62","Dhaka, Bangladesh","Kamalapur","a","municipal",NA,96,8.23,"Yes",1,16303139063.6328,10.2122712330396
+"63","Dhaka, Bangladesh","Kamalapur","a","otherdrinking","otherdrinking",33,4.24,"No",0,573474.273487294,5.75851393987789
+"64","Dhaka, Bangladesh","Ganderia","a","bathing",NA,100,5.38,"No",0,23988329.1901949,7.38
+"65","Dhaka, Bangladesh","Ganderia","a","drain",NA,91,6.46,"No",0,262446866.784521,8.41904139232109
+"66","Dhaka, Bangladesh","Ganderia","a","flood",NA,95,5.65,"No",0,42434941.2543415,7.62772360528885
+"67","Dhaka, Bangladesh","Ganderia","a","latrine",NA,97,0.805,"No",0,619.115581604832,2.79177173426624
+"68","Dhaka, Bangladesh","Ganderia","a","produce",NA,95,7.5,"No",0,3004163777.15996,9.47772360528885
+"69","Dhaka, Bangladesh","Ganderia","a","surface",NA,56,6.06,"No",0,64296602.8038254,7.8081880270062
+"70","Dhaka, Bangladesh","Ganderia","a","streetfood",NA,85,3.86,"No",0,615770.566063741,5.78941892571429
+"71","Dhaka, Bangladesh","Ganderia","a","municipal",NA,82,8.57,"Yes",1,30465888785.9682,10.4838138523837
+"72","Dhaka, Bangladesh","Ganderia","a","otherdrinking","otherdrinking",43,2.62,"No",0,17925.3834892244,4.25346845557959
+"73","Dhaka, Bangladesh","Hazaribagh","a","bathing",NA,100,3.6,"No",0,398107.170553497,5.6
+"74","Dhaka, Bangladesh","Hazaribagh","a","drain",NA,79,6.15,"No",0,111590466.025198,8.04762709129044
+"75","Dhaka, Bangladesh","Hazaribagh","a","flood",NA,89,5.7,"No",0,44605663.7928272,7.64939000664491
+"76","Dhaka, Bangladesh","Hazaribagh","a","latrine",NA,82,3.23,"No",0,139255.979501863,5.14381385238372
+"77","Dhaka, Bangladesh","Hazaribagh","a","produce",NA,87,4.8,"No",0,5489328.89697768,6.73951925261862
+"78","Dhaka, Bangladesh","Hazaribagh","a","surface",NA,56,6.27,"No",0,104276879.65312,8.0181880270062
+"79","Dhaka, Bangladesh","Hazaribagh","a","streetfood",NA,62,4.91,"No",0,5039549.20021742,6.70239168949825
+"80","Dhaka, Bangladesh","Hazaribagh","a","municipal",NA,82,8.52,"Yes",1,27152751961.5724,10.4338138523837
+"81","Dhaka, Bangladesh","Hazaribagh","a","otherdrinking","otherdrinking",25,6.32,"No",0,52232403.271351,7.71794000867204
+"82","Dhaka, Bangladesh","Motijhil","a","bathing",NA,100,2.72,"No",0,52480.7460249773,4.72
+"83","Dhaka, Bangladesh","Motijhil","a","drain",NA,74,6.25,"Yes",1,131592676.34288,8.11923171973098
+"84","Dhaka, Bangladesh","Motijhil","a","flood",NA,82,4.53,"No",0,2778522.08034146,6.44381385238372
+"85","Dhaka, Bangladesh","Motijhil","a","latrine",NA,42,1.83,"No",0,2839.54849664632,3.4532492903979
+"86","Dhaka, Bangladesh","Motijhil","a","produce",NA,92,5.72,"No",0,48282286.3429791,7.68378782734556
+"87","Dhaka, Bangladesh","Motijhil","a","surface",NA,60,2.76,"No",0,34526.3962402294,4.53815125038364
+"88","Dhaka, Bangladesh","Motijhil","a","streetfood",NA,76,7.17,"Yes",1,1124122375.00784,9.05081359228079
+"89","Dhaka, Bangladesh","Motijhil","a","municipal",NA,90,6.68,"Yes",1,430767083.090374,8.63424250943932
+"90","Dhaka, Bangladesh","Motijhil","a","otherdrinking","otherdrinking",71,3.65,"No",0,317145.350427184,5.50125834871907
+"91","Siem Reap, Cambodia","Chong Kaosou (Informal)","a","produce",NA,100,7.25,"Yes",1,1778279410.03892,9.25
+"92","Siem Reap, Cambodia","Chong Kaosou (Informal)","a","flood",NA,98,3.87,"No",0,726484.036474899,5.8612260756925
+"93","Siem Reap, Cambodia","Chong Kaosou (Informal)","a","municipal",NA,NA,NA,"No",0,NA,-9999
+"94","Siem Reap, Cambodia","Chong Kaosou (Informal)","a","otherdrinking","bottled_water",98,3.01,"No",0,100282.713243514,5.00122607569249
+"95","Siem Reap, Cambodia","Chong Kaosou (Informal)","a","otherdrinking","well_water",12,3.3,"No",0,23943.1477796265,4.37918124604762
+"96","Siem Reap, Cambodia","Chong Kaosou (Informal)","a","bathing",NA,100,3.52,"No",0,331131.121482591,5.52
+"97","Siem Reap, Cambodia","Kumruthemey (Informal)","a","produce",NA,100,6.82,"Yes",1,660693448.007596,8.82
+"98","Siem Reap, Cambodia","Kumruthemey (Informal)","a","flood",NA,94,3.2,"No",0,148979.960091345,5.1731278535997
+"99","Siem Reap, Cambodia","Kumruthemey (Informal)","a","municipal",NA,NA,NA,"No",0,NA,-9999
+"100","Siem Reap, Cambodia","Kumruthemey (Informal)","a","otherdrinking","bottled_water",NA,NA,"No",0,NA,-9999
+"101","Siem Reap, Cambodia","Kumruthemey (Informal)","a","otherdrinking","well_water",28,6.31,"No",0,57168662.4507468,7.75715803134222
+"102","Siem Reap, Cambodia","Kumruthemey (Formal)","a","produce",NA,100,6.4,"Yes",1,251188643.150958,8.4
+"103","Siem Reap, Cambodia","Kumruthemey (Formal)","a","flood",NA,95,4.15,"No",0,1341910.66739162,6.12772360528885
+"104","Siem Reap, Cambodia","Kumruthemey (Formal)","a","municipal",NA,NA,NA,"No",0,NA,-9999
+"105","Siem Reap, Cambodia","Kumruthemey (Formal)","a","otherdrinking","bottled_water",3,2.54,"No",0,1040.2105513576,3.01712125471966
+"106","Siem Reap, Cambodia","Kumruthemey (Formal)","a","otherdrinking","well_water",40,3.48,"No",0,120798.068816081,5.08205999132796
+"107","Siem Reap, Cambodia","Steung Thumey (Formal)","a","produce",NA,100,7.11,"Yes",1,1288249551.69314,9.11
+"108","Siem Reap, Cambodia","Steung Thumey (Formal)","a","flood",NA,96,2.68,"No",0,45948.4888629733,4.66227123303957
+"109","Siem Reap, Cambodia","Steung Thumey (Formal)","a","municipal",NA,0,0,"No",0,0,-9999
+"110","Siem Reap, Cambodia","Steung Thumey (Formal)","a","otherdrinking","bottled_water",NA,NA,"No",0,NA,-9999
+"111","Siem Reap, Cambodia","Steung Thumey (Formal)","a","otherdrinking","well_water",15,4.51,"No",0,485390.485394442,5.68609125905568
+"112","Siem Reap, Cambodia","Veal/Trapangses (Formal)","a","produce",NA,100,5.88,"Yes",1,75857757.5029183,7.88
+"113","Siem Reap, Cambodia","Veal/Trapangses (Formal)","a","flood",NA,100,6.19,"Yes",1,154881661.891248,8.19
+"114","Siem Reap, Cambodia","Veal/Trapangses (Formal)","a","municipal",NA,NA,NA,"No",0,NA,-9999
+"115","Siem Reap, Cambodia","Veal/Trapangses (Formal)","a","otherdrinking","bottled_water",NA,NA,"No",0,NA,-9999
+"116","Siem Reap, Cambodia","Veal/Trapangses (Formal)","a","otherdrinking","well_water",61,5.61,"Yes",1,24850196.9460509,7.39532983501077
+"117","Accra, Ghana","Adabraka","a","produce",NA,94,7.14,"Yes",1,1297561208.72671,9.1131278535997
+"118","Accra, Ghana","Adabraka","a","flood",NA,59,2.81,"No",0,38093.5995130447,4.58085201164214
+"119","Accra, Ghana","Adabraka","a","municipal",NA,60,2.02,"No",0,6282.7712883054,3.79815125038364
+"120","Accra, Ghana","Adabraka","a","drain",NA,58,5,"No",0,5800000,6.76342799356294
+"121","Accra, Ghana","Adabraka","a","latrine",NA,68,2.67,"No",0,31805.9896075295,4.50250891270624
+"122","Accra, Ghana","Adabraka","a","ocean",NA,NA,NA,"No",0,NA,-9999
+"123","Accra, Ghana","Chorkor","a","produce",NA,94,6.05,"Yes",1,105469734.704385,8.0231278535997
+"124","Accra, Ghana","Chorkor","a","flood",NA,NA,NA,"No",0,NA,-9999
+"125","Accra, Ghana","Chorkor","a","municipal",NA,74,4.71,"No",0,3795174.2415361,6.57923171973098
+"126","Accra, Ghana","Chorkor","a","drain",NA,71,6.4,"Yes",1,178343936.63718,8.25125834871907
+"127","Accra, Ghana","Chorkor","a","latrine",NA,87,1.92,"No",0,7236.34480859324,3.85951925261862
+"128","Accra, Ghana","Chorkor","a","ocean",NA,62,3.41,"No",0,159364.53853167,5.20239168949825
+"129","Accra, Ghana","Kokomlemle","a","produce",NA,93,6.89,"Yes",1,721909818.464683,8.85848294855393
+"130","Accra, Ghana","Kokomlemle","a","flood",NA,NA,NA,"No",0,NA,-9999
+"131","Accra, Ghana","Kokomlemle","a","municipal",NA,54,2.32,"No",0,11282.1991066118,4.05239375982297
+"132","Accra, Ghana","Kokomlemle","a","drain",NA,50,5.51,"No",0,16179682.8464814,7.20897000433602
+"133","Accra, Ghana","Kokomlemle","a","latrine",NA,68,2.62,"No",0,28347.1180759828,4.45250891270624
+"134","Accra, Ghana","Kokomlemle","a","ocean",NA,NA,NA,"No",0,NA,-9999
+"135","Accra, Ghana","Ringway","a","produce",NA,96,6.18,"Yes",1,145301879.849876,8.16227123303957
+"136","Accra, Ghana","Ringway","a","flood",NA,NA,NA,"No",0,NA,-9999
+"137","Accra, Ghana","Ringway","a","municipal",NA,53,2.18,"No",0,8021.87461671191,3.90427586960079
+"138","Accra, Ghana","Ringway","a","drain",NA,52,4.64,"No",0,2269882.32764886,6.3560033436348
+"139","Accra, Ghana","Ringway","a","latrine",NA,59,1.76,"No",0,3395.09563028923,3.53085201164214
+"140","Accra, Ghana","Ringway","a","ocean",NA,NA,NA,"No",0,NA,-9999
+"141","Accra, Ghana","Shiabu","a","produce",NA,92,6.69,"Yes",1,450596513.818971,8.65378782734556
+"142","Accra, Ghana","Shiabu","a","flood",NA,NA,NA,"No",0,NA,-9999
+"143","Accra, Ghana","Shiabu","a","municipal",NA,72,3.83,"No",0,486779.742282227,5.68733249643127
+"144","Accra, Ghana","Shiabu","a","drain",NA,70,7.56,"Yes",1,2541546383.39071,9.40509804001426
+"145","Accra, Ghana","Shiabu","a","latrine",NA,84,4.58,"No",0,3193590.92909271,6.50427928606188
+"146","Accra, Ghana","Shiabu","a","ocean",NA,49,2.61,"No",0,19961.6336124015,4.30019608002851
+"147","Vellore, India","Cinna Allapuram","a","bathing",NA,100,1.91,"No",0,8128.30516164099,3.91
+"148","Vellore, India","Cinna Allapuram","a","drain",NA,57,3.78,"No",0,343458.964062384,5.53587485567249
+"149","Vellore, India","Cinna Allapuram","a","municipal",NA,97,4.95,"Yes",1,8645134.09989734,6.93677173426625
+"150","Vellore, India","Cinna Allapuram","a","produce",NA,42,6.08,"Yes",1,50495106.2539314,7.7032492903979
+"151","Vellore, India","Cinna Allapuram","a","latrine",NA,59,3.33,"No",0,126139.763280632,5.10085201164214
+"152","Vellore, India","Old Town","a","bathing",NA,100,1.71,"No",0,5128.61383991365,3.71
+"153","Vellore, India","Old Town","a","drain",NA,76,4.1,"No",0,956783.312963566,5.98081359228079
+"154","Vellore, India","Old Town","a","municipal",NA,88,4.25,"No",0,1564885.88083425,6.19448267215017
+"155","Vellore, India","Old Town","a","produce",NA,65,6.59,"Yes",1,252879344.246282,8.40291335664286
+"156","Vellore, India","Old Town","a","latrine",NA,54,4.14,"No",0,745407.502885557,5.87239375982297
+"157","Maputo, Mozambique","Intervention","a","bathing",NA,100,3.03,"No",0,107151.930523761,5.03
+"158","Maputo, Mozambique","Intervention","a","drain",NA,43,2.91,"No",0,34951.7121950563,4.54346845557959
+"159","Maputo, Mozambique","Intervention","a","flood",NA,97,8.66,"Yes",1,44337554392.6429,10.6467717342662
+"160","Maputo, Mozambique","Intervention","a","latrine",NA,100,2.22,"No",0,16595.8690743756,4.22
+"161","Maputo, Mozambique","Intervention","a","municipal",NA,100,3.85,"No",0,707945.784384138,5.85
+"162","Maputo, Mozambique","Intervention","a","produce",NA,100,7.97,"Yes",1,9332543007.96991,9.97
+"163","Maputo, Mozambique","Control","a","bathing",NA,100,4.41,"No",0,2570395.78276886,6.41
+"164","Maputo, Mozambique","Control","a","drain",NA,56,6.34,"No",0,122514650.941175,8.0881880270062
+"165","Maputo, Mozambique","Control","a","flood",NA,94,6.52,"No",0,311263254.193635,8.4931278535997
+"166","Maputo, Mozambique","Control","a","latrine",NA,100,3.26,"No",0,181970.085860998,5.26
+"167","Maputo, Mozambique","Control","a","municipal",NA,100,4.12,"No",0,1318256.73855641,6.12
+"168","Maputo, Mozambique","Control","a","produce",NA,100,14,"Yes",1,1e+16,16
+"169","Atlanta, USA","Peoplestown","a","produce",NA,100,4.71,"No",0,5128613.83991365,6.71
+"170","Atlanta, USA","Peoplestown","a","municipal",NA,100,1.74,"No",0,5495.40873857625,3.74
+"171","Atlanta, USA","Peoplestown","a","flood",NA,100,10.4,"Yes",1,2511886431509.58,12.4
+"172","Atlanta, USA","Peoplestown","a","latrine",NA,100,0.42,"No",0,263.026799189538,2.42
+"173","Lusaka, Zambia","Kanyama","a","municipal",NA,92.7,3.409,"No",0,237727.670185192,5.3760797341445
+"174","Lusaka, Zambia","Kanyama","a","otherdrinking","Shallow Well",12.6,5.615,"Yes",1,5192428.74062636,6.71537054511756
+"175","Lusaka, Zambia","Kanyama","a","otherdrinking","Borehole",32,3.522,"No",0,106451.057054081,5.02714997831991
+"176","Lusaka, Zambia","Kanyama","a","drain",NA,44.9,3.66,"No",0,205232.597137079,5.31224634100332
+"177","Lusaka, Zambia","Kanyama","a","flood",NA,96.1,3.298,"No",0,190863.721558043,5.28072338766855
+"178","Lusaka, Zambia","Kanyama","a","latrine",NA,48.1,0.436,"No",0,131.263831353067,2.11814507637383
+"179","Lusaka, Zambia","Kanyama","a","latrine",NA,73.8,1.74,"No",0,4055.61164906927,3.60805636182304
+"180","Lusaka, Zambia","Kanyama","a","produce",NA,58.4,3.788,"No",0,358437.01101624,5.5544128471124
+"181","Lusaka, Zambia","Kanyama","a","streetfood",NA,51.9,1.504,"No",0,1656.4081467973,3.21916735784846
+"182","Lusaka, Zambia","Kanyama","a","bathing",NA,78,1.77,"No",0,4592.98051177359,3.66209460269048
+"183","Accra, Ghana","Mataheko","a","drain",NA,58.3,5.4,"No",0,14644297.8957009,7.16566855475901
+"184","Accra, Ghana","Mataheko","a","produce",NA,91.4,8.8,"Yes",1,57669501285.4898,10.7609461957338
+"185","Accra, Ghana","Mataheko","a","flood",NA,60.6,6.4,"No",0,152220317.749481,8.18247262416629
+"186","Accra, Ghana","Mataheko","a","latrine",NA,53.9,1.3,"No",0,1075.44638776823,3.03158876518674
+"187","Accra, Ghana","Mataheko","a","bathing",NA,100,0,"No",0,100,-9999
+"188","Accra, Ghana","Mataheko","a","municipal",NA,56.2,3,"No",0,56200,4.74973631556906
+"189","Accra, Ghana","Mataheko","a","streetfood",NA,86.1,7.9,"Yes",1,6839166100.97607,9.83500315145366
+"190","Accra, Ghana","Osu Alata","a","drain",NA,55.4,6.3,"No",0,110537532.249276,8.04350976472843
+"191","Accra, Ghana","Osu Alata","a","produce",NA,92.8,7.5,"Yes",1,2934593668.63626,9.46754797621886
+"192","Accra, Ghana","Osu Alata","a","ocean",NA,48.7,3,"No",0,48700,4.68752896121463
+"193","Accra, Ghana","Osu Alata","a","flood",NA,71.8,5.8,"No",0,45302737.3336779,7.6561244442423
+"194","Accra, Ghana","Osu Alata","a","latrine",NA,75.4,3.7,"No",0,377895.174154964,5.57737134586977
+"195","Accra, Ghana","Osu Alata","a","bathing",NA,100,2.8,"No",0,63095.7344480193,4.8
+"196","Accra, Ghana","Osu Alata","a","municipal",NA,75.7,3.1,"No",0,95300.6536728185,4.97909587950007
+"197","Accra, Ghana","Osu Alata","a","streetfood",NA,88.8,5.7,"No",0,44505426.3461018,7.6484129657786
+"198","Kumasi, Ghana","Fante New Town","a","bathing",NA,100,6.5,"Yes",1,316227766.016838,8.5
+"199","Kumasi, Ghana","Fante New Town","a","drain",NA,67.1,6,"Yes",1,67100000,7.82672252016899
+"200","Kumasi, Ghana","Fante New Town","a","municipal",NA,89.7,3.7,"No",0,449564.948563663,5.65279244304409
+"201","Kumasi, Ghana","Fante New Town","a","flood",NA,74.8,3.8,"No",0,471956.093671184,5.67390159786446
+"202","Kumasi, Ghana","Fante New Town","a","latrine",NA,81.2,3.4,"No",0,203965.178238578,5.30955602924118
+"203","Kumasi, Ghana","Fante New Town","a","produce",NA,90.9,4.7,"No",0,4555791.95367191,6.65856388322197
+"204","Kumasi, Ghana","Fante New Town","a","streetfood",NA,96.8,2.8,"No",0,61076.6709456827,4.78587535730839
+"205","Kumasi, Ghana","Moshie Zongo","a","bathing",NA,100,2.9,"No",0,79432.8234724281,4.9
+"206","Kumasi, Ghana","Moshie Zongo","a","drain",NA,77.7,6.1,"Yes",1,97818504.4964067,7.99042101880091
+"207","Kumasi, Ghana","Moshie Zongo","a","municipal",NA,91.1,4.5,"No",0,2880834.94841339,6.459518376973
+"208","Kumasi, Ghana","Moshie Zongo","a","flood",NA,68.5,3.5,"No",0,216616.019721534,5.33569057149243
+"209","Kumasi, Ghana","Moshie Zongo","a","latrine",NA,92.6,5.3,"No",0,18476129.0366118,7.26661098668193
+"210","Kumasi, Ghana","Moshie Zongo","a","produce",NA,82.7,6.7,"Yes",1,414481842.209754,8.61750550955255
+"211","Kumasi, Ghana","Moshie Zongo","a","streetfood",NA,87.7,2.2,"No",0,13899.513297884,4.14299959336604
+"212","Kumasi, Ghana","Ahodwo","a","bathing",NA,NA,NA,"No",0,NA,-9999
+"213","Kumasi, Ghana","Ahodwo","a","drain",NA,74.5,6,"Yes",1,74500000,7.87215627274829
+"214","Kumasi, Ghana","Ahodwo","a","municipal",NA,86.4,3.6,"No",0,343964.595358222,5.53651374247889
+"215","Kumasi, Ghana","Ahodwo","a","flood",NA,72.5,4.5,"No",0,2292651.30362207,6.36033800657099
+"216","Kumasi, Ghana","Ahodwo","a","latrine",NA,80.8,1.6,"No",0,3216.70593807226,3.50741136077459
+"217","Kumasi, Ghana","Ahodwo","a","produce",NA,85,5.7,"Yes",1,42600914.8583182,7.62941892571429
+"218","Kumasi, Ghana","Ahodwo","a","streetfood",NA,89.6,2.1,"No",0,11279.9716896757,4.05230800966213
+"219","Kumasi, Ghana","Dakodwom","a","bathing",NA,100,2.9,"No",0,79432.8234724281,4.9
+"220","Kumasi, Ghana","Dakodwom","a","drain",NA,82.7,6.3,"No",0,165008193.447926,8.21750550955255
+"221","Kumasi, Ghana","Dakodwom","a","municipal",NA,88.7,3.5,"No",0,280494.028456935,5.44792361983173
+"222","Kumasi, Ghana","Dakodwom","a","flood",NA,82.2,4.2,"No",0,1302782.20420304,6.11487181754005
+"223","Kumasi, Ghana","Dakodwom","a","latrine",NA,98.9,3.4,"No",0,248425.568076297,5.39519629159718
+"224","Kumasi, Ghana","Dakodwom","a","produce",NA,87.6,5.9,"No",0,69583153.3618471,7.84250410616808
+"225","Kumasi, Ghana","Dakodwom","a","streetfood",NA,88.3,4.1,"No",0,1111631.13861425,6.04596070357757
+"226","Kumasi, Ghana","Dakodwom","a","surface",NA,46,13.4,"Yes",1,1155467758494408,15.0627578316816

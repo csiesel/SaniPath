@@ -1,0 +1,69 @@
+sample_type_name,sample_id,neighb_id,neighborhood,age,pop,percent,exposure,dose,deployment_id,country,city,citylabel,date,pathway
+Open Drain Water,1,401,Kanyama,Adults,a,49.3,3.7835,299465.5846,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Open Drain Water
+Open Drain Water,1,401,Kanyama,Children,c,48.8,4.6,1942762.992,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Open Drain Water
+Raw Produce,2,401,Kanyama,Adults,a,58.1,4.5196,1922100.68,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Raw Produce
+Raw Produce,2,401,Kanyama,Children,c,64.5,4.7166,3358611.067,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Raw Produce
+Municipal Drinking Water,3,401,Kanyama,Children,c,89.2,2.7342,48368.74893,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Municipal Drinking Water
+Municipal Drinking Water,3,401,Kanyama,Adults,a,93,3.3238,196012.1302,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Municipal Drinking Water
+Bathing Water,4,401,Kanyama,Adults,a,78,1.77,4592.980512,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Bathing Water
+Bathing Water,4,401,Kanyama,Children,c,78,1.78,4699.964771,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Bathing Water
+Floodwater,6,401,Kanyama,Adults,a,97,3.3875,236740.0496,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Floodwater
+Floodwater,6,401,Kanyama,Children,c,96,4.8322,6523358.299,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Floodwater
+Public Latrine,7,401,Kanyama,Adults,a,53,-0.50365,16.61980292,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Public Latrine
+Public Latrine,7,401,Kanyama,Children,c,85.9,-0.62645,20.3022029,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Public Latrine
+Street Food,10,401,Kanyama,Adults,a,53.6,2.3817,12908.17337,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Street Food
+Street Food,10,401,Kanyama,Children,c,62.1,2.3483,13848.14493,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Street Food
+Shallow Well DW,11,401,Kanyama,Children,c,1.9,3.634,8180.005599,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Shallow Well DW
+Shallow Well DW,11,401,Kanyama,Adults,a,12.3,5.661,5635145.207,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Shallow Well DW
+Borehole DW,12,401,Kanyama,Adults,a,31.9,3.293,62631.19283,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Borehole DW
+Borehole DW,12,401,Kanyama,Children,c,38.5,3.213,62872.49999,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Borehole DW
+Open Drain Water,1,402,Chawama,Adults,a,42.9,3.9,340766.8127,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Open Drain Water
+Open Drain Water,1,402,Chawama,Children,c,63.7,5.1,8019354.873,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Open Drain Water
+Raw Produce,2,402,Chawama,Children,c,70.3,3.6,279869.3409,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Raw Produce
+Raw Produce,2,402,Chawama,Adults,a,66.4,3.9,527433.9479,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Raw Produce
+Municipal Drinking Water,3,402,Chawama,Children,c,98.3,1.8,6202.310696,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Municipal Drinking Water
+Municipal Drinking Water,3,402,Chawama,Adults,a,97.3,2.4,24440.65498,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Municipal Drinking Water
+Bathing Water,4,402,Chawama,Adults,a,99.9,2.5,31591.15383,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Bathing Water
+Bathing Water,4,402,Chawama,Children,c,100,3.7,501187.2336,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Bathing Water
+Public Latrine,7,402,Chawama,Adults,a,88.5,1.6,3523.248459,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Public Latrine
+Public Latrine,7,402,Chawama,Children,c,91.9,1.7,4605.910677,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Public Latrine
+Surface Water,8,402,Chawama,Adults,a,32.3,4.9,2565680.198,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Surface Water
+Surface Water,8,402,Chawama,Children,c,28.8,5.6,11465486.51,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Surface Water
+Street Food,10,402,Chawama,Children,c,83.6,2.6,33281.75946,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Street Food
+Street Food,10,402,Chawama,Adults,a,76.6,3,76600,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Street Food
+Shallow Well DW,11,402,Chawama,Children,c,17.6,4.9,1398017.693,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Shallow Well DW
+Shallow Well DW,11,402,Chawama,Adults,a,13.8,5.4,3466403.275,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Shallow Well DW
+Borehole DW,12,402,Chawama,Children,c,35.5,4.9,2819865.233,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Borehole DW
+Borehole DW,12,402,Chawama,Adults,a,32.5,5.7,16288585.09,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Borehole DW
+Open Drain Water,1,403,George,Adults,a,26.6,4,266000,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Open Drain Water
+Open Drain Water,1,403,George,Children,c,58.2,5.4,14619179.03,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Open Drain Water
+Raw Produce,2,403,George,Children,c,77.1,5.2,12219526.51,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Raw Produce
+Raw Produce,2,403,George,Adults,a,78.4,5.4,19693189.62,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Raw Produce
+Municipal Drinking Water,3,403,George,Children,c,95.7,4.3,1909466.035,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Municipal Drinking Water
+Municipal Drinking Water,3,403,George,Adults,a,97.6,5.2,15468557.56,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Municipal Drinking Water
+Bathing Water,4,403,George,Children,c,99.9,2.7,50068.60464,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Bathing Water
+Bathing Water,4,403,George,Adults,a,100,2.7,50118.72336,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Bathing Water
+Public Latrine,7,403,George,Children,c,96.3,0.3,192.1437609,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Public Latrine
+Public Latrine,7,403,George,Adults,a,91.3,0.4,229.3352312,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Public Latrine
+Street Food,10,403,George,Children,c,86.7,2.2,13741.02398,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Street Food
+Street Food,10,403,George,Adults,a,75.1,2.5,23748.70523,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Street Food
+Shallow Well DW,11,403,George,Children,c,10.3,4.5,325714.599,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Shallow Well DW
+Shallow Well DW,11,403,George,Adults,a,13.1,5.5,4142583.735,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Shallow Well DW
+Borehole DW,12,403,George,Children,c,43.5,3.6,173176.6192,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Borehole DW
+Borehole DW,12,403,George,Adults,a,44,3.7,220522.3828,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Borehole DW
+Open Drain Water,1,404,Chazanga,Adults,a,26.1,2.8,16467.98669,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Open Drain Water
+Open Drain Water,1,404,Chazanga,Children,c,38.6,4.1,485945.209,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Open Drain Water
+Raw Produce,2,404,Chazanga,Adults,a,66,4.8,4164318.474,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Raw Produce
+Raw Produce,2,404,Chazanga,Children,c,74.3,5.4,18663316.19,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Raw Produce
+Municipal Drinking Water,3,404,Chazanga,Children,c,59.6,2.5,18847.17485,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Municipal Drinking Water
+Municipal Drinking Water,3,404,Chazanga,Adults,a,64.4,2.6,25638.10178,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Municipal Drinking Water
+Bathing Water,4,404,Chazanga,Adults,a,99.8,0.8,629.6954298,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Bathing Water
+Bathing Water,4,404,Chazanga,Children,c,99.9,1,999,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Bathing Water
+Public Latrine,7,404,Chazanga,Children,c,87.5,0.2,138.6781543,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Public Latrine
+Public Latrine,7,404,Chazanga,Adults,a,82.2,0.3,164.0105623,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Public Latrine
+Street Food,10,404,Chazanga,Children,c,67.3,2.2,10666.33119,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Street Food
+Street Food,10,404,Chazanga,Adults,a,58.4,2.5,18467.70154,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Street Food
+Shallow Well DW,11,404,Chazanga,Children,c,4.5,2.7,2255.342551,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Shallow Well DW
+Shallow Well DW,11,404,Chazanga,Adults,a,3.6,3.4,9042.791153,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Shallow Well DW
+Borehole DW,12,404,Chazanga,Children,c,79.7,2.3,15902.24065,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Borehole DW
+Borehole DW,12,404,Chazanga,Adults,a,80,2.6,31848.57364,4,Zambia,Lusaka,Lusaka 18,4/1/2018,Borehole DW
