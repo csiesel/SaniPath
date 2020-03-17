@@ -2,6 +2,8 @@ library(shiny)
 library(shinydashboard)
 library(plotly)
 library(shinythemes)
+library(DT)
+library(expss)
 library(tidyverse)
 library(reshape2)
 library(leaflet)
@@ -27,7 +29,7 @@ ui <- fluidPage(
                         menuItem("Exposure", tabName = "tabexposure", icon = icon("asterisk")),
                         menuItem("Map", tabName = "tabmap", icon = icon("map-marker")),
                         h4("Select City/Cities"),
-                        checkboxGroupInput("city", NULL, c(cities))
+                        radioButtons("city", NULL, c(cities), selected="Accra")
                 )
                 ),
                 dashboardBody(
@@ -35,32 +37,26 @@ ui <- fluidPage(
                                 # **************************************************************************************************
                                 # Tab 1 
                                 tabItem(tabName = "taboverview",
-                                        p("Neighborhoods"),
+                                        h3("Neighborhoods"),
                                         leafletOutput("mapneighborhoods"),
                                         hr(),
+                                        h3("Deployment by the Numbers"),
                                         fluidRow(
-                                                # valueBoxOutput("boxdply"),
-                                                valueBoxOutput("boxcountries"),
-                                                valueBoxOutput("boxcity"),
-                                                valueBoxOutput("boxneighb")
-                                        ),
-                                        
-                                        fluidRow(
+                                                valueBoxOutput("boxneighb"),
                                                 valueBoxOutput("boxsamples")
-                                                ),
+                                        ),
                                         fluidRow(
                                                 valueBoxOutput("boxhhsurveys"),
                                                 valueBoxOutput("boxccsurveys"),
                                                 valueBoxOutput("boxsssurveys")
+                                        ),
+                                        hr(),
+                                        h3("Dominant Pathways"),
+                                        fluidRow(
+                                                dataTableOutput("domtable")
                                         )
                                 ),
-                                
-                                # **************************************************************************************************
-                                # # Tab 2 
-                                # tabItem(tabName = "tabstats",
-                                #         h2("Statistics"),
-                                #         p("asdf")
-                                # ),
+
                                 # **************************************************************************************************
                                 # Tab 3 
                                 tabItem(tabName = "tabenviron",
@@ -68,21 +64,19 @@ ui <- fluidPage(
                                         
                                         fluidRow(
                                           column(6,
-                                          wellPanel(
-                                          h4("Map of samples and sample contamination score"),
-                                          leafletOutput("mapecoli", height="600px")
+                                          wellPanel(style="padding: 10px;",
+                                            h4("Map of samples and sample contamination score"),
+                                            leafletOutput("mapecoli", height="600px")
                                           )),
                                           column(6,
-                                        # ), #end of fluidRow1
-                                        # fluidRow(
-                                          wellPanel(
+                                          wellPanel(style="padding: 10px;",
                                             h4("E. coli contamination by sample type", align="center"),
                                             plotOutput("plot_ecoli", height="600px"),
                                             HTML("<p align=center> <i> <font size=2 color=darkred>
                                                  NOTE: Units are as Log10 E. coli/100mL except for the following: Street Food and Raw Produce (Log10 E. coli/serving),
                                                  Latrine Swabs (Log10 E. coli/swab), Soil (Log10 E. coli/gram)
-                                                 </font> </i> </p>"))
-                                            )
+                                                 </font> </i> </p>")
+                                            ))
                                         )
 
                                         
@@ -109,35 +103,7 @@ ui <- fluidPage(
                                 # Tab 5 
                                 tabItem(tabName = "tabexposure",
                                         h2("Exposure and Dominant Pathways"),
-                                        
-                                        p("Static Graph, Adults and Children:"),
-                                        plotOutput("plot_exposure_all", height = "700px"),
-                                        hr(),
-                                        
-                                        p("Static Graph, Adults:"),
-                                        plotOutput("plot_exposure_adults", height = "500px"),
-                                        hr(),
-                                        
-                                        p("Interactive Graph:"),
-                                        plotlyOutput("plot_exposure_adults_plotly", height = "500px"),
-                                        
-                                        hr(),
-                                        plotlyOutput("plot_exposure_bubbles", height = "700px"), #, width = "75%")
-                                        
-                                        hr(),
-                                        p("Static Graph, Children:"),
-                                        plotOutput("plot_exposure_children", height = "500px"),
-                                        hr(),
-                                        
-                                        p("Interactive Graph:"),
-                                        plotlyOutput("plot_exposure_children_plotly", height = "500px"),
-                                        
-                                        hr(),
-                                        plotlyOutput("plot_exposure_bubbles_c", height = "700px")
-                                        
-                                        
-
-                                        
+                                        plotOutput("plot_exposure_all", height = "700px")
                                         
                                 ), 
                                 # **************************************************************************************************
@@ -191,7 +157,7 @@ server <- function(input, output) {
         #neighborhood box
         boxneighb <- reactive({
           meta_full <- filter(meta_full, city %in% citychoice())
-          valueBox(length(unique(meta_full$neighborhood)), "Neighborhoods", icon = icon("list"), color = "teal")
+          valueBox(length(unique(meta_full$neighborhood)), "Neighborhoods", icon = icon("city"), color = "teal")
         })
         output$boxneighb <-renderValueBox(boxneighb())
 
@@ -228,7 +194,23 @@ server <- function(input, output) {
         })
         output$boxsssurveys <- renderValueBox(boxsssurveys())
         
- 
+        #domtable
+        domtable <- reactive({
+          if(is.null(input$city)){
+            return(NULL)
+          }
+          df.dominant <- filter(df.dominant, city %in% citychoice())
+          df.dominant <- df.dominant %>%
+            select(., c("neighborhood", "age", "pathway")) %>%
+            apply_labels(., neighborhood="Neighborhood",
+                         age="Age",
+                         pathway="Dominant Pathway(s)")
+        })
+        output$domtable <- renderDataTable(domtable(), colnames=c("Neighborhood","Age", "Dominant Pathway(s)"),
+                                           options = list(dom = 't', pageLength=30,
+                                                          columnDefs = list(list(className = 'dt-center',
+                                                                                 targets = 0:3)))
+                                           )
         
         # **************************************************************************************************
         
@@ -365,225 +347,7 @@ server <- function(input, output) {
         })
         
         # **************************************************************************************************
-        output$plot_exposure_adults_plotly <- renderPlotly({
-                colors <- c("Open Drain Water" = '#e41a1c',
-                            "Municipal Drinking Water" = '#377eb8',
-                            "Raw Produce" = '#4daf4a',
-                            "Floodwater" = '#984ea3',
-                            "Bathing Water" = '#ff7f00',
-                            "Ocean" = '#ffff33',
-                            "Surface Water" = '#a65628',
-                            "Public Latrine" = '#f781bf',
-                            "Street Food" = '#999999')
-                
-                
-                df.exposure %>% filter(age == "Adults") %>%
-                        mutate(city = replace(city, city == "Atlanta", "Atl"),
-                               city = replace(city, city == "Lusaka", "Lka")) %>%
-                        ggplot(., aes(x=neighb_pop_label, y=perDose, fill=pathway, group = 1,
-                                      text = paste('City: ', city,
-                                                   '<br>Neighborhood:', neighborhood,
-                                                   '<br>Neighborhood ID:', neighb_id, 
-                                                   '<br>Dose:', round(perDose,2), 
-                                                   '<br>Pathway:', pathway)
-                                      ) ) +
-                        geom_bar(stat="identity") +
-                        geom_vline(aes(xintercept = 7.5)) +
-                        geom_vline(aes(xintercept = 8.5)) +
-                        geom_vline(aes(xintercept = 18.5)) +
-                        geom_vline(aes(xintercept = 23.5)) +
-                        geom_vline(aes(xintercept = 27.5)) +
-                        geom_vline(aes(xintercept = 28.5)) +
-                        geom_vline(aes(xintercept = 32.5)) +
-                        geom_vline(aes(xintercept = 37.5)) +
-                        # facet_grid(~ city, scales = "free_x", space = "free_x") +
-                        labs(fill = "Pathway",
-                             x = "Neighborhood",
-                             y = "Total Exposure (log10)") +
-                        theme_bw() +
-                        theme(legend.position="bottom",
-                              axis.text.x = element_text(angle = 90),
-                              strip.text.x = element_text(size = 12),
-                              # strip.text.y = element_text(size = 12),
-                              strip.background = element_rect(fill="white")) +
-                        scale_fill_manual(values = colors) -> p
-                ggplotly(p, tooltip = "text")
-                
-        })
-        
-        # **************************************************************************************************
-        output$plot_exposure_adults <- renderPlot({
-                colors <- c("Open Drain Water" = '#e41a1c',
-                            "Municipal Drinking Water" = '#377eb8',
-                            "Raw Produce" = '#4daf4a',
-                            "Floodwater" = '#984ea3',
-                            "Bathing Water" = '#ff7f00',
-                            "Ocean" = '#ffff33',
-                            "Surface Water" = '#a65628',
-                            "Public Latrine" = '#f781bf',
-                            "Street Food" = '#999999')
-                
-                
-                df.exposure %>% filter(age == "Adults") %>%
-                        mutate(city = replace(city, city == "Atlanta", "Atl"),
-                               city = replace(city, city == "Lusaka", "Lka")) %>%
-                        ggplot(., aes(x=factor(neighb_id), y=perDose, fill=pathway) ) +
-                        geom_bar(stat="identity") +
-                        facet_grid(~ city, scales = "free_x", space = "free_x") +
-                        labs(fill = "Pathway",
-                             x = "Neighborhood",
-                             y = "Total Exposure (log10)") +
-                        theme_bw() +
-                        theme(#legend.position="bottom",
-                              strip.text.x = element_text(size = 12),
-                              # strip.text.y = element_text(size = 12),
-                              strip.background = element_rect(fill="white")) +
-                        scale_fill_manual(values = colors)
-        })
-        
-        # **************************************************************************************************
-        output$plot_exposure_bubbles <- renderPlotly({
-                
-                df.exposure %>% filter(age == "Adults") %>%
-                        ggplot(., aes(x=log10(dose), y=exposure, fill=city, group = 1,
-                                      text = paste('City:', city,
-                                                   '<br>Dose:', round(log10(dose), 2), "(log10)", 
-                                                   '<br>Exposure:', round((exposure*100), 0), "%", 
-                                                   '<br>Neighborhood ID:', neighb_id, 
-                                                   '<br>Neighborhood:', neighborhood))) +
-
-                        # ggplot(., aes(x=log10(dose), y=exposure, text = paste("Neighborhood:", neighb_id))) +
-                        # geom_point(data = transform(df.a, pathway = NULL), colour = "grey85") +
-
-                        geom_point( size = 3, alpha = .8) +
-                        facet_grid(sample_type_name ~ age, labeller = label_wrap_gen(10)) + #wrap label 
-                        theme_bw() +
-                        labs(title = "Exposure by Pathway",
-                             color = "City",
-                             x = "E.coli Dose (log10)",
-                             y = "Percent") +
-                        scale_y_continuous(breaks = c(0,.5,1),
-                                           labels = scales::percent) +
-                        colScale +
-                        theme(strip.text.y = element_text(size = 8),
-                              strip.background = element_rect(fill = "white"),
-                              legend.position = "bottom") -> p
-                ggplotly(p, tooltip = "text")
-        })
-
-        
-        # **************************************************************************************************
-        
-        # **************************************************************************************************
-        output$plot_exposure_children_plotly <- renderPlotly({
-                colors <- c("Open Drain Water" = '#e41a1c',
-                            "Municipal Drinking Water" = '#377eb8',
-                            "Raw Produce" = '#4daf4a',
-                            "Floodwater" = '#984ea3',
-                            "Bathing Water" = '#ff7f00',
-                            "Ocean" = '#ffff33',
-                            "Surface Water" = '#a65628',
-                            "Public Latrine" = '#f781bf',
-                            "Street Food" = '#999999')
-                
-                
-                df.exposure %>% filter(age == "Children") %>%
-                        mutate(city = replace(city, city == "Atlanta", "Atl"),
-                               city = replace(city, city == "Lusaka", "Lka")) %>%
-                        ggplot(., aes(x=neighb_pop_label, y=perDose, fill=pathway, group = 1,
-                                      text = paste('City: ', city,
-                                                   '<br>Neighborhood:', neighborhood,
-                                                   '<br>Neighborhood ID:', neighb_id, 
-                                                   '<br>Dose:', round(perDose,2), 
-                                                   '<br>Pathway:', pathway)
-                        ) ) +
-                        geom_bar(stat="identity") +
-                        geom_vline(aes(xintercept = 7.5)) +
-                        geom_vline(aes(xintercept = 8.5)) +
-                        geom_vline(aes(xintercept = 18.5)) +
-                        geom_vline(aes(xintercept = 23.5)) +
-                        geom_vline(aes(xintercept = 27.5)) +
-                        geom_vline(aes(xintercept = 28.5)) +
-                        geom_vline(aes(xintercept = 32.5)) +
-                        geom_vline(aes(xintercept = 37.5)) +
-                        # facet_grid(~ city, scales = "free_x", space = "free_x") +
-                        labs(fill = "Pathway",
-                             x = "Neighborhood",
-                             y = "Total Exposure (log10)") +
-                        theme_bw() +
-                        theme(legend.position="bottom",
-                              axis.text.x = element_text(angle = 90),
-                              strip.text.x = element_text(size = 12),
-                              # strip.text.y = element_text(size = 12),
-                              strip.background = element_rect(fill="white")) +
-                        scale_fill_manual(values = colors) -> p
-                ggplotly(p, tooltip = "text")
-                
-        })
-        
-        # **************************************************************************************************
-        output$plot_exposure_children <- renderPlot({
-                colors <- c("Open Drain Water" = '#e41a1c',
-                            "Municipal Drinking Water" = '#377eb8',
-                            "Raw Produce" = '#4daf4a',
-                            "Floodwater" = '#984ea3',
-                            "Bathing Water" = '#ff7f00',
-                            "Ocean" = '#ffff33',
-                            "Surface Water" = '#a65628',
-                            "Public Latrine" = '#f781bf',
-                            "Street Food" = '#999999')
-                
-                
-                df.exposure %>% filter(age == "Children") %>%
-                        mutate(city = replace(city, city == "Atlanta", "Atl"),
-                               city = replace(city, city == "Lusaka", "Lka")) %>%
-                        ggplot(., aes(x=factor(neighb_id), y=perDose, fill=pathway) ) +
-                        geom_bar(stat="identity") +
-                        facet_grid(~ city, scales = "free_x", space = "free_x") +
-                        labs(fill = "Pathway",
-                             x = "Neighborhood",
-                             y = "Total Exposure (log10)") +
-                        theme_bw() +
-                        theme(#legend.position="bottom",
-                                strip.text.x = element_text(size = 12),
-                                # strip.text.y = element_text(size = 12),
-                                strip.background = element_rect(fill="white")) +
-                        scale_fill_manual(values = colors)
-        })
-        
-        # **************************************************************************************************
-        output$plot_exposure_bubbles_c <- renderPlotly({
-                
-                df.exposure %>% filter(age == "Children") %>%
-                        ggplot(., aes(x=log10(dose), y=exposure, group = 1,
-                                      text = paste('City:', city,
-                                                   '<br>Dose:', round(log10(dose), 2), "(log10)", 
-                                                   '<br>Exposure:', round((exposure*100), 0), "%", 
-                                                   '<br>Neighborhood ID:', neighb_id, 
-                                                   '<br>Neighborhood:', neighborhood))) +
-                        
-                        # ggplot(., aes(x=log10(dose), y=exposure, text = paste("Neighborhood:", neighb_id))) +
-                        # geom_point(data = transform(df.a, pathway = NULL), colour = "grey85") +
-                        
-                        geom_point(aes(color=city), size = 3, alpha = .8) +
-                        facet_grid(sample_type_name ~ age, labeller = label_wrap_gen(10)) + #wrap label 
-                        theme_bw() +
-                        labs(title = "Exposure by Pathway",
-                             color = "City",
-                             x = "E.coli Dose (log10)",
-                             y = "Percent") +
-                        scale_y_continuous(breaks = c(0,.5,1),
-                                           labels = scales::percent) +
-                        colScale +
-                        theme(strip.text.y = element_text(size = 8),
-                              strip.background = element_rect(fill = "white"),
-                              legend.position = "bottom") -> p
-                ggplotly(p, tooltip = "text")
-        })
-        
-        
-        # **************************************************************************************************
-        output$plot_exposure_all <- renderPlot({
+        plot_exposure_all <- reactive({
                 colors <- c("Open Drain Water" = '#e41a1c',
                             "Municipal Drinking Water" = '#377eb8',
                             "Raw Produce" = '#4daf4a',
@@ -596,9 +360,8 @@ server <- function(input, output) {
                 
                 
                 df.exposure %>% 
-                        mutate(city = replace(city, city == "Atlanta", "Atl"),
-                               city = replace(city, city == "Lusaka", "Lka")) %>%
-                        ggplot(., aes(x=factor(neighb_id), y=perDose, fill=pathway) ) +
+                  filter(., city %in% citychoice()) %>%
+                        ggplot(., aes(x=factor(neighborhood), y=perDose, fill=pathway) ) +
                         geom_bar(stat="identity") +
                         facet_grid(age~ city, scales = "free_x", space = "free_x") +
                         labs(fill = "Pathway",
@@ -611,6 +374,7 @@ server <- function(input, output) {
                                 strip.background = element_rect(fill="white")) +
                         scale_fill_manual(values = colors)
         })
+        output$plot_exposure_all <- renderPlot({plot_exposure_all()})
         
         # **************************************************************************************************       
         output$mapcountries <- renderLeaflet(

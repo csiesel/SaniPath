@@ -56,15 +56,16 @@ df.ecdata <- df.ecdata %>%
 
 # Casey is doing this to standardize E. coli data (x-min/max-min)
 df.ecdata$std_ec_conc <- 0
-max_min <- df.ecdata %>% group_by(sample_type) %>% summarise(max=max(ec_conc, na.rm=TRUE), min=min(ec_conc, na.rm=TRUE))
+#change group_by(sample_type, 2ND VARIABLE HERE) depending on what is used to standardize (city right now)
+max_min <- df.ecdata %>% group_by(sample_type, city) %>% summarise(max=max(ec_conc, na.rm=TRUE), min=min(ec_conc, na.rm=TRUE))
 for(i in 1:nrow(df.ecdata)){
   if(is.na(df.ecdata$ec_conc[i])){
     df.ecdata$std_ec_conc[i]=NA
   }
   else{
-    max<-log10(max_min$max[which(max_min$sample_type==df.ecdata$sample_type[i])])
-    min<-log10(max_min$min[which(max_min$sample_type==df.ecdata$sample_type[i])])
-    df.ecdata$std_ec_conc[i]=(log10(df.ecdata$ec_conc[i])-min)/(max-min) 
+    max<-log10(max_min$max[which(max_min$sample_type==df.ecdata$sample_type[i] & max_min$city==df.ecdata$city[i])])
+    min<-log10(max_min$min[which(max_min$sample_type==df.ecdata$sample_type[i] & max_min$city==df.ecdata$city[i])])
+    df.ecdata$std_ec_conc[i]=(log10(df.ecdata$ec_conc[i])-min)/(max-min)
   }
 }
 
@@ -131,42 +132,9 @@ for(q in 1:length(neighborhoods)){
 
 df.dominant = do.call(rbind, multiFinal)
 
-# df.ecdata$sample_type[df.ecdata$sample_type == 3 & df.ecdata$col_sample_type_alt != "Drinking Water" 
-                      # & df.ecdata$col_sample_type_alt != "" ] <- 33
+df.dominant <- df.dominant %>%
+  filter(., dominantcount==1) %>%
+  select(., c("pathway", "neighborhood", "age", "city"))
 
-# **************************************************************************************************
-# df.exposure <- left_join(df.exposure, meta_dply[c("citylabel", "date")], by = "citylabel")
-# df.exposure <- plyr::arrange(df.exposure, date)
-# reorder levels
-# df.exposure$citylabel <-  factor(df.exposure$citylabel, levels = unique(df.exposure$citylabel))
-
-# table(df.exposure$pathway)
-
-# df.exposure$pathway[df.exposure$pathway == "drain"] <- "Open Drains" #1 
-# df.exposure$pathway[df.exposure$pathway == "produce"] <- "Raw Produce" #2
-# df.exposure$pathway[df.exposure$pathway == "municipal"] <- "Drinking Water" #3
-# df.exposure$pathway[df.exposure$pathway == "ocean"] <- "Oceans" #4
-# df.exposure$pathway[df.exposure$pathway == "surface"] <- "Surface Water" #5
-# df.exposure$pathway[df.exposure$pathway == "flood"] <- "Floodwater" #6
-# df.exposure$pathway[df.exposure$pathway == "latrine"] <- "Public Latrine" #7
-# df.exposure$pathway[df.exposure$pathway == "bathing"] <- "Bathing Water" #9
-# df.exposure$pathway[df.exposure$pathway == "streetfood"] <- "Street Food" #10
-# df.exposure$pathway[df.exposure$pathway == "otherdrinking"] <- "DW, other"  #33
-# 
-# pathwayfactors <- c("Open Drains", "Raw Produce", "Drinking Water", "DW, other", "Oceans", "Surface Water",
-#                     "Floodwater","Public Latrine", "Bathing Water", "Street Food")
-# 
-# df.exposure$pathway <-  factor(df.exposure$pathway, levels = pathwayfactors)
-# 
-# df.exposure$age[df.exposure$age == "a"] <- "Adults"
-# df.exposure$age[df.exposure$age == "c"] <- "Children"
-
-# table(df.ecdata$sample_type)
-# table(df.ecdata$col_sample_type_alt)
-
-# df.ecdata$col_sample_type_alt <- factor(df.ecdata$col_sample_type_alt, 
-#                                         levels=levels(df.ecdata$col_sample_type_alt))
-# df.ecdata$col_sample_type_alt[df.ecdata$sample_type == 3 & df.ecdata$col_sample_type_alt == ""] <- "Drinking Water"
-
-
+df.dominant <- aggregate(pathway ~ neighborhood + age + city, data=df.dominant, paste, collapse=", ")
 
