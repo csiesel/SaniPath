@@ -23,11 +23,12 @@ ui <- fluidPage(
                 dashboardHeader(title = "SaniPath Dashboard"),
                 dashboardSidebar(
                         sidebarMenu(
-                        menuItem("Overview", tabName = "taboverview", icon = icon("home")),
+                        menuItem("Multi-City Comparison", tabName = "tabmulti", icon = icon("globe-africa")),
+                        menuItem("Deployment Overview", tabName = "taboverview", icon = icon("home")),
                         menuItem("Environmental Contamination", tabName = "tabenviron", icon = icon("leaf")),
                         menuItem("Behavior Frequency", tabName = "tabbehav", icon = icon("pie-chart")),
                         menuItem("Exposure", tabName = "tabexposure", icon = icon("asterisk")),
-                        menuItem("Map", tabName = "tabmap", icon = icon("map-marker")),
+                        # menuItem("Map", tabName = "tabmap", icon = icon("map-marker")),
                         h4("Select City/Cities"),
                         radioButtons("city", NULL, c(cities), selected="Accra")
                 )
@@ -35,33 +36,64 @@ ui <- fluidPage(
                 dashboardBody(
                         tabItems(
                                 # **************************************************************************************************
+                                # Tab 1
+                                tabItem(tabName = "tabmulti",
+                                        p("Countries and Cities"),
+                                        leafletOutput("mapcountries"),
+                                        hr(),
+                                        h2("Overview"),
+                                        p("Here is an overview of the Current SaniPath deployment statistics."),
+                                        
+                                        fluidRow(
+                                          # valueBoxOutput("boxdply"),
+                                          valueBoxOutput("multiboxcountries"),
+                                          valueBoxOutput("multiboxcity"),
+                                          valueBoxOutput("multiboxneighb")
+                                        ),
+                                        
+                                        fluidRow(
+                                          valueBoxOutput("multiboxsamples")
+                                        ),
+                                        fluidRow(
+                                          valueBoxOutput("multiboxhhsurveys"),
+                                          valueBoxOutput("multiboxccsurveys"),
+                                          valueBoxOutput("multiboxsssurveys")
+                                        ),
+                                        fluidRow(
+                                          plotOutput("plot_exposure_multi")
+                                        )
+                                        
+                                ),
+                                
+                                # **************************************************************************************************
                                 # Tab 1 
                                 tabItem(tabName = "taboverview",
                                         h3("Neighborhoods"),
                                         leafletOutput("mapneighborhoods"),
-                                        hr(),
-                                        h3("Deployment by the Numbers"),
-                                        fluidRow(
+                                        fluidRow(column(6,
+                                                h3("Deployment by the Numbers"),
                                                 valueBoxOutput("boxneighb"),
-                                                valueBoxOutput("boxsamples")
-                                        ),
-                                        fluidRow(
-                                                valueBoxOutput("boxhhsurveys"),
-                                                valueBoxOutput("boxccsurveys"),
-                                                valueBoxOutput("boxsssurveys")
-                                        ),
-                                        hr(),
-                                        h3("Dominant Pathways"),
-                                        fluidRow(
+                                                fluidRow(valueBoxOutput("boxsamples")),
+                                                fluidRow(valueBoxOutput("boxhhsurveys"),
+                                                valueBoxOutput("boxccsurveys")),
+                                                fluidRow(valueBoxOutput("boxsssurveys"))
+                                                ),
+                                                column(6,
+                                                h3("Dominant Pathways"),
                                                 dataTableOutput("domtable")
+                                                )
                                         )
+
                                 ),
 
                                 # **************************************************************************************************
                                 # Tab 3 
                                 tabItem(tabName = "tabenviron",
-                                        h2("Environmental Contamination"),
-                                        
+                                        fluidRow(
+                                          wellPanel(style="padding: 10px;",
+                                          h2("Environmental Contamination"),
+                                          checkboxGroupInput("sample", NULL, c(samples), inline=TRUE)
+                                        )),
                                         fluidRow(
                                           column(6,
                                           wellPanel(style="padding: 10px;",
@@ -105,26 +137,26 @@ ui <- fluidPage(
                                         h2("Exposure and Dominant Pathways"),
                                         plotOutput("plot_exposure_all", height = "700px")
                                         
-                                ), 
+                                ) 
                                 # **************************************************************************************************
                                 # Tab 6 
-                                tabItem(tabName = "tabmap",
-                                        h2("Map"),
-                                        p("interactive maps"),
-                                        hr(),
-                                        
-                                        p("Countries and Cities"),
-                                        leafletOutput("mapcountries"),
-                                        hr()
-                                        
-                                        # p("Neighborhoods"),
-                                        # leafletOutput("mapneighborhoods"),
-                                        # hr(), 
-                                        # 
-                                        # p("Environmental Samples, Ecoli"),
-                                        # leafletOutput("mapecoli"),
-                                        # hr()
-                                )
+                                # tabItem(tabName = "tabmap",
+                                #         h2("Map"),
+                                #         p("interactive maps"),
+                                #         hr(),
+                                #         
+                                #         p("Countries and Cities"),
+                                #         leafletOutput("mapcountries"),
+                                #         hr()
+                                #         
+                                #         # p("Neighborhoods"),
+                                #         # leafletOutput("mapneighborhoods"),
+                                #         # hr(), 
+                                #         # 
+                                #         # p("Environmental Samples, Ecoli"),
+                                #         # leafletOutput("mapecoli"),
+                                #         # hr()
+                                # )
                         ))
         )
         
@@ -135,20 +167,22 @@ ui <- fluidPage(
 
 
 # Define server logic required to draw a histogram
-server <- function(input, output) {
+server <- function(input, output, session) {
         # **************************************************************************************************
         citychoice <- reactive({input$city})
-
+        
+        
+        observeEvent(input$city,{
+          df.ecdata <- filter(df.ecdata, city %in% citychoice())
+          samples <- as.character(unique(df.ecdata$sample_type_name))
+          updateCheckboxGroupInput(session, "sample", choices=c(samples), selected=samples[[1]], inline=TRUE)
+        })
+        samplechoice <- reactive({input$sample})
+        
         output$citychoice <- renderText(paste0("Here is an overview of the SaniPath deployment statistics in ", citychoice(),"."))
         
-        
-        # output$boxdply <- renderValueBox({
-        #         valueBox(
-        #                 nrow(meta_dply), "Deployments", icon = icon("info-sign", lib = "glyphicon"),
-        #                 color = "teal")
-        # })
-        
-        output$boxcity <- renderValueBox({
+        #multicity box
+        output$multiboxcity <- renderValueBox({
                 valueBox(
                         length(unique(meta_dply$city)), "Cities", icon = icon("info-sign", lib = "glyphicon"),
                         color = "teal")
@@ -160,9 +194,17 @@ server <- function(input, output) {
           valueBox(length(unique(meta_full$neighborhood)), "Neighborhoods", icon = icon("city"), color = "teal")
         })
         output$boxneighb <-renderValueBox(boxneighb())
+        
+        #multineighborhood box
+        output$multiboxneighb <- renderValueBox({
+          valueBox(
+            length(unique(meta_neighb$neighborhood)), "Neighborhoods", icon = icon("city"),
+            color = "teal")
+        })
+        
 
         #country box
-        output$boxcountries <- renderValueBox({
+        output$multiboxcountries <- renderValueBox({
                 valueBox(length(unique(meta_dply$country)), "Countries", icon = icon("flag", lib = "glyphicon"), color = "teal")
         })
         
@@ -193,6 +235,27 @@ server <- function(input, output) {
           valueBox(nrow(df.sc), "School Surveys", icon=icon("clipboard"), color="aqua")
         })
         output$boxsssurveys <- renderValueBox(boxsssurveys())
+        
+        #multisamples box
+        output$multiboxsamples <- renderValueBox({
+          valueBox(
+            nrow(df.ecdata), "Environmental Samples", icon = icon("flask"),
+            color = "light-blue")
+        })
+        
+        output$multiboxhhsurveys <- renderValueBox({
+          valueBox(nrow(df.hh), "Household Surveys", icon=icon("clipboard"), color="aqua")
+        })
+        
+        output$multiboxccsurveys <- renderValueBox({
+          valueBox(nrow(df.cc), "Community Surveys", icon=icon("clipboard"), color="aqua")
+        })
+        
+        output$multiboxsssurveys <- renderValueBox({
+          valueBox(nrow(df.sc), "School Surveys", icon=icon("clipboard"), color="aqua")
+        })
+        
+        
         
         #domtable
         domtable <- reactive({
@@ -376,6 +439,37 @@ server <- function(input, output) {
         })
         output$plot_exposure_all <- renderPlot({plot_exposure_all()})
         
+        
+        output$plot_exposure_multi <-renderPlot({
+          colors <- c("Open Drain Water" = '#e41a1c',
+                      "Municipal Drinking Water" = '#377eb8',
+                      "Raw Produce" = '#4daf4a',
+                      "Floodwater" = '#984ea3',
+                      "Bathing Water" = '#ff7f00',
+                      "Ocean" = '#ffff33',
+                      "Surface Water" = '#a65628',
+                      "Public Latrine" = '#f781bf',
+                      "Street Food" = '#999999')
+          
+          
+          df.exposure %>% 
+            mutate(city = replace(city, city == "Atlanta", "Atl")) %>%
+            ggplot(., aes(x=factor(neighb_id), y=perDose, fill=pathway) ) +
+            geom_bar(stat="identity") +
+            facet_grid(age~ city, scales = "free_x", space = "free_x") +
+            labs(fill = "Pathway",
+                 x = "Neighborhood",
+                 y = "Total Exposure (log10)") +
+            theme_bw() +
+            theme(#legend.position="bottom",
+              strip.text.x = element_text(size = 12),
+              # strip.text.y = element_text(size = 12),
+              strip.background = element_rect(fill="white")) +
+            scale_fill_manual(values = colors)
+        })
+        
+        
+        
         # **************************************************************************************************       
         output$mapcountries <- renderLeaflet(
                 leaflet(meta_dply) %>% 
@@ -409,7 +503,7 @@ server <- function(input, output) {
 
         # Casey New Things
         ecoli_map <- reactive({
-          df.ecdata<- filter(df.ecdata, city %in% citychoice())
+          df.ecdata<- filter(df.ecdata, city %in% citychoice() & sample_type_name %in% samplechoice())
           
           df <- left_join(df.ecdata, df.col[, c("col_UID", "lat" = "X_col_location_latitude", "X_col_location_longitude")],
                           by = c("UID" = "col_UID"))
@@ -438,15 +532,28 @@ server <- function(input, output) {
           df$lat[df$UID == "11_02_1018"] <- 12.915
           df$lon[df$UID == "11_02_1018"] <- 79.141
           
-          leaflet(df) %>% 
+          factpal <- colorFactor("plasma", meta_neighb$deployment)
+          df11 <- left_join(meta_neighb, meta_dply[, c(1,2,4)], by=c("deployment_id" = "id"))
+          df11 <- filter(df11, city %in% citychoice())
+
+          
+          
+          
+          leaflet() %>% 
             addTiles() %>%
             # addProviderTiles(providers$MtbMap) %>%
             # addProviderTiles(providers$Stamen.TonerLines,
             #                  options = providerTileOptions(opacity = 0.35)) %>%
             # addProviderTiles(providers$Stamen.TonerLabels) %>%
-            addCircles(~lon, ~lat,
+            addCircleMarkers(data=df11, lng = ~long,
+                             lat = ~lat, 
+                             label = paste0(df11$neighborhood, ", ", df11$city, " (", df11$country, ")"),
+                             popup = ~deployment,
+                             options = markerOptions(draggable = F, riseOnHover = TRUE),
+                             color = ~factpal(deployment)) %>%
+            addCircles(data=df, lng=~lon, lat=~lat,
                        popup = paste0(df$sample_type_name, ", ", sprintf("%.2f", round(df$std_ec_conc, 2)), " Normalized E.coli", " (log10)"),
-                       weight = 3, radius=20, color=~dot_color, stroke = TRUE, fillOpacity = 1) %>%
+                       weight = 3, radius=50, color=~dot_color, stroke = TRUE, fillOpacity = 1) %>%
             addLegend("bottomright", colors = color1, labels = cutoff1,
                       title = "Ecoli Value Cutoff") %>%
             addScaleBar("bottomleft")
@@ -470,9 +577,7 @@ server <- function(input, output) {
           getPalette = colorRampPalette(brewer.pal(9, "Set3"))
           colScale <- scale_fill_manual(values=getPalette(colourCount))
           
-          df.ecdata %>% filter(city %in% citychoice()) %>%
-            
-            
+          df.ecdata %>% filter(., city %in% citychoice() & sample_type_name %in% samplechoice()) %>%
             ggplot(., aes(y=factor(hood), x=log10(ec_conc))) +
             geom_density_ridges(aes(fill=city), quantile_lines=TRUE, quantiles=2, panel_scaling=FALSE) +
             # geom_point(aes(color=city) ) +
@@ -485,7 +590,8 @@ server <- function(input, output) {
             scale_x_continuous(breaks = c(0,2,4,6,8,10)) +
             theme(axis.text.x = element_text(angle = 90, hjust = 0.95, vjust = 0.2),
                   axis.text=element_text(size=8),
-                  strip.background = element_rect(fill="white")) +
+                  strip.background = element_rect(fill="white"),
+                  legend.position="none") +
             colScale
           
         })
