@@ -32,6 +32,7 @@ meta_dply <- meta_dply %>% mutate(country = factor(.$country, levels = factor(un
 meta_full <- merge(meta_dply, meta_neighb, by.x="id", by.y="deployment_id")
 cities <- unique(meta_dply$city)
 hoods <- unique(meta_neighb$neighborhood)
+samples <- as.character(unique(df.ecdata$sample_type_name))
 colourCount = length(unique(meta_dply$city))
 getPalette = colorRampPalette(brewer.pal(9, "Set3"))
 colScale <- scale_fill_manual(values=getPalette(colourCount))
