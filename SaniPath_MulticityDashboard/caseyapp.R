@@ -30,7 +30,7 @@ ui <- fluidPage(
                         menuItem("Exposure", tabName = "tabexposure", icon = icon("asterisk")),
                         # menuItem("Map", tabName = "tabmap", icon = icon("map-marker")),
                         h4("Select City/Cities"),
-                        radioButtons("city", NULL, c(cities), selected="Accra")
+                        checkboxGroupInput("city", NULL, c(cities), selected="Accra")
                 )
                 ),
                 dashboardBody(
