@@ -35,6 +35,7 @@ hoods <- unique(meta_neighb$neighborhood)
 samples <- as.character(unique(df.ecdata$sample_type_name))
 colourCount = length(unique(meta_dply$city))
 getPalette = colorRampPalette(brewer.pal(9, "Set3"))
+getPalette2 = colorRampPalette(brewer.pal(9, "Pastel1"))
 colScale <- scale_fill_manual(values=getPalette(colourCount))
 
 
@@ -126,7 +127,7 @@ df.dominant = do.call(rbind, multiFinal)
 
 df.dominant <- df.dominant %>%
   filter(., dominantcount==1) %>%
-  select(., c("pathway", "neighborhood", "age", "city"))
+  select(., c("pathway", "neighborhood", "age", "city", "dominantcount"))
 
 df.dominant <- aggregate(pathway ~ neighborhood + age + city, data=df.dominant, paste, collapse=", ")
 

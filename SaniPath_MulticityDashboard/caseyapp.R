@@ -28,7 +28,6 @@ ui <- fluidPage(
                         menuItem("Environmental Contamination", tabName = "tabenviron", icon = icon("leaf")),
                         menuItem("Behavior Frequency", tabName = "tabbehav", icon = icon("pie-chart")),
                         menuItem("Exposure", tabName = "tabexposure", icon = icon("asterisk")),
-                        # menuItem("Map", tabName = "tabmap", icon = icon("map-marker")),
                         h4("Select City/Cities"),
                         checkboxGroupInput("city", NULL, c(cities), selected="Accra")
                 )
@@ -70,15 +69,15 @@ ui <- fluidPage(
                                 tabItem(tabName = "taboverview",
                                         h3("Neighborhoods"),
                                         leafletOutput("mapneighborhoods"),
-                                        fluidRow(column(6,
+                                        fluidRow(column(7,
                                                 h3("Deployment by the Numbers"),
-                                                valueBoxOutput("boxneighb"),
-                                                fluidRow(valueBoxOutput("boxsamples")),
+                                                fluidRow(valueBoxOutput("boxneighb"),
+                                                valueBoxOutput("boxsamples")),
                                                 fluidRow(valueBoxOutput("boxhhsurveys"),
                                                 valueBoxOutput("boxccsurveys")),
                                                 fluidRow(valueBoxOutput("boxsssurveys"))
                                                 ),
-                                                column(6,
+                                                column(5,
                                                 h3("Dominant Pathways"),
                                                 dataTableOutput("domtable")
                                                 )
@@ -256,24 +255,28 @@ server <- function(input, output, session) {
         })
         
         
+
+        
+        
         
         #domtable
         domtable <- reactive({
           if(is.null(input$city)){
             return(NULL)
           }
-          df.dominant <- filter(df.dominant, city %in% citychoice())
-          df.dominant <- df.dominant %>%
-            select(., c("neighborhood", "age", "pathway")) %>%
-            apply_labels(., neighborhood="Neighborhood",
-                         age="Age",
-                         pathway="Dominant Pathway(s)")
-        })
-        output$domtable <- renderDataTable(domtable(), colnames=c("Neighborhood","Age", "Dominant Pathway(s)"),
-                                           options = list(dom = 't', pageLength=30,
-                                                          columnDefs = list(list(className = 'dt-center',
-                                                                                 targets = 0:3)))
-                                           )
+            df.dominant <- filter(df.dominant, city %in% citychoice())
+            tableColor <- getPalette2(n=length(unique(df.dominant$city)))
+            df.dominant <- df.dominant %>%
+              select(., c("city", "neighborhood", "age", "pathway")) %>%
+              apply_labels(., neighborhood="Neighborhood", age="Age", pathway="Dominant Pathway(s)")
+            dom_table <- datatable(df.dominant, colnames=c("City", "Neighborhood","Age", "Dominant Pathway(s)"),
+                                  options = list(dom = 't', pageLength=30,columnDefs = list(list(className = 'dt-center',
+                                                                                                targets = 0:4))))
+            dom_table %>% formatStyle(columns= "city", target="row",
+                                      background=styleEqual(unique(df.dominant$city), c((tableColor))))
+          })
+
+        output$domtable <- renderDataTable(domtable())
         
         # **************************************************************************************************
         
