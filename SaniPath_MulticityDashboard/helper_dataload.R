@@ -129,5 +129,4 @@ df.dominant <- df.dominant %>%
   filter(., dominantcount==1) %>%
   select(., c("pathway", "neighborhood", "age", "city", "dominantcount"))
 
-df.dominant <- aggregate(pathway ~ neighborhood + age + city, data=df.dominant, paste, collapse=", ")
 

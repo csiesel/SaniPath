@@ -18,24 +18,27 @@ source("helper_dataload.R")
 
 
 # Define UI for application that draws a histogram
+#### UI ####
 ui <- fluidPage(
         dashboardPage(
                 dashboardHeader(title = "SaniPath Dashboard"),
                 dashboardSidebar(
                         sidebarMenu(
-                        menuItem("Multi-City Comparison", tabName = "tabmulti", icon = icon("globe-africa")),
-                        menuItem("Deployment Overview", tabName = "taboverview", icon = icon("home")),
-                        menuItem("Environmental Contamination", tabName = "tabenviron", icon = icon("leaf")),
-                        menuItem("Behavior Frequency", tabName = "tabbehav", icon = icon("pie-chart")),
-                        menuItem("Exposure", tabName = "tabexposure", icon = icon("asterisk")),
-                        h4("Select City/Cities"),
+                          h5("SaniPath Multi-City Comparison"),
+                          menuItem("Multi-City Comparison", tabName = "tabmulti", icon = icon("globe-africa")),
+                          h5(textOutput("citychoice")),
+                          menuItem("Deployment Overview", tabName = "taboverview", icon = icon("home")),
+                          menuItem("Environmental Contamination", tabName = "tabenviron", icon = icon("leaf")),
+                          menuItem("Behavior Frequency", tabName = "tabbehav", icon = icon("pie-chart")),
+                          menuItem("Exposure", tabName = "tabexposure", icon = icon("asterisk")),
+                          h4("Select City/Cities"),
                         checkboxGroupInput("city", NULL, c(cities), selected="Accra")
                 )
                 ),
                 dashboardBody(
                         tabItems(
                                 # **************************************************************************************************
-                                # Tab 1
+                                ##### Tab 1: MultiCity Comparison ####
                                 tabItem(tabName = "tabmulti",
                                         p("Countries and Cities"),
                                         leafletOutput("mapcountries"),
@@ -60,12 +63,15 @@ ui <- fluidPage(
                                         ),
                                         fluidRow(
                                           plotOutput("plot_exposure_multi")
+                                        ),
+                                        fluidRow(
+                                          h2("dominant pathway count"),
+                                          plotOutput("multidom")
                                         )
-                                        
                                 ),
                                 
                                 # **************************************************************************************************
-                                # Tab 1 
+                                #### Tab 2: Deployment Overview ####
                                 tabItem(tabName = "taboverview",
                                         h3("Neighborhoods"),
                                         leafletOutput("mapneighborhoods"),
@@ -86,7 +92,7 @@ ui <- fluidPage(
                                 ),
 
                                 # **************************************************************************************************
-                                # Tab 3 
+                                #### Tab 3: Environmental Samples ####
                                 tabItem(tabName = "tabenviron",
                                         fluidRow(
                                           wellPanel(style="padding: 10px;",
@@ -114,7 +120,7 @@ ui <- fluidPage(
                                         
                                 ),
                                 # **************************************************************************************************
-                                # Tab 4 
+                                #### Tab 4: Behavioral frequency ####
                                 tabItem(tabName = "tabbehav",
                                         h2("Behavior Frequency"),
                                         
@@ -131,31 +137,13 @@ ui <- fluidPage(
                                         
                                 ),
                                 # **************************************************************************************************
-                                # Tab 5 
+                                #### Tab 5: Exposure ####
                                 tabItem(tabName = "tabexposure",
                                         h2("Exposure and Dominant Pathways"),
                                         plotOutput("plot_exposure_all", height = "700px")
                                         
-                                ) 
-                                # **************************************************************************************************
-                                # Tab 6 
-                                # tabItem(tabName = "tabmap",
-                                #         h2("Map"),
-                                #         p("interactive maps"),
-                                #         hr(),
-                                #         
-                                #         p("Countries and Cities"),
-                                #         leafletOutput("mapcountries"),
-                                #         hr()
-                                #         
-                                #         # p("Neighborhoods"),
-                                #         # leafletOutput("mapneighborhoods"),
-                                #         # hr(), 
-                                #         # 
-                                #         # p("Environmental Samples, Ecoli"),
-                                #         # leafletOutput("mapecoli"),
-                                #         # hr()
-                                # )
+                                )
+
                         ))
         )
         
@@ -166,11 +154,14 @@ ui <- fluidPage(
 
 
 # Define server logic required to draw a histogram
+#### Server ####
 server <- function(input, output, session) {
         # **************************************************************************************************
+        #### City Choice Important Input ####
         citychoice <- reactive({input$city})
         
-        
+        # **************************************************************************************************
+        #### Sample Choice Important Input for Reactive CheckboxGroupInput on Sample Slide####
         observeEvent(input$city,{
           df.ecdata <- filter(df.ecdata, city %in% citychoice())
           samples <- as.character(unique(df.ecdata$sample_type_name))
@@ -178,7 +169,9 @@ server <- function(input, output, session) {
         })
         samplechoice <- reactive({input$sample})
         
-        output$citychoice <- renderText(paste0("Here is an overview of the SaniPath deployment statistics in ", citychoice(),"."))
+        # **************************************************************************************************
+        #### City Choice Important Input ####
+        output$citychoice <- renderText(paste0("Deployment Overview in ", citychoice(),"."))
         
         #multicity box
         output$multiboxcity <- renderValueBox({
@@ -255,7 +248,27 @@ server <- function(input, output, session) {
         })
         
         
-
+        #multi dom pie chart
+        multidom <- reactive({
+          if(is.null(input$city)){
+            return(NULL)
+          }
+          domcount <- df.dominant %>% group_by(pathway, age) %>% summarise(n=n())
+          ggplot(domcount, aes(x=pathway, y=n, fill=age)) +
+            geom_segment(aes(x=pathway, xend=pathway, y=0, yend=n, colour=age), show.legend=F) +
+            geom_point(aes(colour=age), size=4, alpha=0.6) +
+            theme_light() +
+            coord_flip() +
+            labs(y="Count of neighborhoods with each pathway as dominant", x="") +
+            theme(
+              panel.grid.major.y = element_blank(),
+              panel.border = element_blank(),
+              axis.ticks.y = element_blank()
+            )
+          
+          
+        })
+        output$multidom <- renderPlot(multidom())
         
         
         
@@ -265,7 +278,10 @@ server <- function(input, output, session) {
             return(NULL)
           }
             df.dominant <- filter(df.dominant, city %in% citychoice())
+            df.dominant <- aggregate(pathway ~ neighborhood + age + city, data=df.dominant, paste, collapse=", ")
+            
             tableColor <- getPalette2(n=length(unique(df.dominant$city)))
+            
             df.dominant <- df.dominant %>%
               select(., c("city", "neighborhood", "age", "pathway")) %>%
               apply_labels(., neighborhood="Neighborhood", age="Age", pathway="Dominant Pathway(s)")
@@ -594,7 +610,7 @@ server <- function(input, output, session) {
             theme(axis.text.x = element_text(angle = 90, hjust = 0.95, vjust = 0.2),
                   axis.text=element_text(size=8),
                   strip.background = element_rect(fill="white"),
-                  legend.position="none") +
+                  legend.position="bottom") +
             colScale
           
         })
