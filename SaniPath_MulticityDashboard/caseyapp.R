@@ -2,6 +2,9 @@ library(shiny)
 library(shinydashboard)
 library(plotly)
 library(shinythemes)
+library(dashboardthemes)
+library(shinyWidgets)
+# http://shinyapps.dreamrs.fr/shinyWidgets/
 library(DT)
 library(expss)
 library(tidyverse)
@@ -14,7 +17,9 @@ library(ggridges)
 
 
 # load data
+source("themes.R")
 source("helper_dataload.R")
+source("themes.R")
 
 
 # Define UI for application that draws a histogram
@@ -24,9 +29,10 @@ ui <- fluidPage(
                 dashboardHeader(title = "SaniPath Dashboard"),
                 dashboardSidebar(
                         sidebarMenu(
-                          h5("SaniPath Multi-City Comparison"),
+                          HTML("<h5 align=center> <u><b> SaniPath Multi-City Comparison </b></u> </h5>"),
                           menuItem("Multi-City Comparison", tabName = "tabmulti", icon = icon("globe-africa")),
-                          h5(textOutput("citychoice")),
+                          HTML("<h5 align=center> <u><b> Deployment Overview </b></u> </h5>"),
+                          # h5(textOutput("citychoice")),
                           menuItem("Deployment Overview", tabName = "taboverview", icon = icon("home")),
                           menuItem("Environmental Contamination", tabName = "tabenviron", icon = icon("leaf")),
                           menuItem("Behavior Frequency", tabName = "tabbehav", icon = icon("pie-chart")),
@@ -36,6 +42,9 @@ ui <- fluidPage(
                 )
                 ),
                 dashboardBody(
+                  #THis is loading the custom theme
+                  sanipath,
+                  
                         tabItems(
                                 # **************************************************************************************************
                                 ##### Tab 1: MultiCity Comparison ####
@@ -97,13 +106,22 @@ ui <- fluidPage(
                                         fluidRow(
                                           wellPanel(style="padding: 10px;",
                                           h2("Environmental Contamination"),
-                                          checkboxGroupInput("sample", NULL, c(samples), inline=TRUE)
+                                          h5("Select environmental pathways below to update the map and graphs"),
+                                          checkboxGroupButtons("sample", NULL, c(samples), individual=TRUE, width='100%',
+                                                               status="primary", checkIcon = list(
+                                                                 yes = icon("ok", lib = "glyphicon"),
+                                                                 no = icon("remove", lib = "glyphicon")))
                                         )),
                                         fluidRow(
                                           column(6,
                                           wellPanel(style="padding: 10px;",
                                             h4("Map of samples and sample contamination score"),
-                                            leafletOutput("mapecoli", height="600px")
+                                            leafletOutput("mapecoli", height="600px"),
+                                            HTML("<p align=center> <i> <font size=2 color=darkred>
+                                                 NOTE: Units are as normalized Log10 E. coli. Normalized Log10 E. coli is calculated on the city level and provides
+                                                 a scale of 0-1 using the following formula: x-min/max-min, where x is the Log10 E. coli concentration, min is the
+                                                 lowest concentration of E. coli for that sample type in the city and max is the highest.
+                                                 </font> </i> </p>")
                                           )),
                                           column(6,
                                           wellPanel(style="padding: 10px;",
@@ -165,7 +183,8 @@ server <- function(input, output, session) {
         observeEvent(input$city,{
           df.ecdata <- filter(df.ecdata, city %in% citychoice())
           samples <- as.character(unique(df.ecdata$sample_type_name))
-          updateCheckboxGroupInput(session, "sample", choices=c(samples), selected=samples[[1]], inline=TRUE)
+          updateCheckboxGroupButtons(session, "sample", choices=c(samples), selected=samples[[1]], status="primary",
+                                     checkIcon = list(yes = icon("ok", lib = "glyphicon"), no = icon("remove",lib = "glyphicon")))
         })
         samplechoice <- reactive({input$sample})
         
@@ -452,8 +471,9 @@ server <- function(input, output, session) {
                         theme_bw() +
                         theme(#legend.position="bottom",
                                 strip.text.x = element_text(size = 12),
-                                # strip.text.y = element_text(size = 12),
-                                strip.background = element_rect(fill="white")) +
+                                strip.text.y = element_text(size = 12),
+                                strip.background = element_rect(fill="white"),
+                                axis.text.x = element_text(angle=90)) +
                         scale_fill_manual(values = colors)
         })
         output$plot_exposure_all <- renderPlot({plot_exposure_all()})
@@ -587,7 +607,7 @@ server <- function(input, output, session) {
         
         # Plotting the density ridge plots for ecoli
         ecoli_plot <- reactive({
-          if(is.null(input$city)){
+          if(is.null(input$city) | is.null(input$sample)){
             return(NULL)
           }
           
