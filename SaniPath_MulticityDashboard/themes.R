@@ -1,7 +1,13 @@
 sanipath <- shinyDashboardThemeDIY(
   
+  #SP Top BLue: 26,49,87
+  #SP Light blue: 212, 234, 247
+  #SP Logo light blue: 148, 202, 235
+  #SP Med Blue: 72, 152, 210
+  
+  
   ### general
-  appFontFamily = "Arial"
+  appFontFamily = "Lato"
   ,appFontColor = "rgb(26,49,87)"
   ,primaryFontColor = "rgb(245,245,245)"
   ,infoFontColor = "rgb(245,245,245)"
@@ -13,10 +19,10 @@ sanipath <- shinyDashboardThemeDIY(
   ### header
   ,logoBackColor = "rgb(26,49,87)"
   
-  ,headerButtonBackColor = "rgb(24,188,156)"
-  ,headerButtonIconColor = "rgb(44,62,80)"
-  ,headerButtonBackColorHover = "rgb(20,154,128)"
-  ,headerButtonIconColorHover = "rgb(0,0,0)"
+  ,headerButtonBackColor = "rgb(212, 234, 247)"
+  ,headerButtonIconColor = "rgb(26,49,87)"
+  ,headerButtonBackColorHover = "rgb(148, 202, 235)"
+  ,headerButtonIconColorHover = "rgb(26,49,87)"
   
   ,headerBackColor = "rgb(26, 49, 87)"
   ,headerBoxShadowColor = ""
@@ -42,15 +48,15 @@ sanipath <- shinyDashboardThemeDIY(
   ,sidebarTabTextColor = "rgb(54, 54, 54)"
   ,sidebarTabTextSize = 14
   ,sidebarTabBorderStyle = "none"
-  ,sidebarTabBorderColor = "none"
-  ,sidebarTabBorderWidth = 0
+  ,sidebarTabBorderColor = "rgb(72, 152, 210)"
+  ,sidebarTabBorderWidth = 5
   
-  ,sidebarTabBackColorSelected = "rgb(30,43,55)"
-  ,sidebarTabTextColorSelected = "rgb(24,188,156)"
+  ,sidebarTabBackColorSelected = "rgb(26,49,87)"
+  ,sidebarTabTextColorSelected = "rgb(148, 202, 235)"
   ,sidebarTabRadiusSelected = "0px"
   
-  ,sidebarTabBackColorHover = "rgb(44,62,80)"
-  ,sidebarTabTextColorHover = "rgb(24,188,156)"
+  ,sidebarTabBackColorHover = "rgb(30,43,55)"
+  ,sidebarTabTextColorHover = "rgb(148, 202, 235)"
   ,sidebarTabBorderStyleHover = "none"
   ,sidebarTabBorderColorHover = "none"
   ,sidebarTabBorderWidthHover = 0
@@ -78,9 +84,9 @@ sanipath <- shinyDashboardThemeDIY(
   ,tabBoxBorderRadius = 10
   
   ### inputs
-  ,buttonBackColor = "rgb(44,62,80)"
-  ,buttonTextColor = "rgb(255,255,255)"
-  ,buttonBorderColor = "rgb(44,62,80)"
+  ,buttonBackColor = "rgb(204, 204, 204)"
+  ,buttonTextColor = "rgb(26,49,87)"
+  ,buttonBorderColor = "rgb(26,49,87)"
   ,buttonBorderRadius = 5
   
   ,buttonBackColorHover = "rgb(30,43,55)"

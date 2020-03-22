@@ -17,7 +17,6 @@ library(ggridges)
 
 
 # load data
-source("themes.R")
 source("helper_dataload.R")
 source("themes.R")
 
@@ -31,14 +30,17 @@ ui <- fluidPage(
                         sidebarMenu(
                           HTML("<h5 align=center> <u><b> SaniPath Multi-City Comparison </b></u> </h5>"),
                           menuItem("Multi-City Comparison", tabName = "tabmulti", icon = icon("globe-africa")),
-                          HTML("<h5 align=center> <u><b> Deployment Overview </b></u> </h5>"),
+                          tags$hr(style="background-color: rgb(26, 49, 87); height: 3px;"),
+                          HTML("<h5 align=center> <u><b> Deployment-Specific Results </b></u> </h5>"),
                           # h5(textOutput("citychoice")),
                           menuItem("Deployment Overview", tabName = "taboverview", icon = icon("home")),
                           menuItem("Environmental Contamination", tabName = "tabenviron", icon = icon("leaf")),
                           menuItem("Behavior Frequency", tabName = "tabbehav", icon = icon("pie-chart")),
                           menuItem("Exposure", tabName = "tabexposure", icon = icon("asterisk")),
-                          h4("Select City/Cities"),
-                        checkboxGroupInput("city", NULL, c(cities), selected="Accra")
+                          hr(),
+                          HTML("<h5 align=center> <u><b> Select City/Cities for <br> Deploymeht Results </b></u> </h5>"),
+                        checkboxGroupButtons("city", NULL, c(cities), selected="Accra", direction="vertical",
+                                             justified=TRUE)
                 )
                 ),
                 dashboardBody(
