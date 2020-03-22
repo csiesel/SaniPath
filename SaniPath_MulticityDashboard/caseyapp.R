@@ -25,22 +25,27 @@ source("themes.R")
 #### UI ####
 ui <- fluidPage(
         dashboardPage(
-                dashboardHeader(title = "SaniPath Dashboard"),
+                dashboardHeader(title=logo_sanipath),
                 dashboardSidebar(
                         sidebarMenu(
-                          HTML("<h5 align=center> <u><b> SaniPath Multi-City Comparison </b></u> </h5>"),
+                          HTML("<div style=background-color:rgb(84,84,84);height:20px;> <h5 align=center> <u> <b>
+                               <font color=white> SaniPath Multi-City Comparison </font>
+                               </b></u></h5></div>"),
                           menuItem("Multi-City Comparison", tabName = "tabmulti", icon = icon("globe-africa")),
-                          tags$hr(style="background-color: rgb(26, 49, 87); height: 3px;"),
-                          HTML("<h5 align=center> <u><b> Deployment-Specific Results </b></u> </h5>"),
+                          # tags$hr(style="background-color: rgb(26, 49, 87); height: 3px;"),
+                          HTML("<div style=background-color:rgb(84,84,84);height:20px;> <h5 align=center> <u> <b>
+                               <font color=white> Deployment-Specific Results </font>
+                               </b></u></h5></div>"),
                           # h5(textOutput("citychoice")),
                           menuItem("Deployment Overview", tabName = "taboverview", icon = icon("home")),
                           menuItem("Environmental Contamination", tabName = "tabenviron", icon = icon("leaf")),
                           menuItem("Behavior Frequency", tabName = "tabbehav", icon = icon("pie-chart")),
                           menuItem("Exposure", tabName = "tabexposure", icon = icon("asterisk")),
-                          hr(),
-                          HTML("<h5 align=center> <u><b> Select City/Cities for <br> Deploymeht Results </b></u> </h5>"),
-                        checkboxGroupButtons("city", NULL, c(cities), selected="Accra", direction="vertical",
-                                             justified=TRUE)
+                          tags$h6("Select City/Cities for", tags$br(), "Deployment Results",
+                                  style="text-align: center;  text-decoration: underline; font-weight: bold; color: rgb(26, 49, 87);"),
+                          checkboxGroupButtons("city", NULL, c(cities), selected="Accra", direction="vertical",
+                                             justified=TRUE, checkIcon = list(
+                                               yes = icon("ok", lib = "glyphicon")))
                 )
                 ),
                 dashboardBody(
@@ -307,7 +312,7 @@ server <- function(input, output, session) {
               select(., c("city", "neighborhood", "age", "pathway")) %>%
               apply_labels(., neighborhood="Neighborhood", age="Age", pathway="Dominant Pathway(s)")
             dom_table <- datatable(df.dominant, colnames=c("City", "Neighborhood","Age", "Dominant Pathway(s)"),
-                                  options = list(dom = 't', pageLength=30,columnDefs = list(list(className = 'dt-center',
+                                  options = list(dom = 'fpti',columnDefs = list(list(className = 'dt-center',
                                                                                                 targets = 0:4))))
             dom_table %>% formatStyle(columns= "city", target="row",
                                       background=styleEqual(unique(df.dominant$city), c((tableColor))))

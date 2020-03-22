@@ -14,30 +14,30 @@ sanipath <- shinyDashboardThemeDIY(
   ,successFontColor = "rgb(33,37,41)"
   ,warningFontColor = "rgb(33,37,41)"
   ,dangerFontColor = "rgb(33,37,41)"
-  ,bodyBackColor = "rgb(255,255,255)"
+  ,bodyBackColor = "rgb(212, 234, 247)"
   
   ### header
   ,logoBackColor = "rgb(26,49,87)"
   
-  ,headerButtonBackColor = "rgb(212, 234, 247)"
+  ,headerButtonBackColor = "rgb(148, 202, 235)"
   ,headerButtonIconColor = "rgb(26,49,87)"
-  ,headerButtonBackColorHover = "rgb(148, 202, 235)"
+  ,headerButtonBackColorHover = "rgb(212, 234, 247)"
   ,headerButtonIconColorHover = "rgb(26,49,87)"
   
   ,headerBackColor = "rgb(26, 49, 87)"
-  ,headerBoxShadowColor = ""
-  ,headerBoxShadowSize = "0px 0px 0px"
+  ,headerBoxShadowColor = "rgb(204, 204, 204)"
+  ,headerBoxShadowSize = "2px 4px 4px"
   
   ### sidebar
-  ,sidebarBackColor = "rgb(212, 234, 247)"
+  ,sidebarBackColor = "rgb(148, 202, 235)"
   ,sidebarPadding = 0
   
   ,sidebarMenuBackColor = "inherit"
   ,sidebarMenuPadding = 0
   ,sidebarMenuBorderRadius = 0
   
-  ,sidebarShadowRadius = ""
-  ,sidebarShadowColor = "0px 0px 0px"
+  ,sidebarShadowRadius = "2px 4px 4px"
+  ,sidebarShadowColor = "rgb(204, 204, 204)"
   
   ,sidebarUserTextColor = "rgb(255,255,255)"
   
@@ -47,19 +47,19 @@ sanipath <- shinyDashboardThemeDIY(
   
   ,sidebarTabTextColor = "rgb(54, 54, 54)"
   ,sidebarTabTextSize = 14
-  ,sidebarTabBorderStyle = "none"
-  ,sidebarTabBorderColor = "rgb(72, 152, 210)"
-  ,sidebarTabBorderWidth = 5
+  ,sidebarTabBorderStyle = "solid"
+  ,sidebarTabBorderColor = "rgb(204, 204, 204)"
+  ,sidebarTabBorderWidth = 1
   
   ,sidebarTabBackColorSelected = "rgb(26,49,87)"
   ,sidebarTabTextColorSelected = "rgb(148, 202, 235)"
   ,sidebarTabRadiusSelected = "0px"
   
-  ,sidebarTabBackColorHover = "rgb(30,43,55)"
+  ,sidebarTabBackColorHover = "rgb(18, 41, 79)"
   ,sidebarTabTextColorHover = "rgb(148, 202, 235)"
-  ,sidebarTabBorderStyleHover = "none"
-  ,sidebarTabBorderColorHover = "none"
-  ,sidebarTabBorderWidthHover = 0
+  ,sidebarTabBorderStyleHover = "solid"
+  ,sidebarTabBorderColorHover = "rgb(204, 204, 204)"
+  ,sidebarTabBorderWidthHover = 1
   ,sidebarTabRadiusHover = "0px"
   
   ### boxes
@@ -84,24 +84,25 @@ sanipath <- shinyDashboardThemeDIY(
   ,tabBoxBorderRadius = 10
   
   ### inputs
-  ,buttonBackColor = "rgb(204, 204, 204)"
+  ,buttonBackColor = "rgb(212, 234, 247)"
   ,buttonTextColor = "rgb(26,49,87)"
   ,buttonBorderColor = "rgb(26,49,87)"
   ,buttonBorderRadius = 5
   
-  ,buttonBackColorHover = "rgb(30,43,55)"
-  ,buttonTextColorHover = "rgb(255,255,255)"
-  ,buttonBorderColorHover = "rgb(30,43,55)"
+  ,buttonBackColorHover = "rgb(148, 202, 235)"
+  ,buttonTextColorHover = "rgb(26,49,87)"
+  ,buttonBorderColorHover = "rgb(26,49,87)"
+
   
   ,textboxBackColor = "rgb(255,255,255)"
   ,textboxBorderColor = "rgb(206,212,218)"
   ,textboxBorderRadius = 5
-  ,textboxBackColorSelect = "rgb(255,255,255)"
+  ,textboxBackColorSelect = "rgb(204, 204, 204)"
   ,textboxBorderColorSelect = "rgb(89,126,162)"
   
   ### tables
-  ,tableBackColor = "rgb(255,255,255)"
-  ,tableBorderColor = "rgb(236,240,241)"
+  ,tableBackColor = "none"
+  ,tableBorderColor = "none"
   ,tableBorderTopSize = 1
   ,tableBorderRowSize = 1
   
@@ -110,13 +111,13 @@ sanipath <- shinyDashboardThemeDIY(
 
 logo_sanipath <- shinyDashboardLogoDIY(
   
-  boldText = "SD"
-  ,mainText = "Themes"
-  ,textSize = 16
-  ,badgeText = "BETA"
+  boldText = "SaniPath"
+  ,mainText = "Results Dashboard"
+  ,textSize = 15
+  ,badgeText = ""
   ,badgeTextColor = "white"
-  ,badgeTextSize = 2
-  ,badgeBackColor = "rgb(44,62,80)"
-  ,badgeBorderRadius = 3
+  ,badgeTextSize = "1px"
+  ,badgeBackColor = "rgb(212, 234, 247)"
+  ,badgeBorderRadius = 0
   
 )
