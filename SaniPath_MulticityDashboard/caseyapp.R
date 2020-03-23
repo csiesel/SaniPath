@@ -56,6 +56,7 @@ ui <- fluidPage(
                                 # **************************************************************************************************
                                 ##### Tab 1: MultiCity Comparison ####
                                 tabItem(tabName = "tabmulti",
+                                        textOutput("commondomadult"),
                                         p("Countries and Cities"),
                                         leafletOutput("mapcountries"),
                                         hr(),
@@ -89,21 +90,22 @@ ui <- fluidPage(
                                 # **************************************************************************************************
                                 #### Tab 2: Deployment Overview ####
                                 tabItem(tabName = "taboverview",
-                                        h3("Neighborhoods"),
-                                        leafletOutput("mapneighborhoods"),
-                                        fluidRow(column(7,
-                                                h3("Deployment by the Numbers"),
-                                                fluidRow(valueBoxOutput("boxneighb"),
-                                                valueBoxOutput("boxsamples")),
-                                                fluidRow(valueBoxOutput("boxhhsurveys"),
-                                                valueBoxOutput("boxccsurveys")),
-                                                fluidRow(valueBoxOutput("boxsssurveys"))
-                                                ),
-                                                column(5,
-                                                h3("Dominant Pathways"),
-                                                dataTableOutput("domtable")
-                                                )
-                                        )
+                                        wellPanel(style="padding: 10px",
+                                                  h3("Deployment by the Numbers")),
+                                        fluidRow(valueBoxOutput("boxneighb"),
+                                                 valueBoxOutput("boxsamples")),
+                                        fluidRow(valueBoxOutput("boxhhsurveys"),
+                                                 valueBoxOutput("boxccsurveys"),
+                                                 valueBoxOutput("boxsssurveys")),
+                                
+                                        wellPanel(style="padding: 10px;",
+                                          h3("Neighborhoods"),
+                                          leafletOutput("mapneighborhoods")),
+                                        fluidRow(
+                                          wellPanel(style="padding: 10px;",
+                                                    h3("Dominant Pathways"),
+                                                    dataTableOutput("domtable")
+                                                ))
 
                                 ),
 
@@ -199,19 +201,37 @@ server <- function(input, output, session) {
         #### City Choice Important Input ####
         output$citychoice <- renderText(paste0("Deployment Overview in ", citychoice(),"."))
         
+        
+        # **************************************************************************************************
+        #### Multi-City Comparison Tab####
+        
+        #multicity most common dominant pathways
+        output$commondomadult <- renderText({
+          domcount <- df.dominant %>% group_by(pathway, age) %>% summarise(n=n())
+          nhoods <- length(unique(meta_neighb$neighborhood))
+          domcount <- domcount %>%
+            mutate(., percent=ceiling((n/nhoods)*100))
+          domcount %>%
+            filter(., age=="Adults") %>%
+            arrange(., desc(n)) -> adult
+          domcount %>%
+            filter(., age=="Children") %>%
+            arrange(., desc(n)) -> child
+          
+          #FINISH THIS PODSIJFPOIWEHGPIURHGPOIWJEPFOIJWPEOIFJWE
+          paste0("The 3 most common dominant pathways for adults across cities are: ", adult[1,]$pathway, " (", adult[1,]$percent, "%)")
+          
+          
+        })  
+          
+        
+        
         #multicity box
         output$multiboxcity <- renderValueBox({
                 valueBox(
                         length(unique(meta_dply$city)), "Cities", icon = icon("info-sign", lib = "glyphicon"),
                         color = "teal")
         })
-        
-        #neighborhood box
-        boxneighb <- reactive({
-          meta_full <- filter(meta_full, city %in% citychoice())
-          valueBox(length(unique(meta_full$neighborhood)), "Neighborhoods", icon = icon("city"), color = "teal")
-        })
-        output$boxneighb <-renderValueBox(boxneighb())
         
         #multineighborhood box
         output$multiboxneighb <- renderValueBox({
@@ -220,11 +240,65 @@ server <- function(input, output, session) {
             color = "teal")
         })
         
-
         #country box
         output$multiboxcountries <- renderValueBox({
-                valueBox(length(unique(meta_dply$country)), "Countries", icon = icon("flag", lib = "glyphicon"), color = "teal")
+          valueBox(length(unique(meta_dply$country)), "Countries", icon = icon("flag", lib = "glyphicon"), color = "teal")
         })
+        
+        #multisamples box
+        output$multiboxsamples <- renderValueBox({
+          valueBox(
+            nrow(df.ecdata), "Environmental Samples", icon = icon("flask"),
+            color = "light-blue")
+        })
+        
+        #multi hh survey box
+        output$multiboxhhsurveys <- renderValueBox({
+          valueBox(nrow(df.hh), "Household Surveys", icon=icon("clipboard"), color="aqua")
+        })
+        
+        #multi cc survey box
+        output$multiboxccsurveys <- renderValueBox({
+          valueBox(nrow(df.cc), "Community Surveys", icon=icon("clipboard"), color="aqua")
+        })
+        
+        #multi sc survey box
+        output$multiboxsssurveys <- renderValueBox({
+          valueBox(nrow(df.sc), "School Surveys", icon=icon("clipboard"), color="aqua")
+        })
+        
+        #multi dom pie chart
+        multidom <- reactive({
+          if(is.null(input$city)){
+            return(NULL)
+          }
+          domcount <- df.dominant %>% group_by(pathway, age) %>% summarise(n=n())
+          ggplot(domcount, aes(x=pathway, y=n, fill=age)) +
+            geom_segment(aes(x=pathway, xend=pathway, y=0, yend=n, colour=age), show.legend=F) +
+            geom_point(aes(colour=age), size=4, alpha=0.6) +
+            theme_light() +
+            coord_flip() +
+            labs(y="Count of neighborhoods with each pathway as dominant", x="") +
+            theme(
+              panel.grid.major.y = element_blank(),
+              panel.border = element_blank(),
+              axis.ticks.y = element_blank()
+            )
+          
+          
+        })
+        output$multidom <- renderPlot(multidom())
+        
+        
+        # **************************************************************************************************
+        #### Deployment Overview Tab####
+        
+        #neighborhood box
+        boxneighb <- reactive({
+          meta_full <- filter(meta_full, city %in% citychoice())
+          valueBox(length(unique(meta_full$neighborhood)), "Neighborhoods", icon = icon("city"), color = "teal")
+        })
+        output$boxneighb <-renderValueBox(boxneighb())
         
         #sample box
         boxsamples <- reactive({
@@ -254,50 +328,6 @@ server <- function(input, output, session) {
         })
         output$boxsssurveys <- renderValueBox(boxsssurveys())
         
-        #multisamples box
-        output$multiboxsamples <- renderValueBox({
-          valueBox(
-            nrow(df.ecdata), "Environmental Samples", icon = icon("flask"),
-            color = "light-blue")
-        })
-        
-        output$multiboxhhsurveys <- renderValueBox({
-          valueBox(nrow(df.hh), "Household Surveys", icon=icon("clipboard"), color="aqua")
-        })
-        
-        output$multiboxccsurveys <- renderValueBox({
-          valueBox(nrow(df.cc), "Community Surveys", icon=icon("clipboard"), color="aqua")
-        })
-        
-        output$multiboxsssurveys <- renderValueBox({
-          valueBox(nrow(df.sc), "School Surveys", icon=icon("clipboard"), color="aqua")
-        })
-        
-        
-        #multi dom pie chart
-        multidom <- reactive({
-          if(is.null(input$city)){
-            return(NULL)
-          }
-          domcount <- df.dominant %>% group_by(pathway, age) %>% summarise(n=n())
-          ggplot(domcount, aes(x=pathway, y=n, fill=age)) +
-            geom_segment(aes(x=pathway, xend=pathway, y=0, yend=n, colour=age), show.legend=F) +
-            geom_point(aes(colour=age), size=4, alpha=0.6) +
-            theme_light() +
-            coord_flip() +
-            labs(y="Count of neighborhoods with each pathway as dominant", x="") +
-            theme(
-              panel.grid.major.y = element_blank(),
-              panel.border = element_blank(),
-              axis.ticks.y = element_blank()
-            )
-          
-          
-        })
-        output$multidom <- renderPlot(multidom())
-        
-        
-        
         #domtable
         domtable <- reactive({
           if(is.null(input$city)){
@@ -312,12 +342,11 @@ server <- function(input, output, session) {
               select(., c("city", "neighborhood", "age", "pathway")) %>%
               apply_labels(., neighborhood="Neighborhood", age="Age", pathway="Dominant Pathway(s)")
             dom_table <- datatable(df.dominant, colnames=c("City", "Neighborhood","Age", "Dominant Pathway(s)"),
-                                  options = list(dom = 'fpti',columnDefs = list(list(className = 'dt-center',
-                                                                                                targets = 0:4))))
+                                  options = list(pageLength=25,
+                                                 columnDefs = list(list(className = 'dt-center',targets = 0:4))))
             dom_table %>% formatStyle(columns= "city", target="row",
                                       background=styleEqual(unique(df.dominant$city), c((tableColor))))
           })
-
         output$domtable <- renderDataTable(domtable())
         
         # **************************************************************************************************
