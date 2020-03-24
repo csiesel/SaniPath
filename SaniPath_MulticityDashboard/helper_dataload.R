@@ -14,6 +14,7 @@ df.exposure <- read.csv("data/multicity_exposure_2020-03-05.csv", stringsAsFacto
 df.hh <- read.csv( "data/h_merged_2020-02-10.csv", stringsAsFactors = F)
 df.sc <- read.csv( "data/s_merged_2020-02-10.csv", stringsAsFactors = F)
 df.cc <- read.csv( "data/c_merged_2020-02-10.csv", stringsAsFactors = F)
+pathway.info <- read.csv( "data/pathway_info.csv", stringsAsFactors = F)
 
 
 # **************************************************************************************************
@@ -128,5 +129,7 @@ df.dominant = do.call(rbind, multiFinal)
 df.dominant <- df.dominant %>%
   filter(., dominantcount==1) %>%
   select(., c("pathway", "neighborhood", "age", "city", "dominantcount"))
+
+
 
 

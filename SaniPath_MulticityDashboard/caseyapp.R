@@ -1,5 +1,6 @@
 library(shiny)
 library(shinydashboard)
+library(shinydashboardPlus)
 library(plotly)
 library(shinythemes)
 library(dashboardthemes)
@@ -36,7 +37,6 @@ ui <- fluidPage(
                           HTML("<div style=background-color:rgb(84,84,84);height:20px;> <h5 align=center> <u> <b>
                                <font color=white> Deployment-Specific Results </font>
                                </b></u></h5></div>"),
-                          # h5(textOutput("citychoice")),
                           menuItem("Deployment Overview", tabName = "taboverview", icon = icon("home")),
                           menuItem("Environmental Contamination", tabName = "tabenviron", icon = icon("leaf")),
                           menuItem("Behavior Frequency", tabName = "tabbehav", icon = icon("pie-chart")),
@@ -64,7 +64,6 @@ ui <- fluidPage(
                                         p("Here is an overview of the Current SaniPath deployment statistics."),
                                         
                                         fluidRow(
-                                          # valueBoxOutput("boxdply"),
                                           valueBoxOutput("multiboxcountries"),
                                           valueBoxOutput("multiboxcity"),
                                           valueBoxOutput("multiboxneighb")
@@ -112,15 +111,16 @@ ui <- fluidPage(
                                 # **************************************************************************************************
                                 #### Tab 3: Environmental Samples ####
                                 tabItem(tabName = "tabenviron",
-                                        fluidRow(
-                                          wellPanel(style="padding: 10px;",
-                                          h2("Environmental Contamination"),
-                                          h5("Select environmental pathways below to update the map and graphs"),
+                                      wellPanel(style="padding: 10px;",
+                                        
+                                        
+                                          h3("  Environmental Contamination"),
+                                          h5("  Select environmental pathways below to update the map and graphs"),
                                           checkboxGroupButtons("sample", NULL, c(samples), individual=TRUE, width='100%',
                                                                status="primary", checkIcon = list(
                                                                  yes = icon("ok", lib = "glyphicon"),
                                                                  no = icon("remove", lib = "glyphicon")))
-                                        )),
+                                        ),
                                         fluidRow(
                                           column(6,
                                           wellPanel(style="padding: 10px;",
@@ -167,7 +167,29 @@ ui <- fluidPage(
                                 #### Tab 5: Exposure ####
                                 tabItem(tabName = "tabexposure",
                                         h2("Exposure and Dominant Pathways"),
-                                        plotOutput("plot_exposure_all", height = "700px")
+                                        plotOutput("plot_exposure_all", height = "700px"),
+                                        wellPanel(
+                                          fluidRow(
+                                            tags$h2("The Most Common Dominant Pathways for ", style="display:inline;vertical-align:top;"),
+                                            div(style="display:inline-block;vertical-align:top;",
+                                                selectInput("age", label=NULL, choices=c("Adults", "Children"),
+                                                            selected="Adults", width="100px")),
+                                          tags$h2(" in:", style="display:inline;vertical-align:top;"),
+                                          tags$h2(textOutput("citychoice"), style="display:inline;vertical-align:top;color:rgb(62, 0, 0);"))
+                                        ),
+                                          fluidRow(
+                                            column(4,
+                                                  uiOutput("dom1")
+                                                  ),
+                                            column(4,
+                                                   uiOutput("dom2")
+                                                   ),
+                                            column(4,
+                                                   uiOutput("dom3")
+                                                   )
+                                          )
+                                        
+                                        
                                         
                                 )
 
@@ -198,9 +220,12 @@ server <- function(input, output, session) {
         samplechoice <- reactive({input$sample})
         
         # **************************************************************************************************
-        #### City Choice Important Input ####
-        output$citychoice <- renderText(paste0("Deployment Overview in ", citychoice(),"."))
-        
+        #### city choice text ####
+        output$citychoice <- renderText(paste0(citychoice(), collapse=", "))
+
+        # **************************************************************************************************
+        #### age input ####
+        agechoice <- reactive({input$age})
         
         # **************************************************************************************************
         #### Multi-City Comparison Tab####
@@ -219,12 +244,11 @@ server <- function(input, output, session) {
             arrange(., desc(n)) -> child
           
           #FINISH THIS PODSIJFPOIWEHGPIURHGPOIWJEPFOIJWPEOIFJWE
-          paste0("The 3 most common dominant pathways for adults across cities are: ", adult[1,]$pathway, " (", adult[1,]$percent, "%)")
+
+          paste0("The 3 most common dominant pathways for adults across cities are: ", adult[1,]$pathway, " (", adult[1,]$percent, "%)", print(icon("city")))
           
           
         })  
-          
-        
         
         #multicity box
         output$multiboxcity <- renderValueBox({
@@ -673,9 +697,115 @@ server <- function(input, output, session) {
         output$plot_ecoli <- renderPlot(ecoli_plot())
 
 
+      # DOMINANT PATHWAYS FOR Adults and Children  
+        commondom1 <- reactive({
+          meta_full <- filter(meta_full, city %in% citychoice())
+          city.domcount <- df.dominant %>%
+            filter(., city %in% citychoice()) %>%
+            group_by(pathway, age) %>%
+            summarise(n=n())
+          nhoods <- length(unique(meta_full$neighborhood))
+          city.domcount <- city.domcount %>%
+            filter(., age %in% agechoice()) %>%
+            mutate(., percent=ceiling((n/nhoods)*100)) %>%
+            arrange(., desc(n))
+
+          if(is.na(city.domcount$pathway[1])){
+            return(NULL)
+          }
+          
+          widgetUserBox(
+            title = tags$h3(city.domcount$pathway[1], tags$br(),
+                            "(", city.domcount$n[1], ")",
+                            style="text-align: center;color: rgb(255, 255, 255);"),
+            subtitle = NULL,
+            type = 2,
+            width = 12,
+            src = pathway.info$url[which(pathway.info$pathway==city.domcount$pathway[1])],
+            background = TRUE,
+            backgroundUrl = pathway.info$url[which(pathway.info$pathway==city.domcount$pathway[1])],
+            closable = FALSE,
+            tags$h5(pathway.info$front_text[which(pathway.info$pathway==city.domcount$pathway[1])],
+                    style="text-align: center; color: rgb(62, 0, 0);"),
+            footer = pathway.info$back_text[which(pathway.info$pathway==city.domcount$pathway[1])],
+            boxToolSize="xs"
+          )
+
+        })
+        output$dom1 <- renderUI(commondom1())
+
         
-   
-   
+        commondom2 <- reactive({
+          meta_full <- filter(meta_full, city %in% citychoice())
+          city.domcount <- df.dominant %>%
+            filter(., city %in% citychoice()) %>%
+            group_by(pathway, age) %>%
+            summarise(n=n())
+          nhoods <- length(unique(meta_full$neighborhood))
+          city.domcount <- city.domcount %>%
+            filter(., age %in% agechoice()) %>%
+            mutate(., percent=ceiling((n/nhoods)*100)) %>%
+            arrange(., desc(n))
+          
+          if(is.na(city.domcount$pathway[2])){
+            return(NULL)
+          }
+          
+          widgetUserBox(
+            title = tags$h3(city.domcount$pathway[2], tags$br(),
+                            "(", city.domcount$n[2], ")",
+                            style="text-align: center;color: rgb(255, 255, 255);"),
+            subtitle = NULL,
+            type = 2,
+            width = 12,
+            src = pathway.info$url[which(pathway.info$pathway==city.domcount$pathway[2])],
+            background = TRUE,
+            backgroundUrl = pathway.info$url[which(pathway.info$pathway==city.domcount$pathway[2])],
+            closable = FALSE,
+            tags$h5(pathway.info$front_text[which(pathway.info$pathway==city.domcount$pathway[2])],
+                    style="text-align: center; color: rgb(62, 0, 0);"),
+            footer = pathway.info$back_text[which(pathway.info$pathway==city.domcount$pathway[2])],
+            boxToolSize="xs"
+          )
+        })
+        output$dom2 <- renderUI(commondom2())
+        
+        commondom3 <- reactive({
+          meta_full <- filter(meta_full, city %in% citychoice())
+          city.domcount <- df.dominant %>%
+            filter(., city %in% citychoice()) %>%
+            group_by(pathway, age) %>%
+            summarise(n=n())
+          nhoods <- length(unique(meta_full$neighborhood))
+          city.domcount <- city.domcount %>%
+            filter(., age %in% agechoice()) %>%
+            mutate(., percent=ceiling((n/nhoods)*100)) %>%
+            arrange(., desc(n))
+          
+          if(is.na(city.domcount$pathway[3])){
+            return(NULL)
+          }
+          
+          widgetUserBox(
+            title = tags$h3(city.domcount$pathway[3], tags$br(),
+                            "(", city.domcount$n[3], ")",
+                            style="text-align: center;color: rgb(255, 255, 255);"),
+            subtitle = NULL,
+            type = 2,
+            width = 12,
+            src = pathway.info$url[which(pathway.info$pathway==city.domcount$pathway[3])],
+            background = TRUE,
+            backgroundUrl = pathway.info$url[which(pathway.info$pathway==city.domcount$pathway[3])],
+            closable = FALSE,
+            tags$h5(pathway.info$front_text[which(pathway.info$pathway==city.domcount$pathway[3])],
+                    style="text-align: center; color: rgb(62, 0, 0);"),
+            footer = pathway.info$back_text[which(pathway.info$pathway==city.domcount$pathway[3])],
+            boxToolSize="xs"
+          )
+          
+          
+        })
+        output$dom3 <- renderUI(commondom3())
         
 }
 
