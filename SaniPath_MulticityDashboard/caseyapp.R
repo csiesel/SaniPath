@@ -6,6 +6,8 @@ library(shinythemes)
 library(dashboardthemes)
 library(shinyWidgets)
 # http://shinyapps.dreamrs.fr/shinyWidgets/
+library(ggh4x)
+#devtools::install_github("teunbrand/ggh4x")
 library(DT)
 library(expss)
 library(tidyverse)
@@ -21,22 +23,22 @@ library(ggridges)
 source("helper_dataload.R")
 source("themes.R")
 
-
 # Define UI for application that draws a histogram
 #### UI ####
-ui <- fluidPage(
+ui <- 
+  fluidPage(
         dashboardPage(
                 dashboardHeader(title=logo_sanipath),
                 dashboardSidebar(
                         sidebarMenu(
-                          HTML("<div style=background-color:rgb(84,84,84);height:20px;> <h5 align=center> <u> <b>
+                          HTML("<div style=background-color:rgb(84,84,84);height:20px;> <h5 align=center> <b>
                                <font color=white> SaniPath Multi-City Comparison </font>
-                               </b></u></h5></div>"),
+                               </b></h5></div>"),
                           menuItem("Multi-City Comparison", tabName = "tabmulti", icon = icon("globe-africa")),
                           # tags$hr(style="background-color: rgb(26, 49, 87); height: 3px;"),
-                          HTML("<div style=background-color:rgb(84,84,84);height:20px;> <h5 align=center> <u> <b>
+                          HTML("<div style=background-color:rgb(84,84,84);height:20px;> <h5 align=center> <b>
                                <font color=white> Deployment-Specific Results </font>
-                               </b></u></h5></div>"),
+                               </b></h5></div>"),
                           menuItem("Deployment Overview", tabName = "taboverview", icon = icon("home")),
                           menuItem("Environmental Contamination", tabName = "tabenviron", icon = icon("leaf")),
                           menuItem("Behavior Frequency", tabName = "tabbehav", icon = icon("pie-chart")),
@@ -56,33 +58,41 @@ ui <- fluidPage(
                                 # **************************************************************************************************
                                 ##### Tab 1: MultiCity Comparison ####
                                 tabItem(tabName = "tabmulti",
-                                        textOutput("commondomadult"),
-                                        p("Countries and Cities"),
-                                        leafletOutput("mapcountries"),
-                                        hr(),
-                                        h2("Overview"),
-                                        p("Here is an overview of the Current SaniPath deployment statistics."),
-                                        
-                                        fluidRow(
-                                          valueBoxOutput("multiboxcountries"),
-                                          valueBoxOutput("multiboxcity"),
-                                          valueBoxOutput("multiboxneighb")
+                                        h2("SaniPath Multi City Comparison"),
+                                        wellPanel(
+                                          h3("SaniPath Study by the Numbers"),
+                                          fluidRow(
+                                            valueBoxOutput("multiboxcountries"),
+                                            valueBoxOutput("multiboxcity"),
+                                            valueBoxOutput("multiboxneighb")
+                                          ),
+                                          
+                                          fluidRow(
+                                            valueBoxOutput("multiboxsamples")
+                                          ),
+                                          fluidRow(
+                                            valueBoxOutput("multiboxhhsurveys"),
+                                            valueBoxOutput("multiboxccsurveys"),
+                                            valueBoxOutput("multiboxsssurveys")
+                                          )
                                         ),
-                                        
-                                        fluidRow(
-                                          valueBoxOutput("multiboxsamples")
+                                        wellPanel(
+                                          h3("Cities"),
+                                          leafletOutput("mapcountries")
                                         ),
-                                        fluidRow(
-                                          valueBoxOutput("multiboxhhsurveys"),
-                                          valueBoxOutput("multiboxccsurveys"),
-                                          valueBoxOutput("multiboxsssurveys")
-                                        ),
-                                        fluidRow(
-                                          plotOutput("plot_exposure_multi")
-                                        ),
-                                        fluidRow(
-                                          h2("dominant pathway count"),
+                                        wellPanel(
+                                          h3("Most Common Dominant Pathways"),
+                                          fluidRow(
+                                            column(6,
+                                                   h4(textOutput("commondomadult"), align="center")),
+                                            column(6,
+                                                   h4(textOutput("commondomchild"), aligh="center"))),
+                                          h3("Count of Dominant Pathways across Countries"),
                                           plotOutput("multidom")
+                                        ),
+                                        wellPanel(
+                                          h3("Exposure for Adults and Children by Pathway"),
+                                          plotOutput("plot_exposure_multi")
                                         )
                                 ),
                                 
@@ -112,14 +122,12 @@ ui <- fluidPage(
                                 #### Tab 3: Environmental Samples ####
                                 tabItem(tabName = "tabenviron",
                                       wellPanel(style="padding: 10px;",
-                                        
-                                        
-                                          h3("  Environmental Contamination"),
-                                          h5("  Select environmental pathways below to update the map and graphs"),
-                                          checkboxGroupButtons("sample", NULL, c(samples), individual=TRUE, width='100%',
-                                                               status="primary", checkIcon = list(
-                                                                 yes = icon("ok", lib = "glyphicon"),
-                                                                 no = icon("remove", lib = "glyphicon")))
+                                        h3("  Environmental Contamination"),
+                                        h5("  Select environmental pathways below to update the map and graphs"),
+                                        checkboxGroupButtons("sample", NULL, c(samples), individual=TRUE, width='100%',
+                                                             status="primary", checkIcon = list(
+                                                              yes = icon("ok", lib = "glyphicon"),
+                                                              no = icon("remove", lib = "glyphicon")))
                                         ),
                                         fluidRow(
                                           column(6,
@@ -149,25 +157,29 @@ ui <- fluidPage(
                                 # **************************************************************************************************
                                 #### Tab 4: Behavioral frequency ####
                                 tabItem(tabName = "tabbehav",
-                                        h2("Behavior Frequency"),
+                                        wellPanel(style="padding: 10px;",
+                                          h3("Behavior Frequency"),
+                                          h5("Select environmental pathways below to update the graphs"),
+                                          checkboxGroupButtons("bx", NULL, c(samples), individual=TRUE, width='100%',
+                                                               status="primary", checkIcon = list(
+                                                                 yes = icon("ok", lib = "glyphicon"),
+                                                                 no = icon("remove", lib = "glyphicon")))
+                                        ),
+                                        wellPanel(style="padding: 10px;",
+                                          h4("Distribution of Behavior by Neighborhood and City for Selected Pathways"),
+                                          plotOutput("plot_behavior", height = "700px")),
                                         
-                                        p("Static Graph:"),
-                                        plotOutput("plot_behavior", height = "700px"), 
-                                        hr(),
-                                        
-                                        p("Interactive Graph:"),
-                                        plotlyOutput("plot_behavior1"), #, width = "800px", height = "417px" )
-                                        hr(),
-                                        
-                                        plotlyOutput("plot_behavior2") 
-                                        
-                                        
+                                        wellPanel(style="padding: 10px;",
+                                          h4("Distribution of Behavior by City (combined neighborhoods) for Selected Pathways"),
+                                          plotOutput("plot_behavior_city", height="700px"))
                                 ),
                                 # **************************************************************************************************
                                 #### Tab 5: Exposure ####
                                 tabItem(tabName = "tabexposure",
                                         h2("Exposure and Dominant Pathways"),
-                                        plotOutput("plot_exposure_all", height = "700px"),
+                                        wellPanel(
+                                          h3("Distribution of Exposure by Neighborhood and City Across Pathways"),
+                                          plotOutput("plot_exposure_all", height = "700px")),
                                         wellPanel(
                                           fluidRow(
                                             tags$h2("The Most Common Dominant Pathways for ", style="display:inline;vertical-align:top;"),
@@ -188,6 +200,48 @@ ui <- fluidPage(
                                                    uiOutput("dom3")
                                                    )
                                           )
+                                        
+                                        #delete below
+                                        ,
+                                        h3("BELOW ARE JUST EXAMPLES")
+                                        ,fluidRow(
+                                          column(4,
+                                                 uiOutput("test1")
+                                          ),
+                                          column(4,
+                                                 uiOutput("test2")
+                                          ),
+                                          column(4,
+                                                 uiOutput("test3")
+                                          )
+                                        )
+                                        ,fluidRow(
+                                          column(4,
+                                                 uiOutput("test4")
+                                          ),
+                                          column(4,
+                                                 uiOutput("test5")
+                                          ),
+                                          column(4,
+                                                 uiOutput("test6")
+                                          )
+                                        )
+                                        ,fluidRow(
+                                          column(4,
+                                                 uiOutput("test7")
+                                          ),
+                                          column(4,
+                                                 uiOutput("test8")
+                                          ),
+                                          column(4,
+                                                 uiOutput("test9")
+                                          )
+                                        )
+                                        ,fluidRow(
+                                          column(4,
+                                                 uiOutput("test10")
+                                          ))
+                                          
                                         
                                         
                                         
@@ -219,6 +273,15 @@ server <- function(input, output, session) {
         })
         samplechoice <- reactive({input$sample})
         
+        #### Bx Choice Important Input for Reactive CheckboxGroupInput on Bx Slide####
+        observeEvent(input$city,{
+          df.ecdata <- filter(df.ecdata, city %in% citychoice())
+          samples <- as.character(unique(df.behav.all$sample_type))
+          updateCheckboxGroupButtons(session, "bx", choices=c(samples), selected=samples[[1]], status="primary",
+                                     checkIcon = list(yes = icon("ok", lib = "glyphicon"), no = icon("remove",lib = "glyphicon")))
+        })
+        bxchoice <- reactive({input$bx})
+        
         # **************************************************************************************************
         #### city choice text ####
         output$citychoice <- renderText(paste0(citychoice(), collapse=", "))
@@ -230,25 +293,41 @@ server <- function(input, output, session) {
         # **************************************************************************************************
         #### Multi-City Comparison Tab####
         
-        #multicity most common dominant pathways
+        #multicity most common dominant pathways: Adult
         output$commondomadult <- renderText({
-          domcount <- df.dominant %>% group_by(pathway, age) %>% summarise(n=n())
+          domcount <- df.dominant %>%
+            group_by(pathway, age) %>%
+            summarise(n=n())
           nhoods <- length(unique(meta_neighb$neighborhood))
           domcount <- domcount %>%
             mutate(., percent=ceiling((n/nhoods)*100))
           domcount %>%
             filter(., age=="Adults") %>%
             arrange(., desc(n)) -> adult
+
+          paste0("The 3 most common dominant pathways for adults across cities are: 1) ",
+                 adult[1,]$pathway, " (", adult[1,]$percent, "% of all neighborhoods),  2) ",
+                 adult[2,]$pathway, " (", adult[2,]$percent, "% of all neighborhoods),  and 3) ",
+                 adult[3,]$pathway, " (", adult[3,]$percent, "% of all neighborhoods). ")
+        })  
+        
+        #multicity most common dominant pathways: Child
+        output$commondomchild <- renderText({
+          domcount <- df.dominant %>% group_by(pathway, age) %>% summarise(n=n())
+          nhoods <- length(unique(meta_neighb$neighborhood))
+          domcount <- domcount %>%
+            mutate(., percent=ceiling((n/nhoods)*100))
           domcount %>%
             filter(., age=="Children") %>%
             arrange(., desc(n)) -> child
           
-          #FINISH THIS PODSIJFPOIWEHGPIURHGPOIWJEPFOIJWPEOIFJWE
+          paste0("The 3 most common dominant pathways for children across cities are: 1) ",
+                              child[1,]$pathway, " (", child[1,]$percent, "% of all neighborhoods),  2) ",
+                              child[2,]$pathway, " (", child[2,]$percent, "% of all neighborhoods),  and 3) ",
+                              child[3,]$pathway, " (", child[3,]$percent, "% of all neighborhoods).")
 
-          paste0("The 3 most common dominant pathways for adults across cities are: ", adult[1,]$pathway, " (", adult[1,]$percent, "%)", print(icon("city")))
-          
-          
-        })  
+        })
+        
         
         #multicity box
         output$multiboxcity <- renderValueBox({
@@ -291,28 +370,72 @@ server <- function(input, output, session) {
           valueBox(nrow(df.sc), "School Surveys", icon=icon("clipboard"), color="aqua")
         })
         
-        #multi dom pie chart
+        #multi dom Lollipop chart
         multidom <- reactive({
           if(is.null(input$city)){
             return(NULL)
           }
           domcount <- df.dominant %>% group_by(pathway, age) %>% summarise(n=n())
           ggplot(domcount, aes(x=pathway, y=n, fill=age)) +
-            geom_segment(aes(x=pathway, xend=pathway, y=0, yend=n, colour=age), show.legend=F) +
-            geom_point(aes(colour=age), size=4, alpha=0.6) +
+            geom_linerange(position=position_dodge(.5),
+                           aes(xmin=pathway, xmax=pathway, ymin=0, ymax=n, colour=age, size=10, alpha=0.6),
+                           show.legend=F) +
+            geom_point(position=position_dodge(.5), aes(colour=age), size=10, show.legend=T) +
             theme_light() +
             coord_flip() +
-            labs(y="Count of neighborhoods with each pathway as dominant", x="") +
+            guides(fill=FALSE, size=FALSE, alpha=FALSE) +
+            labs(y="Dominant Pathway Count Across Neighborhoods", x="", color="Age") +
             theme(
               panel.grid.major.y = element_blank(),
               panel.border = element_blank(),
-              axis.ticks.y = element_blank()
+              axis.ticks.y = element_blank(),
+              axis.text.y = element_text(size=12)
             )
           
           
         })
         output$multidom <- renderPlot(multidom())
         
+        #multi exposure plot
+        output$plot_exposure_multi <-renderPlot({
+          colors <- c("Open Drain Water" = '#e41a1c',
+                      "Municipal Drinking Water" = '#377eb8',
+                      "Raw Produce" = '#4daf4a',
+                      "Floodwater" = '#984ea3',
+                      "Bathing Water" = '#ff7f00',
+                      "Ocean" = '#ffff33',
+                      "Surface Water" = '#a65628',
+                      "Public Latrine" = '#f781bf',
+                      "Street Food" = '#999999')
+          
+          
+          df.exposure %>% 
+            mutate(city = replace(city, city == "Atlanta", "Atl")) %>%
+            ggplot(., aes(x=factor(neighborhood), y=perDose, fill=pathway) ) +
+            geom_bar(stat="identity") +
+            facet_grid(age~ city, scales = "free_x", space = "free_x") +
+            labs(fill = "Pathway",
+                 x = "Neighborhood",
+                 y = "Total Exposure (log10)") +
+            theme_bw() +
+            theme(#legend.position="bottom",
+              strip.text.x = element_text(size = 12),
+              axis.text.x = element_text(angle = 90, hjust = 0.95, vjust = 0.2),
+              # strip.text.y = element_text(size = 12),
+              strip.background = element_rect(fill="white")) +
+            scale_fill_manual(values = colors)
+        })
+        
+        #country-level map
+        output$mapcountries <- renderLeaflet({
+          leaflet(meta_dply) %>% 
+            addTiles() %>% 
+            addMarkers(lng = ~long,
+                       lat = ~lat, 
+                       label = paste0(meta_dply$city, ", ", meta_dply$country),
+                       popup = ~country,
+                       options = markerOptions(draggable = F, riseOnHover = TRUE))
+        })
         
         # **************************************************************************************************
         #### Deployment Overview Tab####
@@ -372,142 +495,75 @@ server <- function(input, output, session) {
                                       background=styleEqual(unique(df.dominant$city), c((tableColor))))
           })
         output$domtable <- renderDataTable(domtable())
-        
-        # **************************************************************************************************
-        
-        colourCount = length(unique(meta_dply$city))
-        getPalette = colorRampPalette(brewer.pal(9, "Set1"))
-        colScale <- scale_fill_manual(values=getPalette(colourCount))
 
-        
-        output$plot_ecoli_plotly1 <- renderPlotly({
-                df.ecdata %>% 
-                        filter(sample_type_name %in% c("Drinking Water", "Other Drinking Water", "Bathing Water", "Floodwater", "Open Drains" )) %>%
-                        ggplot(., aes(x=factor(city), y=log10(ec_conc), fill=city)) +
-                        geom_boxplot() +
-                        # geom_point(aes(color=city) ) +
-                        facet_grid( ~ sample_type_name, scales = "free", space = "free") + 
-                        ylim(c(-1,10)) +
-                        labs(fill = "City",
-                             x = "",
-                             y = "E.coli (Log10)") +
-                        theme_bw() +
-                        theme(axis.text.x = element_text(angle = 90, hjust = 0.95, vjust = 0.2),
-                              axis.text=element_text(size=8),
-                              strip.background = element_rect(fill="white")) +
-                        colScale
-                })
-        
-        output$plot_ecoli_plotly2 <- renderPlotly({
-                df.ecdata %>% 
-                        filter(sample_type_name %in% c("Surface Water", "Oceans", "Raw Produce","Street Food", "Public Latrine", "Particulate")) %>%
-                        mutate(sample_type_name = factor(sample_type_name, 
-                                                    levels=c("Oceans", "Surface Water", "Public Latrine", "Particulate", "Raw Produce","Street Food"))) %>%
-                        ggplot(., aes(x=factor(city), y=log10(ec_conc), fill=city)) +
-                        geom_boxplot() +
-                        # geom_point(aes(color=city) ) +
-                        facet_grid( ~ sample_type_name, scales = "free", space = "free") + 
-                        ylim(c(-1,10)) +
-                        labs(fill = "City",
-                             x = "",
-                             y = "E.coli (Log10)") +
-                        theme_bw() +
-                        theme(axis.text.x = element_text(angle = 90, hjust = 0.95, vjust = 0.2),
-                              axis.text=element_text(size=8),
-                              strip.background = element_rect(fill="white")) +
-                        colScale
-        })
-        
-        
         # **************************************************************************************************
+        #### Behavior Tab####
         output$plot_behavior <- renderPlot({
-                df.behav %>% 
-                        melt(., id.vars = c("city", "sample_type", "pop")) %>%
-                        na.omit(value) %>%
-                        ggplot(., aes(x = city, y = value, fill = variable)) + 
-                        geom_bar(stat = "identity") +
-                        facet_grid(pop ~ sample_type, scales = "free", space = "free") + 
-                        theme_bw() +
-                        labs(fill = "Frequency",
-                             x = "",
-                             y = "Percent") +
-                        # theme(strip.text.y = element_text(size = 7)) +
-                        scale_fill_brewer(palette="Set2") +
-                        theme(axis.text.x = element_text(angle = 90, hjust = 0.95, vjust = 0.2),
-                              strip.text.x = element_text(size = 8),
-                              strip.text.y = element_text(size = 8),
-                              strip.background = element_rect(fill="white"),
-                              legend.position="bottom") + 
-                        scale_y_continuous(labels = scales::percent) 
+          if(is.null(citychoice()) | is.null(bxchoice())){
+            return(NULL)
+          }
+          df.behav.city %>%
+            filter(., city %in% citychoice() & sample_type %in% bxchoice()) %>%
+            melt(., id.vars = c("neighb_UID", "sample_type", "pop", "city", "country", "citylabel", "deployment_id", "neighborhood")) %>%
+            na.omit(value) %>%
+            # ggplot(aes(x = factor(neighb_UID), y = value, fill = variable)) +
+            ggplot(aes(x = neighborhood, y = value, fill = variable)) + #add value labels
+            geom_bar(stat = "identity") +
+            facet_nested(pop ~ sample_type + city, scales = "free", space = "free") + #scales = "free_x"
+            theme_bw() +
+            labs(title = "Distribution of Behaviors",
+                 fill = "Frequency",
+                 x = "City",
+                 y = "Percent") +
+            # theme(strip.text.y = element_text(size = 7)) +
+            scale_fill_brewer(palette="Set2") +
+            theme(axis.text.x = element_text(angle = 45, hjust = 0.95, size = 7),
+                  # theme(axis.text.x = element_text(angle = 90, hjust = 0.95, vjust = 0.2),
+                  strip.text.x = element_text(size = 6),
+                  strip.text.y = element_text(size = 8),
+                  strip.background = element_rect(fill="grey"),
+                  legend.position="bottom",
+                  panel.spacing=unit(0.5,"lines")) + 
+            scale_y_continuous(labels = scales::percent)
                 
                 
                 
         })
         
-        # **************************************************************************************************
-        output$plot_behavior1 <- renderPlotly({
-                df.behav %>% filter(sample_type %in% c("Drinking Water", "DW, other", "Bathing Water", "Floodwater", "Open Drains" )) %>%
-                        melt(., id.vars = c("city", "sample_type", "pop")) %>%
-                        na.omit(value) %>%
-                        ggplot(., aes(x = city, y = value, fill = variable, group = 1,
-                                      text = paste('City: ', city,
-                                                   '<br>Percent:', round((value*100),2), 
-                                                   '<br>Frequency:', variable)
-                                      )) + 
-                        geom_bar(stat = "identity") +
-                        facet_grid(pop ~ sample_type, scales = "free", space = "free") + 
-                        theme_bw() +
-                        labs(fill = "Frequency",
-                             x = "",
-                             y = "Percent") +
-                        # theme(strip.text.y = element_text(size = 7)) +
-                        scale_fill_brewer(palette="Set2") +
-                        theme(axis.text.x = element_text(angle = 90, hjust = 0.95, vjust = 0.2),
-                              strip.text.x = element_text(size = 8),
-                              strip.text.y = element_text(size = 8),
-                              strip.background = element_rect(fill="white"),
-                              legend.position="bottom") + 
-                        scale_y_continuous(labels = scales::percent) -> p
-                
-                
-                ggplotly(p, tooltip = "text")
+        output$plot_behavior_city <- renderPlot({
+          if(is.null(citychoice()) | is.null(bxchoice())){
+            return(NULL)
+          }
+          df.behav.all %>%
+            filter(., city %in% citychoice() & sample_type %in% bxchoice()) %>%
+            melt(., id.vars = c("city", "sample_type", "pop")) %>%
+            na.omit(value) %>%
+            # ggplot(aes(x = factor(neighb_UID), y = value, fill = variable)) +
+            ggplot(aes(x = city, y = value, fill = variable)) + #add value labels
+            geom_bar(stat = "identity") +
+            facet_nested(pop ~ sample_type, scales = "free", space = "free") + #scales = "free_x"
+            theme_bw() +
+            labs(title = "Distribution of Behaviors",
+                 fill = "Frequency",
+                 x = "City",
+                 y = "Percent") +
+            # theme(strip.text.y = element_text(size = 7)) +
+            scale_fill_brewer(palette="Set2") +
+            theme(axis.text.x = element_text(angle = 45, hjust = 0.95, size = 7),
+                  # theme(axis.text.x = element_text(angle = 90, hjust = 0.95, vjust = 0.2),
+                  strip.text.x = element_text(size = 6),
+                  strip.text.y = element_text(size = 8),
+                  strip.background = element_rect(fill="grey"),
+                  legend.position="bottom",
+                  panel.spacing=unit(0.5,"lines")) + 
+            scale_y_continuous(labels = scales::percent)
+          
+          
+          
+        })
 
-                
-                
-        })
         # **************************************************************************************************
-        output$plot_behavior2 <- renderPlotly({
-                df.behav %>% mutate(sample_type = replace(sample_type, sample_type=="Ocn", "Ocean")) %>%
-                        filter(sample_type %in% c("Surface Water", "Ocean", "Raw Produce","Street Food", "Public Latrine")) %>%
-                        mutate(sample_type = factor(sample_type,
-                                                    levels=c("Ocean","Surface Water",  "Public Latrine", "Raw Produce","Street Food"))) %>%
-                        melt(., id.vars = c("city", "sample_type", "pop")) %>%
-                        na.omit(value) %>%
-                        ggplot(., aes(x = city, y = value, fill = variable, group = 1,
-                                      text = paste('City: ', city,
-                                                   '<br>Percent:', round((value*100),2), 
-                                                   '<br>Frequency:', variable)
-                        )) + 
-                        geom_bar(stat = "identity") +
-                        facet_grid(pop ~ sample_type, scales = "free", space = "free") + 
-                        theme_bw() +
-                        labs(fill = "Frequency",
-                             x = "",
-                             y = "Percent") +
-                        # theme(strip.text.y = element_text(size = 7)) +
-                        scale_fill_brewer(palette="Set2") +
-                        theme(axis.text.x = element_text(angle = 90, hjust = 0.95, vjust = 0.2),
-                              strip.text.x = element_text(size = 8),
-                              strip.text.y = element_text(size = 8),
-                              strip.background = element_rect(fill="white"),
-                              legend.position="bottom") + 
-                        scale_y_continuous(labels = scales::percent) -> p
-                
-                ggplotly(p, tooltip = "text")
-                
-        })
-        
-        # **************************************************************************************************
+        #### Exposure  Tab####
         plot_exposure_all <- reactive({
                 colors <- c("Open Drain Water" = '#e41a1c',
                             "Municipal Drinking Water" = '#377eb8',
@@ -539,46 +595,10 @@ server <- function(input, output, session) {
         output$plot_exposure_all <- renderPlot({plot_exposure_all()})
         
         
-        output$plot_exposure_multi <-renderPlot({
-          colors <- c("Open Drain Water" = '#e41a1c',
-                      "Municipal Drinking Water" = '#377eb8',
-                      "Raw Produce" = '#4daf4a',
-                      "Floodwater" = '#984ea3',
-                      "Bathing Water" = '#ff7f00',
-                      "Ocean" = '#ffff33',
-                      "Surface Water" = '#a65628',
-                      "Public Latrine" = '#f781bf',
-                      "Street Food" = '#999999')
-          
-          
-          df.exposure %>% 
-            mutate(city = replace(city, city == "Atlanta", "Atl")) %>%
-            ggplot(., aes(x=factor(neighb_id), y=perDose, fill=pathway) ) +
-            geom_bar(stat="identity") +
-            facet_grid(age~ city, scales = "free_x", space = "free_x") +
-            labs(fill = "Pathway",
-                 x = "Neighborhood",
-                 y = "Total Exposure (log10)") +
-            theme_bw() +
-            theme(#legend.position="bottom",
-              strip.text.x = element_text(size = 12),
-              # strip.text.y = element_text(size = 12),
-              strip.background = element_rect(fill="white")) +
-            scale_fill_manual(values = colors)
-        })
-        
         
         
         # **************************************************************************************************       
-        output$mapcountries <- renderLeaflet(
-                leaflet(meta_dply) %>% 
-                        addTiles() %>% 
-                        addMarkers(lng = ~long,
-                                   lat = ~lat, 
-                                   label = paste0(meta_dply$city, ", ", meta_dply$country),
-                                   popup = ~country,
-                                   options = markerOptions(draggable = F, riseOnHover = TRUE))
-        )
+
         # **************************************************************************************************
         
         mapneighborhoods <- reactive({
@@ -696,6 +716,9 @@ server <- function(input, output, session) {
         })
         output$plot_ecoli <- renderPlot(ecoli_plot())
 
+        
+        
+        
 
       # DOMINANT PATHWAYS FOR Adults and Children  
         commondom1 <- reactive({
@@ -714,16 +737,16 @@ server <- function(input, output, session) {
             return(NULL)
           }
           
-          widgetUserBox(
+          widgetUserBoxCasey(
             title = tags$h3(city.domcount$pathway[1], tags$br(),
                             "(", city.domcount$n[1], ")",
                             style="text-align: center;color: rgb(255, 255, 255);"),
             subtitle = NULL,
             type = 2,
             width = 12,
-            src = pathway.info$url[which(pathway.info$pathway==city.domcount$pathway[1])],
+            src = pathway.info$icon[which(pathway.info$pathway==city.domcount$pathway[1])],
             background = TRUE,
-            backgroundUrl = pathway.info$url[which(pathway.info$pathway==city.domcount$pathway[1])],
+            backgroundUrl = pathway.info$bg[which(pathway.info$pathway==city.domcount$pathway[1])],
             closable = FALSE,
             tags$h5(pathway.info$front_text[which(pathway.info$pathway==city.domcount$pathway[1])],
                     style="text-align: center; color: rgb(62, 0, 0);"),
@@ -751,16 +774,16 @@ server <- function(input, output, session) {
             return(NULL)
           }
           
-          widgetUserBox(
+          widgetUserBoxCasey(
             title = tags$h3(city.domcount$pathway[2], tags$br(),
                             "(", city.domcount$n[2], ")",
                             style="text-align: center;color: rgb(255, 255, 255);"),
             subtitle = NULL,
             type = 2,
             width = 12,
-            src = pathway.info$url[which(pathway.info$pathway==city.domcount$pathway[2])],
+            src = pathway.info$icon[which(pathway.info$pathway==city.domcount$pathway[2])],
             background = TRUE,
-            backgroundUrl = pathway.info$url[which(pathway.info$pathway==city.domcount$pathway[2])],
+            backgroundUrl = pathway.info$bg[which(pathway.info$pathway==city.domcount$pathway[2])],
             closable = FALSE,
             tags$h5(pathway.info$front_text[which(pathway.info$pathway==city.domcount$pathway[2])],
                     style="text-align: center; color: rgb(62, 0, 0);"),
@@ -786,16 +809,16 @@ server <- function(input, output, session) {
             return(NULL)
           }
           
-          widgetUserBox(
+          widgetUserBoxCasey(
             title = tags$h3(city.domcount$pathway[3], tags$br(),
                             "(", city.domcount$n[3], ")",
                             style="text-align: center;color: rgb(255, 255, 255);"),
             subtitle = NULL,
             type = 2,
             width = 12,
-            src = pathway.info$url[which(pathway.info$pathway==city.domcount$pathway[3])],
+            src = pathway.info$icon[which(pathway.info$pathway==city.domcount$pathway[3])],
             background = TRUE,
-            backgroundUrl = pathway.info$url[which(pathway.info$pathway==city.domcount$pathway[3])],
+            backgroundUrl = pathway.info$bg[which(pathway.info$pathway==city.domcount$pathway[3])],
             closable = FALSE,
             tags$h5(pathway.info$front_text[which(pathway.info$pathway==city.domcount$pathway[3])],
                     style="text-align: center; color: rgb(62, 0, 0);"),
@@ -806,6 +829,181 @@ server <- function(input, output, session) {
           
         })
         output$dom3 <- renderUI(commondom3())
+        
+        output$test1 <- renderUI({
+          widgetUserBoxCasey(
+            title = tags$h3("DW",
+                            style="text-align: center;color: rgb(255, 255, 255);"),
+            subtitle = NULL,
+            type = 2,
+            width = 12,
+            src = pathway.info$icon[which(pathway.info$pathway=="Municipal Drinking Water")],
+            background = TRUE,
+            backgroundUrl = pathway.info$bg[which(pathway.info$pathway=="Municipal Drinking Water")],
+            closable = FALSE,
+            tags$h5(pathway.info$front_text[which(pathway.info$pathway=="Municipal Drinking Water")],
+                    style="text-align: center; color: rgb(62, 0, 0);"),
+            footer = pathway.info$back_text[which(pathway.info$pathway=="Municipal Drinking Water")],
+            boxToolSize="xs"
+          )
+        })
+        output$test2 <- renderUI({
+          widgetUserBoxCasey(
+            title = tags$h3("BW",
+                            style="text-align: center;color: rgb(255, 255, 255);"),
+            subtitle = NULL,
+            type = 2,
+            width = 12,
+            src = pathway.info$icon[which(pathway.info$pathway=="Bathing Water")],
+            background = TRUE,
+            backgroundUrl = pathway.info$bg[which(pathway.info$pathway=="Bathing Water")],
+            closable = FALSE,
+            tags$h5(pathway.info$front_text[which(pathway.info$pathway=="Bathing Water")],
+                    style="text-align: center; color: rgb(62, 0, 0);"),
+            footer = pathway.info$back_text[which(pathway.info$pathway=="Bathing Water")],
+            boxToolSize="xs"
+          )
+        })
+        output$test3 <- renderUI({
+          widgetUserBoxCasey(
+            title = tags$h3("OD",
+                            style="text-align: center;color: rgb(255, 255, 255);"),
+            subtitle = NULL,
+            type = 2,
+            width = 12,
+            src = pathway.info$icon[which(pathway.info$pathway=="Open Drain Water")],
+            background = TRUE,
+            backgroundUrl = pathway.info$bg[which(pathway.info$pathway=="Open Drain Water")],
+            closable = FALSE,
+            tags$h5(pathway.info$front_text[which(pathway.info$pathway=="Open Drain Water")],
+                    style="text-align: center; color: rgb(62, 0, 0);"),
+            footer = pathway.info$back_text[which(pathway.info$pathway=="Open Drain Water")],
+            boxToolSize="xs"
+          )
+        })
+        output$test4 <- renderUI({
+          widgetUserBoxCasey(
+            title = tags$h3("0DW",
+                            style="text-align: center;color: rgb(255, 255, 255);"),
+            subtitle = NULL,
+            type = 2,
+            width = 12,
+            src = pathway.info$icon[which(pathway.info$pathway=="Other Drinking Water")],
+            background = TRUE,
+            backgroundUrl = pathway.info$bg[which(pathway.info$pathway=="Other Drinking Water")],
+            closable = FALSE,
+            tags$h5(pathway.info$front_text[which(pathway.info$pathway=="Other Drinking Water")],
+                    style="text-align: center; color: rgb(62, 0, 0);"),
+            footer = pathway.info$back_text[which(pathway.info$pathway=="Other Drinking Water")],
+            boxToolSize="xs"
+          )
+        })
+        output$test5 <- renderUI({
+          widgetUserBoxCasey(
+            title = tags$h3("OW",
+                            style="text-align: center;color: rgb(255, 255, 255);"),
+            subtitle = NULL,
+            type = 2,
+            width = 12,
+            src = pathway.info$icon[which(pathway.info$pathway=="Ocean")],
+            background = TRUE,
+            backgroundUrl = pathway.info$bg[which(pathway.info$pathway=="Ocean")],
+            closable = FALSE,
+            tags$h5(pathway.info$front_text[which(pathway.info$pathway=="Ocean")],
+                    style="text-align: center; color: rgb(62, 0, 0);"),
+            footer = pathway.info$back_text[which(pathway.info$pathway=="Ocean")],
+            boxToolSize="xs"
+          )
+        })
+        output$test6 <- renderUI({
+          widgetUserBoxCasey(
+            title = tags$h3("FW",
+                            style="text-align: center;color: rgb(255, 255, 255);"),
+            subtitle = NULL,
+            type = 2,
+            width = 12,
+            src = pathway.info$icon[which(pathway.info$pathway=="Floodwater")],
+            background = TRUE,
+            backgroundUrl = pathway.info$bg[which(pathway.info$pathway=="Floodwater")],
+            closable = FALSE,
+            tags$h5(pathway.info$front_text[which(pathway.info$pathway=="Floodwater")],
+                    style="text-align: center; color: rgb(62, 0, 0);"),
+            footer = pathway.info$back_text[which(pathway.info$pathway=="Floodwater")],
+            boxToolSize="xs"
+          )
+        })
+        output$test7 <- renderUI({
+          widgetUserBoxCasey(
+            title = tags$h3("SW",
+                            style="text-align: center;color: rgb(255, 255, 255);"),
+            subtitle = NULL,
+            type = 2,
+            width = 12,
+            src = pathway.info$icon[which(pathway.info$pathway=="Surface Water")],
+            background = TRUE,
+            backgroundUrl = pathway.info$bg[which(pathway.info$pathway=="Surface Water")],
+            closable = FALSE,
+            tags$h5(pathway.info$front_text[which(pathway.info$pathway=="Surface Water")],
+                    style="text-align: center; color: rgb(62, 0, 0);"),
+            footer = pathway.info$back_text[which(pathway.info$pathway=="Surface Water")],
+            boxToolSize="xs"
+          )
+        })
+        output$test8 <- renderUI({
+          widgetUserBoxCasey(
+            title = tags$h3("SF",
+                            style="text-align: center;color: rgb(255, 255, 255);"),
+            subtitle = NULL,
+            type = 2,
+            width = 12,
+            src = pathway.info$icon[which(pathway.info$pathway=="Street Food")],
+            background = TRUE,
+            backgroundUrl = pathway.info$bg[which(pathway.info$pathway=="Street Food")],
+            closable = FALSE,
+            tags$h5(pathway.info$front_text[which(pathway.info$pathway=="Street Food")],
+                    style="text-align: center; color: rgb(62, 0, 0);"),
+            footer = pathway.info$back_text[which(pathway.info$pathway=="Street Food")],
+            boxToolSize="xs"
+          )
+        })
+        output$test9 <- renderUI({
+          widgetUserBoxCasey(
+            title = tags$h3("PR",
+                            style="text-align: center;color: rgb(255, 255, 255);"),
+            subtitle = NULL,
+            type = 2,
+            width = 12,
+            src = pathway.info$icon[which(pathway.info$pathway=="Raw Produce")],
+            background = TRUE,
+            backgroundUrl = pathway.info$bg[which(pathway.info$pathway=="Raw Produce")],
+            closable = FALSE,
+            tags$h5(pathway.info$front_text[which(pathway.info$pathway=="Raw Produce")],
+                    style="text-align: center; color: rgb(62, 0, 0);"),
+            footer = pathway.info$back_text[which(pathway.info$pathway=="Raw Produce")],
+            boxToolSize="xs"
+          )
+        })
+        output$test10 <- renderUI({
+          widgetUserBoxCasey(
+            title = tags$h3("LS",
+                            style="text-align: center;color: rgb(255, 255, 255);"),
+            subtitle = NULL,
+            type = 2,
+            width = 12,
+            src = pathway.info$icon[which(pathway.info$pathway=="Public Latrine")],
+            background = TRUE,
+            backgroundUrl = pathway.info$bg[which(pathway.info$pathway=="Public Latrine")],
+            closable = FALSE,
+            tags$h5(pathway.info$front_text[which(pathway.info$pathway=="Public Latrine")],
+                    style="text-align: center; color: rgb(62, 0, 0);"),
+            footer = pathway.info$back_text[which(pathway.info$pathway=="Public Latrine")],
+            boxToolSize="xs"
+          )
+        })
+        
+        
+        
+        
         
 }
 

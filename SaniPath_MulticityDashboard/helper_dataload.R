@@ -7,7 +7,8 @@ library(dplyr)
 meta_dply <- read.csv( "data/meta_deployments.csv", stringsAsFactors = F)
 meta_neighb <- read.csv( "data/meta_neighborhoods.csv", stringsAsFactors = F)
 meta_sampleID <- read.csv( "data/meta_sampleID.csv", stringsAsFactors = F)
-df.behav <- read.csv( "data/behavior_all_city_percent_02122020.csv", stringsAsFactors = F) #done
+df.behav.city <- read.csv( "data/behavior_all_city_neighborhood_03242020.csv", stringsAsFactors = F) #done
+df.behav.all <- read.csv( "data/behavior_all_city_percent_02122020.csv", stringsAsFactors = F) #done
 df.ecdata <- read.csv( "data/ec_data_2020-02-12.csv", stringsAsFactors = F) #done
 df.col <- read.csv( "data/col_merged_2020-02-12.csv", stringsAsFactors = F) #done
 df.exposure <- read.csv("data/multicity_exposure_2020-03-05.csv", stringsAsFactors = F) #done
@@ -19,10 +20,18 @@ pathway.info <- read.csv( "data/pathway_info.csv", stringsAsFactors = F)
 
 # **************************************************************************************************
 #### modify behavior data ####
-colnames(df.behav) <- c("city", "sample_type", "pop", "sum", "10+", "6-10", "<5", "Never")
-df.behav$sum <- NULL
-df.behav$pop <- factor(df.behav$pop)
-df.behav[ is.na(df.behav) ] <- NA
+colnames(df.behav.city) <- c("neighb_UID", "sample_type", "pop", "10+", "6-10", "<5", "Never", "deployment_id", "country", "city",
+                        "citylabel", "neighborhood")
+df.behav.city <- df.behav.city %>% filter(neighb_UID != 501 & neighb_UID != 502)
+df.behav.city$sum <- NULL
+df.behav.city$pop <- factor(df.behav.city$pop)
+df.behav.city[ is.na(df.behav.city) ] <- NA
+
+colnames(df.behav.all) <- c("city", "sample_type", "pop", "sum", "10+", "6-10", "<5", "Never")
+df.behav.all$sum <- NULL
+df.behav.all$pop <- factor(df.behav.all$pop)
+df.behav.all[ is.na(df.behav.all) ] <- NA
+
 
 # **************************************************************************************************
 #### rearranging order and formatting date and making meta files ####
@@ -132,4 +141,97 @@ df.dominant <- df.dominant %>%
 
 
 
-
+#### Custom widgetUserBox maker ####
+widgetUserBoxCasey <- function(..., title = NULL, subtitle = NULL, type = NULL,
+                               background = FALSE, backgroundUrl = NULL,
+                               src = NULL, color = NULL, footer = NULL, footer_padding = TRUE,
+                               width = 6, height = NULL, boxToolSize = "sm",
+                               collapsible = TRUE, collapsed = FALSE, closable = FALSE) {
+  
+  cl <- "widget-user-header"
+  if (!is.null(color) && background == FALSE) cl <- paste0(cl, " bg-", color)
+  if (isTRUE(background)) cl <- paste0(cl, " bg-black")
+  
+  boxCl <- "box box-widget widget-user"
+  if (!is.null(type)) boxCl <- paste0(boxCl, "-", type)
+  if (collapsible && collapsed) {
+    boxCl <- paste(boxCl, "collapsed-box")
+  }
+  
+  style <- NULL
+  if (!is.null(height)) {
+    style <- paste0("height: ", shiny::validateCssUnit(height))
+  }
+  
+  backgroundStyle <- NULL
+  if (isTRUE(background)) {
+    backgroundStyle <- paste0("background: url('", backgroundUrl, "') center center;background-size: cover;")
+  }
+  
+  # collapseTag
+  collapseTag <- NULL
+  if (collapsible) {
+    collapseIcon <- if (collapsed) 
+      "fas fa-plus"
+    else "fas fa-minus"
+    collapseTag <- shiny::tags$button(
+      class = paste0("btn btn-box-tool", " bg-", color, " btn-", boxToolSize), 
+      type = "button",
+      `data-widget` = "collapse",
+      tags$i(class=collapseIcon, style = "color:#FFFFFF")
+      # shiny::icon(collapseIcon)
+    )
+  }
+  
+  # closeTag
+  closeTag <- NULL
+  if (closable) {
+    closeTag <- shiny::tags$button(
+      class = paste0("btn btn-box-tool", " bg-", color, " btn-", boxToolSize),
+      `data-widget` = "remove",
+      type = "button",
+      shiny::tags$i(class = "fa fa-times")
+    )
+  }
+  
+  shiny::column(
+    width = width,
+    shiny::tags$div(
+      class = boxCl,
+      style = style,
+      
+      # header
+      shiny::tags$div(
+        class = cl,
+        style = backgroundStyle,
+        
+        # box header buttons
+        shiny::tags$div(
+          class = "pull-right box-tools",
+          collapseTag,
+          closeTag
+        ),
+        
+        # image
+        shiny::tags$div(
+          class = "widget-user-image",
+          shiny::tags$img(class = "img-circle", src = src)
+        ),
+        
+        # titles
+        shiny::tags$h3(class = "widget-user-username", title),
+        shiny::tags$h5(class = "widget-user-desc", subtitle)
+        
+      ),
+      
+      # body
+      shiny::tags$div(class = "box-body", ...),
+      
+      # footer
+      shiny::tags$div(
+        class = if (isTRUE(footer_padding)) "box-footer" else "box-footer no-padding", 
+        footer
+      )
+    )
+  )
+}
