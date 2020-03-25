@@ -45,7 +45,8 @@ hoods <- unique(meta_neighb$neighborhood)
 samples <- as.character(unique(df.ecdata$sample_type_name))
 colourCount = length(unique(meta_dply$city))
 getPalette = colorRampPalette(brewer.pal(9, "Set3"))
-getPalette2 = colorRampPalette(brewer.pal(9, "Pastel1"))
+# getPalette2 = colorRampPalette(brewer.pal(9, "Pastel1"))
+getPalette2 = colorRampPalette(c("#E4E4E4", "#6FAAC0"))
 colScale <- scale_fill_manual(values=getPalette(colourCount))
 
 

@@ -51,8 +51,8 @@ sanipath <- shinyDashboardThemeDIY(
   ,sidebarTabBorderColor = "rgb(204, 204, 204)"
   ,sidebarTabBorderWidth = 1
   
-  ,sidebarTabBackColorSelected = "rgb(184,184,184)"
-  ,sidebarTabTextColorSelected = "rgb(26,49,87)"
+  ,sidebarTabBackColorSelected = "rgb(34, 78, 150)"
+  ,sidebarTabTextColorSelected = "rgb(148, 202, 235)"
   ,sidebarTabRadiusSelected = "10px"
   
   ,sidebarTabBackColorHover = "rgb(18, 41, 79)"

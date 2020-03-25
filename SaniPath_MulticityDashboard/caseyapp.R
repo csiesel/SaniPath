@@ -375,14 +375,23 @@ server <- function(input, output, session) {
           if(is.null(input$city)){
             return(NULL)
           }
+          
+          colors <- c("Adults" = '#961f16',
+                      "Children" = '#1a3157')
+          
           domcount <- df.dominant %>% group_by(pathway, age) %>% summarise(n=n())
           ggplot(domcount, aes(x=pathway, y=n, fill=age)) +
             geom_linerange(position=position_dodge(.5),
-                           aes(xmin=pathway, xmax=pathway, ymin=0, ymax=n, colour=age, size=10, alpha=0.6),
+                           aes(xmin=pathway, xmax=pathway, ymin=0, ymax=n
+                                , colour=age
+                               , size=10, alpha=0.6),
                            show.legend=F) +
-            geom_point(position=position_dodge(.5), aes(colour=age), size=10, show.legend=T) +
+            geom_point(position=position_dodge(.5)
+                        , aes(colour=age)
+                       , size=10, show.legend=T) +
             theme_light() +
             coord_flip() +
+            scale_color_manual(values = colors) +
             guides(fill=FALSE, size=FALSE, alpha=FALSE) +
             labs(y="Dominant Pathway Count Across Neighborhoods", x="", color="Age") +
             theme(
