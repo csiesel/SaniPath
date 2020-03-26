@@ -88,9 +88,9 @@ ui <-
         ##### Tab 1: MultiCity Comparison ####
         tabItem(
           tabName = "tabmulti",
-          h2("SaniPath Multi City Comparison"),
+          h1("SaniPath Multi City Comparison"),
           wellPanel(
-            h3("SaniPath Study by the Numbers"),
+            h2("SaniPath Study by the Numbers"),
             fluidRow(
               valueBoxOutput("multiboxcountries"),
               valueBoxOutput("multiboxcity"),
@@ -106,24 +106,23 @@ ui <-
             )
           ),
           wellPanel(
-            h3("Cities"),
+            h2("Cities"),
             leafletOutput("mapcountries")),
           wellPanel(
-            h3("Most Common Dominant Pathways"),
-            fluidRow(
-              column(6,
-                     h4(textOutput("commondomadult"), align = "center")
-              ),
-              column(6,
-                     h4(textOutput("commondomchild"), aligh = "center")
-              )
-            ),
-            h3("Count of Dominant Pathways across Countries"),
-            plotOutput("multidom")
+            h2("Exposure for Adults and Children by Pathway"),
+            plotOutput("plot_exposure_multi")
           ),
           wellPanel(
-            h3("Exposure for Adults and Children by Pathway"),
-            plotOutput("plot_exposure_multi")
+            fluidRow(
+              column(6,
+                     h4(uiOutput("commondomadult"), align = "center")
+              ),
+              column(6,
+                     h4(uiOutput("commondomchild"), align = "center")
+              )
+            ),
+            h2("Count of Dominant Pathways across Countries", align = "center"),
+            plotOutput("multidom")
           )
         ),
         
@@ -132,7 +131,7 @@ ui <-
         tabItem(
           tabName = "taboverview",
           wellPanel(style = "padding: 10px",
-                    h3("Deployment by the Numbers")),
+                    h2("Deployment by the Numbers")),
           fluidRow(
             valueBoxOutput("boxneighb"),
             valueBoxOutput("boxsamples")
@@ -143,12 +142,12 @@ ui <-
             valueBoxOutput("boxsssurveys")
           ),
           wellPanel(style = "padding: 10px;",
-            h3("Neighborhoods"),
+            h2("Neighborhoods"),
             leafletOutput("mapneighborhoods")
           ),
           fluidRow(
             wellPanel(style = "padding: 10px;",
-              h3("Dominant Pathways"),
+              h2("Dominant Pathways"),
               dataTableOutput("domtable")
             )
           )
@@ -159,8 +158,8 @@ ui <-
         tabItem(
           tabName = "tabenviron",
           wellPanel(style = "padding: 10px;",
-            h3("  Environmental Contamination"),
-            h5("  Select environmental pathways below to update the map and graphs"),
+            h2("  Environmental Contamination"),
+            h4("  Select environmental pathways below to update the map and graphs"),
             checkboxGroupButtons(
               "sample",
               NULL,
@@ -172,7 +171,8 @@ ui <-
                 yes = icon("ok", lib = "glyphicon"),
                 no = icon("remove", lib = "glyphicon")
               )
-            )
+            ),
+            tags$h6("* We recommend only selecting a single city for the map comparison", style="font-style: italic")
           ),
           fluidRow(
             column(6,
@@ -195,7 +195,10 @@ ui <-
                 HTML(
                   "<p align=center> <i> <font size=2 color=darkred>
                   NOTE: Units are as Log10 E. coli/100mL except for the following: Street Food and Raw Produce (Log10 E. coli/serving),
-                  Latrine Swabs (Log10 E. coli/swab), Soil (Log10 E. coli/gram)
+                  Latrine Swabs (Log10 E. coli/swab), Soil (Log10 E. coli/gram). <br>
+                  These plots show the data density estimations based on the distribution of contamination found on environmental samples
+                  from the SaniPath Study.
+
                   </font> </i> </p>"
                 )
               )
@@ -207,8 +210,8 @@ ui <-
         tabItem(
           tabName = "tabbehav",
           wellPanel(style = "padding: 10px;",
-            h3("Behavior Frequency"),
-            h5("Select environmental pathways below to update the graphs"),
+            h2("Behavior Frequency"),
+            h4("Select environmental pathways below to update the graphs"),
             checkboxGroupButtons(
               "bx",
               NULL,
@@ -235,14 +238,14 @@ ui <-
         #### Tab 5: Exposure ####
         tabItem(
           tabName = "tabexposure",
-          h2("Exposure and Dominant Pathways"),
+          h1("Exposure and Dominant Pathways"),
           wellPanel(
-            h3("Distribution of Exposure by Neighborhood and City Across Pathways"),
+            h2("Distribution of Exposure by Neighborhood and City Across Pathways"),
             plotOutput("plot_exposure_all", height = "700px")
           ),
           wellPanel(
             fluidRow(
-              tags$h2("The Most Common Dominant Pathways for ", style = "display:inline;vertical-align:top;"),
+              tags$h1("The Most Common Dominant Pathways for ", style = "display:inline;vertical-align:top;"),
               div(style = "display:inline-block;vertical-align:top;",
                 selectInput(
                   "age",
@@ -252,8 +255,8 @@ ui <-
                   width = "100px"
                 )
               ),
-              tags$h2(" in:", style = "display:inline;vertical-align:top;"),
-              tags$h2(textOutput("citychoice"), style = "display:inline;vertical-align:top;color:rgb(62, 0, 0);")
+              tags$h1(" in:", style = "display:inline;vertical-align:top;"),
+              tags$h1(textOutput("citychoice"), style = "display:inline;vertical-align:top;color:rgb(62, 0, 0);")
             )
           ),
           fluidRow(
@@ -341,7 +344,7 @@ server <- function(input, output, session) {
         #### Multi-City Comparison Tab####
         
           #multicity most common dominant pathways: Adult
-          output$commondomadult <- renderText({
+          output$commondomadult <- renderUI({
             domcount <- df.dominant %>%
               group_by(pathway, age) %>%
               summarise(n=n())
@@ -352,14 +355,18 @@ server <- function(input, output, session) {
               filter(., age=="Adults") %>%
               arrange(., desc(n)) -> adult
   
-            paste0("The 3 most common dominant pathways for adults across cities are: 1) ",
-                   adult[1,]$pathway, " (", adult[1,]$percent, "% of all neighborhoods),  2) ",
-                   adult[2,]$pathway, " (", adult[2,]$percent, "% of all neighborhoods),  and 3) ",
-                   adult[3,]$pathway, " (", adult[3,]$percent, "% of all neighborhoods). ")
+            tags$h2("The 3 most common dominant pathways for Adults across cities are: ", style="text-align: center;",
+                    tags$h3("1) ",adult[1,]$pathway, style="color: rgb(62, 0, 0); text-align: center;"),
+                    tags$h4(" -", adult[1,]$percent, "% of all neighborhoods", style="text-align: center;"),
+                    tags$h3("2) ",adult[2,]$pathway, style="color: rgb(62, 0, 0); text-align: center;"),
+                    tags$h4(" -", adult[2,]$percent, "% of all neighborhoods", style="text-align: center;"),
+                    tags$h3("3) ",adult[3,]$pathway, style="color: rgb(62, 0, 0); text-align: center;"),
+                    tags$h4(" -", adult[3,]$percent, "% of all neighborhoods", style="text-align: center;")
+            )
           })  
           
           #multicity most common dominant pathways: Child
-          output$commondomchild <- renderText({
+          output$commondomchild <- renderUI({
             domcount <- df.dominant %>% group_by(pathway, age) %>% summarise(n=n())
             nhoods <- length(unique(meta_neighb$neighborhood))
             domcount <- domcount %>%
@@ -368,11 +375,15 @@ server <- function(input, output, session) {
               filter(., age=="Children") %>%
               arrange(., desc(n)) -> child
             
-            paste0("The 3 most common dominant pathways for children across cities are: 1) ",
-                                child[1,]$pathway, " (", child[1,]$percent, "% of all neighborhoods),  2) ",
-                                child[2,]$pathway, " (", child[2,]$percent, "% of all neighborhoods),  and 3) ",
-                                child[3,]$pathway, " (", child[3,]$percent, "% of all neighborhoods).")
-  
+
+            tags$h2("The 3 most common dominant pathways for Children across cities are: ", style="text-align: center;",
+            tags$h3("1) ",child[1,]$pathway, style="color: rgb(62, 0, 0); text-align: center;"),
+            tags$h4(" -", child[1,]$percent, "% of all neighborhoods", style="text-align: center;"),
+            tags$h3("2) ",child[2,]$pathway, style="color: rgb(62, 0, 0); text-align: center;"),
+            tags$h4(" -", child[2,]$percent, "% of all neighborhoods", style="text-align: center;"),
+            tags$h3("3) ",child[3,]$pathway, style="color: rgb(62, 0, 0); text-align: center;"),
+            tags$h4(" -", child[3,]$percent, "% of all neighborhoods", style="text-align: center;")
+            )
           })
           
           #multicity box
@@ -700,8 +711,9 @@ server <- function(input, output, session) {
             }
             
             df.ecdata %>% filter(., city %in% citychoice() & sample_type_name %in% samplechoice()) %>%
-              ggplot(., aes(y=factor(hood), x=log10(ec_conc))) +
+              ggplot(., aes(y=factor(hood, levels=(unique(hood))), x=log10(ec_conc))) +
               geom_density_ridges(aes(fill=city), quantile_lines=TRUE, quantiles=2, panel_scaling=FALSE) +
+              geom_vline(aes(xintercept=mean(log10(ec_conc), na.rm=TRUE), color="red"), show.legend=FALSE) +
               # geom_point(aes(color=city) ) +
               # facet_grid( ~ sample_type_name, scales = "free_x", space = "free_x") +
               facet_wrap( ~ sample_type_name, scales = "fixed", nrow=4, ncol=3) +

@@ -89,7 +89,6 @@ for(i in 1:nrow(df.ecdata)){
 }
 
 
-
 # **************************************************************************************************
 #### determining dominant pathways ####
 df.exposure$citylabel <-  factor(df.exposure$citylabel, levels = unique(df.exposure$citylabel))
