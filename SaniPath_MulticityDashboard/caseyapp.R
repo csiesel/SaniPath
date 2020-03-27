@@ -76,7 +76,9 @@ ui <-
           direction = "vertical",
           justified = TRUE,
           checkIcon = list(yes = icon("ok", lib = "glyphicon"))
-        )
+        ),
+        tags$h6("* Selections above will change the", tags$br(), "deployment-specific results ",
+                style="text-align: center; font-style: italic; color: rgb(26, 49, 87);")
         )
       ),
     
@@ -177,7 +179,7 @@ ui <-
           fluidRow(
             column(6,
               wellPanel(style = "padding: 10px;",
-                h4("Map of samples and sample contamination score"),
+                h3("Map of samples and sample contamination score", align="center"),
                 leafletOutput("mapecoli", height = "600px"),
                 HTML(
                   "<p align=center> <i> <font size=2 color=darkred>
@@ -190,7 +192,7 @@ ui <-
             ),
             column(6,
               wellPanel(style = "padding: 10px;",
-                h4("E. coli contamination by sample type", align ="center"),
+                h3("E. coli contamination by sample type", align ="center"),
                 plotOutput("plot_ecoli", height = "600px"),
                 HTML(
                   "<p align=center> <i> <font size=2 color=darkred>
@@ -699,7 +701,7 @@ server <- function(input, output, session) {
                          popup = paste0(df$sample_type_name, ", ", sprintf("%.2f", round(df$std_ec_conc, 2)), " Normalized E.coli", " (log10)"),
                          weight = 3, radius=50, color=~dot_color, stroke = TRUE, fillOpacity = 1) %>%
               addLegend("bottomright", colors = color1, labels = cutoff1,
-                        title = "Ecoli Value Cutoff") %>%
+                        title = "Normalized E. coli Rating") %>%
               addScaleBar("bottomleft")
           })
           output$mapecoli <- renderLeaflet(ecoli_map())
@@ -710,22 +712,37 @@ server <- function(input, output, session) {
               return(NULL)
             }
             
-            df.ecdata %>% filter(., city %in% citychoice() & sample_type_name %in% samplechoice()) %>%
+            df.ecdata <- df.ecdata %>% filter(., city %in% citychoice() & sample_type_name %in% samplechoice())
+            df2 <- df.ecdata %>%
+              group_by(sample_type_name) %>%
+              summarise(mean.cont = mean(log10(ec_conc), na.rm=TRUE))
+            
+            df.ecdata %>%
               ggplot(., aes(y=factor(hood, levels=(unique(hood))), x=log10(ec_conc))) +
-              geom_density_ridges(aes(fill=city), quantile_lines=TRUE, quantiles=2, panel_scaling=FALSE) +
-              geom_vline(aes(xintercept=mean(log10(ec_conc), na.rm=TRUE), color="red"), show.legend=FALSE) +
+              geom_density_ridges(aes(fill=city), quantile_lines=TRUE, quantiles=2, panel_scaling=FALSE
+                                  #comment this chunk out to get rid of lines: from here
+                                  ,
+                                  jittered_points = TRUE,
+                                  position = position_points_jitter(width = 0.05,
+                                                                    height = 0),
+                                  point_shape = '|', point_size = 2,
+                                  point_alpha = 1, alpha = 0.7
+                                  #to here
+                                  ) +
+              geom_vline(data=df2, aes(xintercept=mean.cont, color="red"), show.legend=FALSE) +
               # geom_point(aes(color=city) ) +
               # facet_grid( ~ sample_type_name, scales = "free_x", space = "free_x") +
               facet_wrap( ~ sample_type_name, scales = "fixed", nrow=4, ncol=3) +
               labs(fill = "City",
                    x = "E. coli (Log10)",
                    y = "") +
-              theme_bw() +
               scale_x_continuous(breaks = c(0,2,4,6,8,10)) +
-              theme(axis.text.x = element_text(angle = 90, hjust = 0.95, vjust = 0.2),
+              theme_bw() +
+              theme(axis.text.x = element_text(hjust = 0.95, vjust = 0.2),
                     axis.text=element_text(size=8),
                     strip.background = element_rect(fill="white"),
-                    legend.position="bottom") +
+                    legend.position="bottom",
+                    legend.justification="center") +
               colScale
             
           })
