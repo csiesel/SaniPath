@@ -35,6 +35,11 @@ ui <-
           <font color=white> SaniPath Multi-City Comparison </font>
           </b></h5></div>"
         ),
+        HTML(
+          "<h6 align=center> <b>
+          <font color=rgb(26, 49, 87)> The following tab presents results for <br> all study sites </font>
+          </b></h5>"
+        ),
         menuItem(
           "Multi-City Comparison",
           tabName = "tabmulti",
@@ -45,6 +50,11 @@ ui <-
           "<div style=background-color:rgb(84,84,84);height:20px;> <h5 align=center> <b>
           <font color=white> Deployment-Specific Results </font>
           </b></h5></div>"
+        ),
+        HTML(
+          "<h6 align=center> <b>
+          <font color=rgb(26, 49, 87)> The following tabs present results for <br> the study site(s) selected below </font>
+          </b></h5>"
         ),
         menuItem(
           "Deployment Overview",
@@ -90,7 +100,7 @@ ui <-
         ##### Tab 1: MultiCity Comparison ####
         tabItem(
           tabName = "tabmulti",
-          h1("SaniPath Multi City Comparison"),
+          h1("SaniPath Multi City Comparison: All Study Sites"),
           wellPanel(
             h2("SaniPath Study by the Numbers"),
             fluidRow(
@@ -108,24 +118,24 @@ ui <-
             )
           ),
           wellPanel(
-            h2("Cities"),
+            h2("SaniPath Study Sites"),
             leafletOutput("mapcountries")),
           wellPanel(
-            h2("Exposure for Adults and Children by Pathway"),
+            h2("Exposure to Fecal Contamination for Adults and Children by Study Site"),
             plotOutput("plot_exposure_multi")
           ),
-          wellPanel(
             fluidRow(
               column(6,
-                     h4(uiOutput("commondomadult"), align = "center")
+                     wellPanel(h4(uiOutput("commondomadult"), align = "center"))
               ),
               column(6,
-                     h4(uiOutput("commondomchild"), align = "center")
+                     wellPanel(h4(uiOutput("commondomchild"), align = "center"))
               )
             ),
-            h2("Count of Dominant Pathways across Countries", align = "center"),
+            wellPanel(
+            h2("Count of Dominant Pathways across Cities", align = "center"),
             plotOutput("multidom")
-          )
+            )
         ),
         
         # **************************************************************************************************
@@ -197,9 +207,9 @@ ui <-
                 HTML(
                   "<p align=center> <i> <font size=2 color=darkred>
                   NOTE: Units are as Log10 E. coli/100mL except for the following: Street Food and Raw Produce (Log10 E. coli/serving),
-                  Latrine Swabs (Log10 E. coli/swab), Soil (Log10 E. coli/gram). <br>
+                  Latrine Swabs (Log10 E. coli/swab), Soil (Log10 E. coli/gram). <br> <br>
                   These plots show the data density estimations based on the distribution of contamination found on environmental samples
-                  from the SaniPath Study.
+                  from the SaniPath Study. Dots represent individual samples and the level of E. coli detected.
 
                   </font> </i> </p>"
                 )
@@ -228,11 +238,11 @@ ui <-
             )
           ),
           wellPanel(style = "padding: 10px;",
-            h4("Distribution of Behavior by Neighborhood and City for Selected Pathways"),
+            h3("Distribution of Behavior by Neighborhood and City for Selected Pathways"),
             plotOutput("plot_behavior", height = "700px")
           ),
           wellPanel(style = "padding: 10px;",
-            h4("Distribution of Behavior by City (combined neighborhoods) for Selected Pathways"),
+            h3("Distribution of Behavior by City (combined neighborhoods) for Selected Pathways"),
             plotOutput("plot_behavior_city", height ="700px")
           )
         ),
@@ -723,10 +733,11 @@ server <- function(input, output, session) {
                                   #comment this chunk out to get rid of lines: from here
                                   ,
                                   jittered_points = TRUE,
-                                  position = position_points_jitter(width = 0.05,
-                                                                    height = 0),
-                                  point_shape = '|', point_size = 2,
-                                  point_alpha = 1, alpha = 0.7
+                                  # position = position_points_jitter(width = 0.05, height = 0),
+                                  # point_shape = '|',
+                                  point_size = 0.75,
+                                  point_alpha = 0.5,
+                                  alpha = 0.7
                                   #to here
                                   ) +
               geom_vline(data=df2, aes(xintercept=mean.cont, color="red"), show.legend=FALSE) +
