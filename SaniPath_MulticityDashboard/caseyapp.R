@@ -100,9 +100,9 @@ ui <-
         ##### Tab 1: MultiCity Comparison ####
         tabItem(
           tabName = "tabmulti",
-          h1("SaniPath Multi City Comparison: All Study Sites"),
-          wellPanel(
-            h2("SaniPath Study by the Numbers"),
+          wellPanel(style = "padding: 10px;",
+            h2("SaniPath Study by the Numbers")
+          ),
             fluidRow(
               valueBoxOutput("multiboxcountries"),
               valueBoxOutput("multiboxcity"),
@@ -115,8 +115,7 @@ ui <-
               valueBoxOutput("multiboxhhsurveys"),
               valueBoxOutput("multiboxccsurveys"),
               valueBoxOutput("multiboxsssurveys")
-            )
-          ),
+            ),
           wellPanel(
             h2("SaniPath Study Sites"),
             leafletOutput("mapcountries")),
@@ -154,12 +153,12 @@ ui <-
             valueBoxOutput("boxsssurveys")
           ),
           wellPanel(style = "padding: 10px;",
-            h2("Neighborhoods"),
+            h2("Study Neighborhoods"),
             leafletOutput("mapneighborhoods")
           ),
           fluidRow(
             wellPanel(style = "padding: 10px;",
-              h2("Dominant Pathways"),
+              h2("Dominant Pathways of Exposure to Fecal Contamination"),
               dataTableOutput("domtable")
             )
           )
@@ -555,7 +554,7 @@ server <- function(input, output, session) {
           
           #neighborhood map
           mapneighborhoods <- reactive({
-            factpal <- colorFactor("plasma", meta_neighb$deployment)
+            factpal <- colorFactor("plasma", meta_neighb$city)
             df11 <- left_join(meta_neighb, meta_dply[, c(1,2,4)], by=c("deployment_id" = "id"))
             df11 <- filter(df11, city %in% citychoice())
             leaflet(df11) %>% 
@@ -565,10 +564,12 @@ server <- function(input, output, session) {
                                label = paste0(df11$neighborhood, ", ", df11$city, " (", df11$country, ")"),
                                popup = ~deployment,
                                options = markerOptions(draggable = F, riseOnHover = TRUE),
-                               color = ~factpal(deployment))
+                               color = ~factpal(city))
             
           })
           output$mapneighborhoods <- renderLeaflet(mapneighborhoods())
+          
+          
           
           #domtable
           domtable <- reactive({
@@ -614,8 +615,8 @@ server <- function(input, output, session) {
               scale_fill_brewer(palette="Set2") +
               theme(axis.text.x = element_text(angle = 45, hjust = 0.95, size = 7),
                     # theme(axis.text.x = element_text(angle = 90, hjust = 0.95, vjust = 0.2),
-                    strip.text.x = element_text(size = 6),
-                    strip.text.y = element_text(size = 8),
+                    strip.text.x = element_text(size = 10),
+                    strip.text.y = element_text(size = 10),
                     strip.background = element_rect(fill="grey"),
                     legend.position="bottom",
                     panel.spacing=unit(0.5,"lines")) + 
@@ -646,8 +647,8 @@ server <- function(input, output, session) {
               scale_fill_brewer(palette="Set2") +
               theme(axis.text.x = element_text(angle = 45, hjust = 0.95, size = 7),
                     # theme(axis.text.x = element_text(angle = 90, hjust = 0.95, vjust = 0.2),
-                    strip.text.x = element_text(size = 6),
-                    strip.text.y = element_text(size = 8),
+                    strip.text.x = element_text(size = 10),
+                    strip.text.y = element_text(size = 10),
                     strip.background = element_rect(fill="grey"),
                     legend.position="bottom",
                     panel.spacing=unit(0.5,"lines")) + 
