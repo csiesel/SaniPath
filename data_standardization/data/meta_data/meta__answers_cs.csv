@@ -1,0 +1,201 @@
+form,variable,population,answer,answer1
+c,c_d_a_3,adults,10+,Vote if you went into open drains more than 10 times in the past month. 
+c,c_d_a_2,adults,6 to 10,Vote if you went into open drains 6 to 10 times in the past month. 
+c,c_d_a_1,adults,<5,Vote if you went into open drains 5 times or less in the past month. 
+c,c_d_a_0,adults,Never, Vote if you never went into open drains in the past month. 
+c,c_d_a_na,adults,Do not know,Vote if you do not know how often you went into open drains in the past month.
+c,c_p_a_3,adults,10+,Vote if you ate raw produce more than 10 times within the past week. 
+c,c_p_a_2,adults,6 to 10,Vote if you ate raw produce 6 to 10 times within the past week. 
+c,c_p_a_1,adults,<5,Vote if you ate raw produce 1 to 5 times within the past week. 
+c,c_p_a_0,adults,Never,Vote if you never ate raw produce within the past week.
+c,c_p_a_na,adults,Do not know,Vote if you do not know how often you ate raw produce within the past week.
+c,c_dw_a_3,adults,10+,Vote if you drank municipal water every day.
+c,c_dw_a_2,adults,6 to 10,Vote if you drank municipal water 4 to 6 days within the past week. 
+c,c_dw_a_1,adults,<5,Vote if you drank municipal water 3 days or less within the past week. 
+c,c_dw_a_0,adults,Never,Vote if you never drank municipal water within the past week. 
+c,c_dw_a_na,adults,Do not know,Vote if you do not know how often you drank municipal water within the past week.
+c,c_o_a_3,adults,10+,Vote if you went into the ocean more than 10 times total in the past month. 
+c,c_o_a_2,adults,6 to 10,Vote if you went into the ocean 6 to 10 times total in the past month. 
+c,c_o_a_1,adults,<5,Vote if you went into the ocean 5 times or less in the past month. 
+c,c_o_a_0,adults,Never,Vote if you never went into the ocean in the past month.
+c,c_o_a_na,adults,Do not know,Vote if you do not know how often you went into the ocean in the past month.
+c,c_s_a_3,adults,10+,"Vote if you went into rivers, ponds, or lakes more than 10 times in the past month."
+c,c_s_a_2,adults,6 to 10,"Vote if you went into rivers, ponds, or lakes 6 to 10 times in the past month."
+c,c_s_a_1,adults,<5,"Vote if you went into rivers, ponds, or lakes 5 times or less in the past month."
+c,c_s_a_0,adults,Never," Vote if you never went into rivers, ponds, or lakes in the past month. "
+c,c_s_a_na,adults,Do not know,"Vote if you do not know how often you went into rivers, ponds, or lakes in the past month."
+c,c_f_a_3,adults,10+,Vote if you come into contact with floodwater more than 10 times total every week during the rainy season. 
+c,c_f_a_2,adults,6 to 10,Vote if you come into contact with floodwater 6 to 10 times total every week during the rainy season. 
+c,c_f_a_1,adults,<5,Vote if you come into contact with floodwater 5 times or less total every week during the rainy season.
+c,c_f_a_0,adults,Never,Vote if you never come into contact with floodwater during the rainy season. 
+c,c_f_a_na,adults,Do not know,Vote if you do not know how often you come into contact with floodwater during the rainy season. 
+c,c_l_a_3,adults,10+,Vote if you used a public latrine in your neighborhood more than 10 times within the past week. 
+c,c_l_a_2,adults,6 to 10,Vote if you used a public latrine in your neighborhood 6 to 10 times within the past week. 
+c,c_l_a_1,adults,<5,Vote if you used a public latrine in your neighborhood 5 times or less in the past week. 
+c,c_l_a_0,adults,Never,Vote if you never used apublic latrine in your neighborhood in the past week.
+c,c_l_a_na,adults,Do not know,Vote if you do not know how often you used a public latrine in your neighborhood in the past week. 
+c,c_bw_a_3,adults,10+,Vote if you bathed more than 10 times within the past week. 
+c,c_bw_a_2,adults,6 to 10,Vote if you bathed 6 to 10 times within the past week. 
+c,c_bw_a_1,adults,<5,Vote if you bathed 1 to 5 times within the past week. 
+c,c_bw_a_0,adults,Never,Vote if you never bathed in the past week.
+c,c_bw_a_na,adults,Do not know,Vote if you do not know how often you bathed in the past week. 
+c,c_sf_a_3,adults,10+,Vote if you ate street food more than 10 times within the past week. 
+c,c_sf_a_2,adults,6 to 10,Vote if you ate street food 6 to 10 times within the past week. 
+c,c_sf_a_1,adults,<5,Vote if you ate street food 1 to 5 times within the past week. 
+c,c_sf_a_0,adults,Never,Vote if you never ate street food within the past week.
+c,c_sf_a_na,adults,Do not know,Vote if you do not know how often you ate street food within the past week.
+c,c_d_c_3,children,10+,Vote if your children went into open drains more than 10 times in the past month.
+c,c_d_c_2,children,6 to 10,Vote if your children went into open drains 6 to 10 times in the past month.
+c,c_d_c_1,children,<5,Vote if your children went into open drains 5 times or less in the past month.
+c,c_d_c_0,children,Never,Vote if your children never went into open drains in the past month.
+c,c_d_c_na,children,Do not know,Vote if you do not know how often your children went into open drains in the past month.
+c,c_p_c_3,children,10+,Vote if your children ate raw produce more than 10 times within the past week. 
+c,c_p_c_2,children,6 to 10,Vote if your children ate raw produce 6 to 10 times within the past week. 
+c,c_p_c_1,children,<5,Vote if your children ate raw produce 1 to 5 times within the past week. 
+c,c_p_c_0,children,Never,Vote if your children never ate raw produce within the past week.
+c,c_p_c_na,children,Do not know,Vote if you do not know how often your children ate raw produce within the past week. 
+c,c_dw_c_3,children,Every day,Vote if your children drank municipal water every day in the past week. 
+c,c_dw_c_2,children,6 to 10,Vote if your children drank municipal water 4 to 6 days in the past week.
+c,c_dw_c_1,children,<5,Vote if your children drank municipal water 3 days or less in the past week.
+c,c_dw_c_0,children,Never,Vote if your children never drank municipal water in the past week.
+c,c_dw_c_na,children,Do not know,Vote if you do not know how often your children drank municipal water in the past week.
+c,c_o_c_3,children,10+,Vote if the children went into the ocean more than 10 times total in the past month.
+c,c_o_c_2,children,6 to 10,Vote if the children went into the ocean 6 to 10 times total in the past month.
+c,c_o_c_1,children,<5,Vote if the children went into the ocean 5 times or less in the past month. 
+c,c_o_c_0,children,Never,Vote if the children never went into the ocean in the past month.
+c,c_o_c_na,children,Do not know,Vote if you do not know how often the children went into the ocean in the past month.
+c,c_s_c_3,children,10+,"Vote if your children went into rivers, ponds, or lakes more than 10 times in the past month. "
+c,c_s_c_2,children,6 to 10,"Vote if your children went into rivers, ponds, or lakes 6 to 10 times in the past month. "
+c,c_s_c_1,children,<5,"Vote if your children went into rivers, ponds, or lakes 5 times or less in the past month."
+c,c_s_c_0,children,Never,"Vote if your children never went into rivers, ponds, or lakes in the past month."
+c,c_s_c_na,children,Do not know,"Vote if you do not know how often your children went into rivers, ponds, or lakes in the past month."
+c,c_f_c_3,children,10+,Vote if your children come into contact with floodwater during the rainy season more than 10 times total every week during the rainy season. 
+c,c_f_c_2,children,6 to 10,Vote if your children come into contact with floodwater 6 to 10 times total every week during the rainy season. 
+c,c_f_c_1,children,<5,Vote if your children come into contact with floodwater 5 times or less total every week during the rainy season. 
+c,c_f_c_0,children,Never,Vote if your children never come into contact with floodwater during the rainy season. 
+c,c_f_c_na,children,Do not know,Vote if you do not know how often your children come into contact with floodwater during the rainy season. 
+c,c_l_c_3,children,10+,Vote if your children used public latrines in your neighborhood more than 10 times within the past week. 
+c,c_l_c_2,children,6 to 10,Vote if your children used public latrines in your neighborhood 6 to 10 times within the past week. 
+c,c_l_c_1,children,<5,Vote if your children used public latrines in your neighborhood 5 times or less within the past week. 
+c,c_l_c_0,children,Never,Vote if your children never used public latrines in your neighborhood within the past week. 
+c,c_l_c_na,children,Do not know,Vote if you do not know how often your children used public latrines in your neighborhood within the past week.
+c,c_bw_c_3,children,10+,Vote if your children bathed more than 10 times within the past week. 
+c,c_bw_c_2,children,6 to 10,Vote if your children bathed 6 to 10 times within the past week. 
+c,c_bw_c_1,children,<5,Vote if your children bathed 1 to 5 times within the past week. 
+c,c_bw_c_0,children,Never,Vote if your children never bathed within the past week. 
+c,c_bw_c_na,children,Do not know,Vote if you do not know how often your children bathe. 
+c,c_sf_c_3,children,10+,Vote if your children ate street food more than 10 times within the past week. 
+c,c_sf_c_2,children,6 to 10,Vote if your children ate street food 6 to 10 times within the past week. 
+c,c_sf_c_1,children,<5,Vote if your children ate street food 1 to 5 times within the past week. 
+c,c_sf_c_0,children,Never,Vote if your children never ate street food within the past week.
+c,c_sf_c_na,children,Do not know,Vote if you do not know how often your children ate street food within the past week.
+s,s_d_c_3,children,10+,Raise your hand if you went into open drains more than 10 times in the past month. 
+s,s_d_c_2,children,6 to 10,Raise your hand if you went into open drains 6 to 10 times in the past month. 
+s,s_d_c_1,children,<5,Raise your hand if you went into open drains 5 times or less in the past month. 
+s,s_d_c_0,children,Never,Raise your hand if you never went into open drains in the past month.
+s,s_d_c_na,children,Do not know,Raise your hand if you do not know how often you went into open drains in the past month.
+s,s_d_a_3,adults,10+,Raise your hand if the adults went into open drains more than 10 times in the past month.
+s,s_d_a_2,adults,6 to 10,Raise your hand if the adults went into open drains 6 to 10 times in the past month.
+s,s_d_a_1,adults,<5,Raise your hand if the adults went into open drains 5 times or less in the past month. 
+s,s_d_a_0,adults,Never,Raise your hand if the adults never went into open drains in the past month.
+s,s_d_a_na,adults,Do not know,Raise your hand if you do not know how often the adults went into open drains in the past month.
+s,s_p_c_3,children,10+,Raise your hand if you ate raw produce more than 10 times in the past week. 
+s,s_p_c_2,children,6 to 10,Raise your hand if you ate raw produce 6 to 10 times in the past week. 
+s,s_p_c_1,children,<5,Raise your hand if you ate raw produce 1 to 5 times in the past week. 
+s,s_p_c_0,children,Never,Raise your hand if you never ate raw produce in the past week. 
+s,s_p_c_na,children,Do not know,Raise your hand if you do not know how often you ate raw produce in the past week.
+s,s_p_a_3,adults,10+,Raise your hand if the adults ate raw produce more than 10 times in the past week. 
+s,s_p_a_2,adults,6 to 10,Raise your hand if the adults ate raw produce 6 to 10 times in the past week. 
+s,s_p_a_1,adults,<5,Raise your hand if the adults ate raw produce 1 to 5 times in the past week. 
+s,s_p_a_0,adults,Never,Raise your hand if the adults never ate raw produce in the past week. 
+s,s_p_a_na,adults,Do not know,Raise your hand if you do not know how often the adults ate raw produce in the past week.
+s,s_dw_c_3,children,Every day,Raise your hand if you drank municipal water every day in the past week. 
+s,s_dw_c_2,children,6 to 10,Raise your hand if you drank municipal water 4 to 6 days in the past week. 
+s,s_dw_c_1,children,<5,Raise your hand if you drank municipal water 3 days or less in the past week. 
+s,s_dw_c_0,children,Never,Raise your hand if you never drank municipal water in the past week. 
+s,s_dw_c_na,children,Do not know,Raise your hand if you do not know how often you drank municipal water in the past week. 
+s,s_dw_a_3,adults,Every day,Raise your hand if the adults drank municipal water every day in the past week.
+s,s_dw_a_2,adults,6 to 10,Raise your hand if the adults drank municipal water 4 to 6 days in the past week. 
+s,s_dw_a_1,adults,<5,Raise your hand if the adults drank municipal water 3 days or less in the past week. 
+s,s_dw_a_0,adults,Never,Raise your hand if the adults never drank municipal water in the past week.
+s,s_dw_a_na,adults,Do not know,Raise your hand if you do not know how ofen the adults drank municipal water in the past week. 
+s,s_o_c_3,children,10+,Raise your hand if you went into the ocean more than 10 times total in the past month. 
+s,s_o_c_2,children,6 to 10,Raise your hand if you went into the ocean 6 to 10 times total in the past month. 
+s,s_o_c_1,children,<5,Raise your hand if you went into the ocean 5 times or less total in  the past month. 
+s,s_o_c_0,children,Never,Raise your hand if you never went into the ocean in the past month.
+s,s_o_c_na,children,Do not know,Raise your hand if you do not know how often you went into the ocean in the past month.
+s,s_o_a_3,adults,10+,Raise your hand if the adults went into the ocean more than 10 times total in the past month.
+s,s_o_a_2,adults,6 to 10,Raise your hand if the adults went into the ocean 6 to 10 times total in the past month.
+s,s_o_a_1,adults,<5,Raise your hand if the adults went into the ocean 5 times or less total in the past month. 
+s,s_o_a_0,adults,Never,Raise your hand if the adults never went into the ocean in the past month.
+s,s_o_a_na,adults,Do not know,Raise your hand if you do not know how often the adults went into the ocean in the past month.
+s,s_s_c_3,children,10+,"Raise your hand if you went into rivers, ponds, or lakes more than 10 times in the past month. "
+s,s_s_c_2,children,6 to 10,"Raise your hand if you went into rivers, ponds, or lakes 6 to 10 times in the past month. "
+s,s_s_c_1,children,<5,"Raise your hand if you went into rivers, ponds, or lakes 5 times or less in the past month. "
+s,s_s_c_0,children,Never,"Raise your hand if you never went into rivers, ponds, or lakes in the past month."
+s,s_s_c_na,children,Do not know,"Raise your hand if you do not know how often you went into rivers, ponds, or lakes in the past month."
+s,s_s_a_3,adults,10+,"Raise your hand if the adults went into rivers, ponds, or lakes more than 10 times in the past month."
+s,s_s_a_2,adults,6 to 10,"Raise your hand if the adults went into rivers, ponds, or lakes 6 to 10 times in the past month."
+s,s_s_a_1,adults,<5,"Raise your hand if the adults went into rivers, ponds, or lakes 5 times or less in the past month. "
+s,s_s_a_0,adults,Never,"Raise your hand if the adults never went into rivers, ponds, or lakes in the past month."
+s,s_s_a_na,adults,Do not know,"Raise your hand if you do not know how often the adults went into rivers, ponds, or lakes in the past month."
+s,s_f_c_3,children,10+,Raise your hand if you come into contact with floodwater more than 10 times total every week during the rainy season. 
+s,s_f_c_2,children,6 to 10,Raise your hand if you come into contact with floodwater 6 to 10 times total every week during the rainy season. 
+s,s_f_c_1,children,<5,Raise your hand if you come into contact with floodwater 5 times or less total every week during the rainy season. 
+s,s_f_c_0,children,Never,Raise your hand if you never come into contact with floodwater during the rainy season. 
+s,s_f_c_na,children,Do not know,Raise your hand if you do not know how often you come into contact with floodwater during the rainy season. 
+s,s_f_a_3,adults,10+,Raise your hand if the adults come into contact with floodwater more than 10 times total every week during the rainy season. 
+s,s_f_a_2,adults,6 to 10,Raise your hand if the adults come into contact with floodwater 6 to 10 times total every week during the rainy season. 
+s,s_f_a_1,adults,<5,Raise your hand if the adults come into contact with floodwater 5 times or less total every week during the rainy season. 
+s,s_f_a_0,adults,Never,Raise your hand if the adults never come into contact with floodwater during the rainy season. 
+s,s_f_a_na,adults,Do not know,Raise your hand if you don't know how often the adults come into contact with floodwater during the rainy season. 
+s,s_l_c_3,children,10+,Raise your hand if you used a public latrine in your neighborhood more than 10 times in the past week. 
+s,s_l_c_2,children,6 to 10,Raise your hand if you used a public latrine in your neighborhood 6 to 10 times in the past week. 
+s,s_l_c_1,children,<5,Raise your hand if you used a public latrine in your neighborhood 5 times or less in the past week. 
+s,s_l_c_0,children,Never,Raise your hand if you never used a public latrine in your neighborhood in the past week. 
+s,s_l_c_na,children,Do not know,Raise your hand if you do not know how often you used a public latrine in your neighborhood in the past week.
+s,s_l_a_3,adults,10+,Raise your hand if the adults used a public latrine in your neighborhood more than 10 times in the past week. 
+s,s_l_a_2,adults,6 to 10,Raise your hand if the adults used a public latrine in your neighborhood 6 to 10 times in the past week. 
+s,s_l_a_1,adults,<5,Raise your hand if the adults used a public latrine in your neighborhood 5 times or less in the past week. 
+s,s_l_a_0,adults,Never,Raise your hand if the adults never used a public latrine in your neighborhood in the past week.
+s,s_l_a_na,adults,Do not know,Raise your hand if you don't know how often the adults used a public latrine in the past week.
+s,s_bw_c_3,children,10+,Raise your hand if you bathed more than 10 times in the past week. 
+s,s_bw_c_2,children,6 to 10,Raise your hand if you bathed 6 to 10 times in the past week. 
+s,s_bw_c_1,children,<5,Raise your hand if you bathed 1 to 5 times in the past week. 
+s,s_bw_c_0,children,Never,Raise your hand if you never bathed in the past week. 
+s,s_bw_c_na,children,Do not know,Raise your hand if you do not know how often you bathed in the past week.
+s,s_bw_a_3,adults,10+,Raise your hand if the adults bathed more than 10 times in the past week.
+s,s_bw_a_2,adults,6 to 10,Raise your hand if the adults bathed 6 to 10 times in the past week.
+s,s_bw_a_1,adults,<5,Raise your hand if the adults bathed 5 times or less in the past week. 
+s,s_bw_a_0,adults,Never,Raise your hand if the adults never bathed in the past week.
+s,s_bw_a_na,adults,Do not know,Raise your hand if you do not know how often the adults bathed in the past week.
+s,s_sf_c_3,children,10+,Raise your hand if you ate street food more than 10 times in the past week. 
+s,s_sf_c_2,children,6 to 10,Raise your hand if you ate street food 6 to 10 times in the past week. 
+s,s_sf_c_1,children,<5,Raise your hand if you ate street food 1 to 5 times in the past week. 
+s,s_sf_c_0,children,Never,Raise your hand if you never ate street food in the past week. 
+s,s_sf_c_na,children,Do not know,Raise your hand if you do not know how often you ate street food in the past week. 
+s,s_sf_a_3,adults,10+,Raise your hand if the adults ate street food more than 10 times in the past week.
+s,s_sf_a_2,adults,6 to 10,Raise your hand if the adults ate street food 6 to 10 time in the past week.
+s,s_sf_a_1,adults,<5,Raise your hand if the adults ate street food more than 1 to 5 times in the past week.
+s,s_sf_a_0,adults,Never,Raise your hand if the adults never ate street food in the past week.
+s,s_sf_a_na,adults,Do not know,Raise your hand if you do not know how often the adults ate street food in the past week.
+c,c_odw_a_3,adults,10+,Vote if you drank other water every day.
+c,c_odw_a_2,adults,6 to 10,Vote if you drank other water 4 to 6 days within the past week. 
+c,c_odw_a_1,adults,<5,Vote if you drank other water 3 days or less within the past week. 
+c,c_odw_a_0,adults,Never,Vote if you never drank other water within the past week. 
+c,c_odw_a_na,adults,Do not know,Vote if you do not know how often you drank other water within the past week.
+c,c_odw_c_3,children,Every day,Vote if your children drank other water every day in the past week. 
+c,c_odw_c_2,children,6 to 10,Vote if your children drank other water 4 to 6 days in the past week.
+c,c_odw_c_1,children,<5,Vote if your children drank other water 3 days or less in the past week.
+c,c_odw_c_0,children,Never,Vote if your children never drank other water in the past week.
+c,c_odw_c_na,children,Do not know,Vote if you do not know how often your children drank other water in the past week.
+s,s_odw_c_3,children,Every day,Raise your hand if you drank other water every day in the past week. 
+s,s_odw_c_2,children,6 to 10,Raise your hand if you drank other water 4 to 6 days in the past week. 
+s,s_odw_c_1,children,<5,Raise your hand if you drank other water 3 days or less in the past week. 
+s,s_odw_c_0,children,Never,Raise your hand if you never drank other water in the past week. 
+s,s_odw_c_na,children,Do not know,Raise your hand if you do not know how often you drank other water in the past week. 
+s,s_odw_a_3,adults,Every day,Raise your hand if the adults drank other water every day in the past week.
+s,s_odw_a_2,adults,6 to 10,Raise your hand if the adults drank other water 4 to 6 days in the past week. 
+s,s_odw_a_1,adults,<5,Raise your hand if the adults drank other water 3 days or less in the past week. 
+s,s_odw_a_0,adults,Never,Raise your hand if the adults never drank other water in the past week.
+s,s_odw_a_na,adults,Do not know,Raise your hand if you do not know how ofen the adults drank other water in the past week. 

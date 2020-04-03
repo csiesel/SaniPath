@@ -1,0 +1,4 @@
+survey_id,survey_type,risk_response_table
+1,School,surveyresponseanswer
+2,Community,surveyresponseanswer
+3,Household,surveyresponsechoice

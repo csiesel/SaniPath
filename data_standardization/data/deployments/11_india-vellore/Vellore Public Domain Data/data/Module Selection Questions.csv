@@ -1,0 +1,27 @@
+selection_question_id,module,selection_question_text
+1,1,M1. Is this city near an ocean?
+2,1,M2. Is the ocean likely to have fecal contamination based on what you learned and observed about sanitation?
+3,1,M3. Are any of the potential target neighborhoods near the ocean?
+4,1,M4. Do people who live in this neighborhood enter the ocean?
+5,2,"R1. Are there any rivers, lakes, or ponds in this city?"
+6,2,"R2. Are any of the rivers, lakes, or ponds likely to have fecal contamination based on what you learned and observed about sanitation?"
+7,2,"R3. Are any of the potentially contaminated rivers, lakes, or ponds near any of the potential target neighborhoods?"
+8,2,"R4. Do people who live in this neighborhood enter the rivers, lakes, or ponds, or use this water for activities such as laundry or bathing?"
+9,3,F1. Does it ever flood in this city?  Flooding includes standing water that may persist for several days.
+10,3,F2. Is the floodwater likely to have fecal contamination based on what you learned and observed about sanitation?
+11,3,F3. Are any of the potentially contaminated flooding areas near any of the potential target neighborhoods?
+12,3,F4. Do people who live in this neighborhood come into contact with floodwater?
+13,8,"W1. Is there a municipal drinking water supply system in this city?  This includes both piped and unpiped sources, such as boreholes."
+14,8,W2. Is the municipal drinking water likely to have fecal contamination based on what you learned and observed about the water system and sanitation?
+15,8,"W3. Are any of the potential target neighborhoods served by the municipal water system?  This includes both legal and/or alternative methods of connection (illegal connections, visiting neighbors, etc.)."
+16,5,PUB1. Are there any public latrines in the city?
+17,5,PUB2. Are there public latrines in any of the potential target neighborhoods?
+18,5,PUB3. Do people who live in the potential target neighborhoods use the public latrines?
+19,9,D1. Are there any open drains in the city?
+20,9,D2. Is the drain water likely to have fecal contamination based on what you learned and observed about sanitation?
+21,9,D3. Do any of the potential target neighborhoods have open drains?
+22,9,D4. Do people who live in this neighborhood come into contact with open drain water?
+23,6,B1. Are public water supplies used for bathing?
+24,6,B2. Is the surface water used for bathing?
+25,6,B3. Is municipal drinking water used for bathing?
+26,6,B4. Is a source that is not surface water or municipal piped water used for bathing?

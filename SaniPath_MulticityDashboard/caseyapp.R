@@ -188,7 +188,7 @@ ui <-
           fluidRow(
             column(6,
               wellPanel(style = "padding: 10px;",
-                h3("Map of samples and sample contamination score", align="center"),
+                h3("Hotspots of Fecal Contamination", align="center"),
                 leafletOutput("mapecoli", height = "600px"),
                 HTML(
                   "<p align=center> <i> <font size=2 color=darkred>
@@ -683,8 +683,7 @@ server <- function(input, output, session) {
                                                       dot_label == 2 ~ "yellow",
                                                       dot_label == 3 ~ "orange",
                                                       dot_label == 4 ~ "red"))
-            cutoff1 <- c(paste0("<=", cutoff[[2]]), paste0(cutoff[[2]], " - ", cutoff[[3]]),
-                         paste0(cutoff[[3]], " - ", cutoff[[4]]), paste0(cutoff[[4]], " - 1"))
+            cutoff1 <- c("Minimal", "Low", "Medium", "High")
             # cutoff1 <- sprintf("%.2f", round(cutoff1, 2))
             color1 <- c("green", "yellow", "orange", "red")
             
@@ -712,7 +711,7 @@ server <- function(input, output, session) {
                          popup = paste0(df$sample_type_name, ", ", sprintf("%.2f", round(df$std_ec_conc, 2)), " Normalized E.coli", " (log10)"),
                          weight = 3, radius=50, color=~dot_color, stroke = TRUE, fillOpacity = 1) %>%
               addLegend("bottomright", colors = color1, labels = cutoff1,
-                        title = "Normalized E. coli Rating") %>%
+                        title = "Fecal Contamination Risk Scale") %>%
               addScaleBar("bottomleft")
           })
           output$mapecoli <- renderLeaflet(ecoli_map())

@@ -1,0 +1,41 @@
+form,variable,population,answer,question
+c,c_d_a_note,adults,month,How many times within the past month did you go into the drains?
+c,c_p_a_note,adults,week,How many times within the past week did you eat raw produce?
+c,c_dw_a_note,adults,week,How many days within the past week did you drink municipal water?
+c,c_o_a_note,adults,month,How many times within the past month did you go into the ocean for any of these reasons?
+c,c_s_a_note,adults,month,"How many times within the past month did you go into the rivers, ponds, or lakes for any of these reasons?"
+c,c_f_a_note,adults,week,How many times total every week do you come into contact with floodwater during the rainy season?
+c,c_l_a_note,adults,week,How many times within the past week did you use communal/shared latrines in your neighborhood? 
+c,c_bw_a_note,adults,week,How many times within the past week did you bathe?
+c,c_sf_a_note,adults,week,How many times within the past week did you eat street food?
+c,c_d_c_note,children,month,How many times within the past month did your children go into the drains?
+c,c_p_c_note,children,week,How many times within the past week did your children eat raw produce?
+c,c_dw_c_note,children,week,How many days in the past week did your children drink municipal water?
+c,c_o_c_note,children,month,How many times within the past month did the children go into the ocean for any of these reasons? 
+c,c_s_c_note,children,month,"How many times within the past month did your children go into the rivers, ponds, or lakes for any of these reasons?"
+c,c_f_c_note,children,week,How many times total every week do your children come into contact with floodwater during the rainy season?
+c,c_l_c_note,children,week,How many times within the past week did your children use communal/shared latrines in your neighborhood? 
+c,c_bw_c_note,children,week,How many times within the past week did your children bathe?
+c,c_sf_c_note,children,week,How many times within the past week did your children eat street food?
+s,s_d_c_note,children,month,How many times within the past month did you go into the drains?
+s,s_d_a_note,adults,month,How many times within the past month do the adults go into the drains?
+s,s_p_c_note,children,week,How many times within the past week did you eat raw produce?
+s,s_p_a_note,adults,week,How many times within the past week did the adults eat raw produce?
+s,s_dw_c_note,children,week,How many days within the past week did you drink municipal water?
+s,s_dw_a_note,adults,week,How many days within the past week did the adults drink municipal water?
+s,s_o_c_note,children,month,How many times within the past month did you go into the ocean for any of these reasons?
+s,s_o_a_note,adults,month,How many times in the past month did the adults go into the ocean for any of these reasons? 
+s,s_s_c_note,children,month,"How many times within the past month do you go into the rivers, ponds, or lakes for any of these reasons?"
+s,s_s_a_note,adults,month,"How many times within the past month did the adults go into the rivers, ponds, or lakes for any of these reasons?"
+s,s_f_c_note,children,week,How many times total every week do you come into contact with floodwater during the rainy season?
+s,s_f_a_note,adults,week,How many times total every week do the adults come into contact with floodwater during the rainy season?
+s,s_l_c_note,children,week,How many times within the past week did you use public latrines in your neighborhood? 
+s,s_l_a_note,adults,week,How many times within the past week did adults in your household use public  latrines in your neighborhood? 
+s,s_bw_c_note,children,week,How many times within the past week did you bathe?
+s,s_bw_a_note,adults,week,How many times within the past week did they bathe?
+s,s_sf_c_note,children,week,How many times within the past week did you eat street food?
+s,s_sf_a_note,adults,week,How many times within the past week did the adults eat street food?
+c,c_odw_a_note,adults,week,How many days within the past week did you drink other water?
+c,c_odw_c_note,children,week,How many days in the past week did your children drink other water?
+s,s_odw_c_note,children,week,How many days within the past week did you drink other water?
+s,s_odw_a_note,adults,week,How many days within the past week did the adults drink other water?

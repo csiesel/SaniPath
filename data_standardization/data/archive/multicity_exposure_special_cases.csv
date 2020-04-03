@@ -1,0 +1,9 @@
+sample_type_name,sample_id,neighb_id,neighborhood,age,pop,p,r,n.response,mu,sigma,n.sample,exposure,dose,popDose,deployment_id,country,city,citylabel,date,pathway,neighb_pop,neighb_pop_label,perDose
+Bathing Water,9,902,Central,Adults,a,,,,,,,1,9437.60967,9437.60967,9,Uganda,Kampala,Kampala 18,10/1/2018,Street Food,Kampala 902 Children,Kampala 902,
+Bathing Water,9,902,Central,Children,c,,,,,,,1,16994.16743,16994.16743,9,Uganda,Kampala,Kampala 18,10/1/2018,Street Food,Kampala 902 Children,Kampala 902,
+Bathing Water,9,903,Kawempe,Adults,a,,,,,,,1,50.47331,50.47331,9,Uganda,Kampala,Kampala 18,10/1/2018,Street Food,Kampala 903 Children,Kampala 903,
+Bathing Water,9,903,Kawempe,Children,c,,,,,,,1,88.10445,88.10445,9,Uganda,Kampala,Kampala 18,10/1/2018,Street Food,Kampala 903 Children,Kampala 903,
+Bathing Water,9,904,Rubaga,Adults,a,,,,,,,1,68422.34155,68422.34155,9,Uganda,Kampala,Kampala 18,10/1/2018,Street Food,Kampala 904 Children,Kampala 904,
+Bathing Water,9,904,Rubaga,Children,c,,,,,,,1,33316.33426,33316.33426,9,Uganda,Kampala,Kampala 18,10/1/2018,Street Food,Kampala 904 Children,Kampala 904,
+Bathing Water,9,905,Nakawa,Adults,a,,,,,,,1,5557.83965,5557.83965,9,Uganda,Kampala,Kampala 18,10/1/2018,Street Food,Kampala 905 Children,Kampala 905,
+Bathing Water,9,905,Nakawa,Children,c,,,,,,,1,12556.06803,12556.06803,9,Uganda,Kampala,Kampala 18,10/1/2018,Street Food,Kampala 905 Children,Kampala 905,

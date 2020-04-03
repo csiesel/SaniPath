@@ -1,0 +1,1557 @@
+---
+title: " SaniPath Data Analysis/ Data Discovery"
+author: "Wolfgang"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  html_document:
+    # toc: yes
+    # toc_float: true
+    # number_sections: true
+  # pdf_document:
+    # toc: yes
+---
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+
+# Import data:
+source("helper_dataload_all.R")
+source("helper_graph.R")
+source("helper_graph_combined.R")
+
+
+# data setup (adding country and city names etc.)
+df.ecdata <- df.ecdata %>% 
+        left_join(., meta_sampleID, by = c("sample_type" = "id")) %>%
+        left_join(., meta_dply[, c("id", "country", "city", "citylabel")], by = c("dply_num" = "id"))
+
+# check:
+# levels(df.ecdata$sample_type_name)
+# factor(meta_dply$citylabel)
+
+# alternative drinking water declarations
+# add dw level for factors
+# df.ecdata$col_sample_type_alt <- factor(df.ecdata$col_sample_type_alt, 
+#                                         levels=levels(df.ecdata$col_sample_type_alt))
+
+# df.ecdata$col_sample_type_alt[df.ecdata$sample_type == 3 & df.ecdata$col_sample_type_alt == ""] <- "Drinking Water"
+
+#recode other drinking water
+# df.ecdata$sample_type[df.ecdata$sample_type == 3 & df.ecdata$col_sample_type_alt != "Drinking Water" 
+#                       & df.ecdata$col_sample_type_alt != "" ] <- 33
+
+
+df.col <- df.col %>% left_join(., meta_dply[c("id", "citylabel")], by = c("dply_num" = "id"))
+df.lab <- df.lab %>% left_join(., meta_dply[c("id", "citylabel")], by = c("dply_num" = "id"))
+df.h <- df.h %>% left_join(., meta_dply[c("id", "citylabel")], by = c("dply_num" = "id"))
+df.c <- df.c %>% left_join(., meta_dply[c("id", "citylabel")], by = c("dply_num" = "id"))
+df.s <- df.s %>% left_join(., meta_dply[c("id", "citylabel")], by = c("dply_num" = "id"))
+
+
+```
+
+# {.tabset}
+
+## Overview 
+
+### Descriptive Statistics by City
+```{r Descriptive Statisticsc by City, echo=FALSE}
+meta_dply %>% select("country", "city", "year", "citylabel") %>% arrange(year) %>% 
+        kable(., format = "html", caption = "Deployments Overview:") %>% 
+        kable_styling(bootstrap_options = c("hover", "bordered", "condensed"), full_width = F, position = "left")
+
+```
+
+In this database there are `r nrow(meta_dply)` SaniPath deployments.
+
+### Number of Neighborhoods
+```{r Number of Neighborhoods, echo=FALSE}
+meta_neighb %>% 
+        left_join(., meta_dply[, c("id", "country", "city", "year", "date")], by = c("deployment_id" = "id")) %>%
+        arrange((date)) %>% 
+        select(country, city, year, neighborhood_id, neighb_UID, neighborhood, note) %>% 
+        kable(., caption = "Neighborhoods Overview:") %>% 
+        kable_styling(bootstrap_options = c("hover", "bordered", "condensed"), full_width = F, position = "left")
+```
+
+Overall, there are `r nrow(meta_dply)` deployments in `r length(unique(meta_dply$country))` different countries, `r length(unique(meta_dply$city))` cities, and `r nrow(meta_neighb)` neighborhoods in this analysis.
+
+
+### Number of Samples per Pathway
+```{r Number of Samples per Pathway, echo=FALSE}
+options(knitr.kable.NA = '')
+
+df <- as.data.frame.matrix(table(df.col$col_sample_type, df.col$citylabel))
+row.names(df) <- as.character(meta_sampleID$sample_type_name)
+df[df == 0 ] <- NA
+
+kable(df, caption = "Pathway Overview:") %>% 
+        kable_styling(bootstrap_options = c("hover", "bordered", "condensed"), full_width = F, position = "left")
+```
+Overall, `r nrow(df.ecdata)` samples were collected and analyized.
+
+
+### Survey Type and Number of Surveys per Deployment
+```{r echo=FALSE}
+options(knitr.kable.NA = '')
+
+df.h %>% group_by(citylabel) %>% summarize("nr" = n()) %>% spread(citylabel, nr) %>% 
+        as.data.frame() %>% mutate("Form" = "Household") -> nr.h
+df.c %>% group_by(citylabel) %>% summarize("nr" = n()) %>% spread(citylabel, nr) %>% 
+        as.data.frame() %>%mutate("Form" = "Community") -> nr.c
+df.s %>% group_by(citylabel) %>% summarize("nr" = n()) %>% spread(citylabel, nr) %>% 
+        as.data.frame() %>%mutate("Form" = "School") -> nr.s
+df.col %>% group_by(citylabel) %>% summarize("nr" = n()) %>% spread(citylabel, nr) %>% 
+        as.data.frame() %>%mutate("Form" = "Sample") -> nr.col
+df.lab %>% group_by(citylabel) %>% summarize("nr" = n()) %>% spread(citylabel, nr) %>% 
+        as.data.frame() %>%mutate("Form" = "Lab") -> nr.lab
+
+df <- bind_rows(nr.h, nr.c)
+df <- bind_rows(df, nr.s)
+df <- bind_rows(df, nr.col)
+df <- bind_rows(df, nr.lab)
+
+df <- df %>% select(Form, everything())
+df1 <- rowSums(df[-1], na.rm = TRUE)
+
+kable(df, caption = "Survey Type Overview:") %>% 
+        kable_styling(bootstrap_options = c("hover", "bordered","condensed"), full_width = F, position = "left") %>%
+        group_rows("Behavioral Survey", 1, 3) %>%
+        group_rows("Environmental Testing", 4, 5) 
+```
+
+In total, there were `r df1[1]` Household Surveys, `r df1[2]` Community Surveys and `r df1[3]` School Surveys conducted. Additionally, `r df1[4]` environmental samples were collected and subsequently analyzed in the laboratory.  
+
+
+### Survey Type and Number of People per Deployment
+```{r echo=FALSE}
+options(knitr.kable.NA = '')
+
+df.h %>% group_by(citylabel) %>% summarize("nr" = n()) %>% # use n() here because only 1 person is interviewed per survey
+        spread(citylabel, nr) %>% mutate("Form" = "Household") -> nr.h
+df.c %>% group_by(citylabel) %>% summarize("nr" = sum(c_participant_num)) %>% 
+        spread(citylabel, nr) %>% mutate("Form" = "Community") -> nr.c
+df.s %>% group_by(citylabel) %>% summarize("nr" = sum(s_participant_num)) %>% 
+        spread(citylabel, nr) %>% mutate("Form" = "School") -> nr.s
+
+
+df <- bind_rows(nr.h, nr.c)
+df <- bind_rows(df, nr.s)
+
+df <- df %>% select(Form, everything())
+
+kable(df, caption = "Form Participants:") %>% 
+        kable_styling(bootstrap_options = c("hover", "bordered","condensed"), full_width = F, position = "left")
+```
+*Note: Household survey numbers include the number of surveys, whereas community and school surveys account for number of participants.*
+
+<div align="right"><a href="#top">Back to top</a></div>
+
+<!-- ------------------------------------------------------------------------------------------------------------ -->
+
+## Literature
+### Population Density
+- Cambodia, Siem Reap: 
+- Bangladesh, Dhaka:  
+[Census 2011, Report](http://203.112.218.65:8008/PageWebMenuContent.aspx?MenuKey=333): Female/ Male Population (Table C02), Population Density (Table C01)
+- Ghana, Accra:  
+[Census 2010, Report](http://www.statsghana.gov.gh/docfiles/2010phc/National_Analytical_Report.pdf):  
+Greater Accra Region: 1235.8 population density in 2010, 895.5 population density in 2000 (people per kmsq) (Table 4.4).  
+90% of the population is considered urban population (Table 4.5).  
+- Zambia, Lusaka:  
+[Census 2010, Report](http://www.zamstats.gov.zm/phocadownload/2010_Census/2010%20Census%20of%20Population%20National%20Analytical%20Report.pdf): Population density for Lusaka 63.5 (2000) and 100.1 (2010) people per kmsq (Table 2.7).  
+[Census 2010, Population](https://unstats.un.org/unsd/demographic-social/census/documents/Zambia/PreliminaryReport.pdf). 
+- Mozambique, Maputo:  
+Note: added population information to meta_neighborhood.csv file. Sources: Ghana Statistical Services - Census 2010 Shapefile from Habib.
+
+### Enteric Disease Burden
+### Fecal Sludge Managment
+### Shit Flow Diagram
+- Cambodia, Siem Reap:  
+no SFD available 
+- Bangladesh, Dhaka:  
+[SFD Link](https://sfd.susana.org/about/worldwide-projects/city/4-dhaka). The SFD report from March 2016 indicates that less than 1% of fecal sludge in Dhaka is safely managed. 
+- Ghana, Accra:  
+no SFD available 
+- Zambia, Lusaka:  
+[SFD Link](https://sfd.susana.org/about/worldwide-projects/city/46-lusaka). The SFD report from September 2018 shows that 17% of fecal sludge is safely managed. 
+- Mozambique, Maputo:  
+no SFD available 
+- Ghana, Kumasi:  
+[SFD Link](https://sfd.susana.org/about/worldwide-projects/city/13-kumasi). The SFD report from November 2015 shows that 55% of fecal sludge is safely managed. 
+
+
+### WASH Interventions in the past 10 Years
+### Local Stakeholders/ Decision Makers
+
+<div align="right"><a href="#top">Back to top</a></div>
+
+<!-- ------------------------------------------------------------------------------------------------------------ -->
+
+## MF vs. IDEXX
+How many samples were collected for each deployment and each pathway by laboratory analysis method: Membrane Filtration (MF) or IDEXX Quanti-Tray (IDEXX).   
+
+```{r echo=FALSE, warning=FALSE}
+options(knitr.kable.NA = '')
+
+df <- df.ecdata %>% select(citylabel, mf) %>% table() %>% as.data.frame.matrix()
+colnames(df) <- c("IDEXX", "MF")
+
+df %>% 
+        kable(., format = "html", caption = "Lab Method used:") %>% 
+        kable_styling(bootstrap_options = c("hover", "bordered", "condensed"), full_width = F, position = "left")
+
+# 
+df2.2 <- df.ecdata %>% mutate(mf=replace(mf, mf == FALSE, "IDEXX"),
+                        mf=replace(mf, mf == TRUE, "MF"))
+
+df2.2 %>% select(sample_type_name, mf) %>% table() %>% as.data.frame.matrix() %>% 
+        kable(., format = "html", caption = "Lab Method per Sample Type:") %>% 
+        kable_styling(bootstrap_options = c("hover", "bordered", "condensed"), full_width = F, position = "left")
+
+
+df2.2 %>% ggplot(., aes(x=mf, y=log10(ec_conc), fill=mf)) +
+        stat_boxplot(geom = "errorbar", width = 0.35) +
+        geom_boxplot() +
+        facet_wrap(~sample_type_name) +
+        labs(title = "IDEXX vs. MF",
+             fill = "Test",
+             x = "Test Types") +
+        theme_bw() +
+        theme(legend.position="none")
+
+
+```
+
+
+### Membrane Filtration: valid vs. invalid test results
+How many samples tested with the Membrane Filtration method produced valid or invalid results?  
+Note: **`Invalid`** MF results include TDTC (Too Dirty To Count) classifications of laboratory results of samples. **`Valid`** MF results are all results between the range of 0 and 200 as well as TNTC (Too Numerous To Count).
+
+```{r echo=FALSE}
+
+# lab_analysis == 1 IDEXX, 2 Membrane Filtration
+# membrane status == 1 TNTC, 2 TDTC, 3 Valid
+df.lab %>% filter(lab_analysis == 2) %>% summarise("n" = sum(!is.na(lab_1_ecoli_reading_membrane)) +
+                                                           sum(!is.na(lab_2_ecoli_reading_membrane)) + 
+                                                           sum(!is.na(lab_3_ecoli_reading_membrane)), 
+                                                   "valid" = sum(lab_1_ecoli_reading_membrane == 3, na.rm = T) +
+                                                           sum(lab_2_ecoli_reading_membrane == 3, na.rm = T) +
+                                                           sum(lab_3_ecoli_reading_membrane == 3, na.rm = T) +
+                                                           # TNTC
+                                                           sum(lab_1_ecoli_reading_membrane == 1, na.rm = T) +
+                                                           sum(lab_2_ecoli_reading_membrane == 1, na.rm = T) +
+                                                           sum(lab_3_ecoli_reading_membrane == 1, na.rm = T),
+                                                   "invalid" = sum(lab_1_ecoli_reading_membrane == 2, na.rm = T) +
+                                                           sum(lab_2_ecoli_reading_membrane == 2, na.rm = T) +
+                                                           sum(lab_3_ecoli_reading_membrane == 2, na.rm = T),
+                                                   "percent valid" = round( (valid/n)*100, 2)
+                                                ) %>%
+        kable(., caption = "Overview: Valid Membrane Filtration Lab Results") %>% 
+        kable_styling(bootstrap_options = c("hover", "bordered","condensed"), full_width = F, position = "left")
+
+colorcutoff <- 80
+
+# by deployment
+df.lab %>% filter(lab_analysis == 2) %>% group_by(citylabel) %>%
+        summarise("n" = sum(!is.na(lab_1_ecoli_reading_membrane)) +
+                          sum(!is.na(lab_2_ecoli_reading_membrane)) + 
+                          sum(!is.na(lab_3_ecoli_reading_membrane)), 
+                  "valid" = sum(lab_1_ecoli_reading_membrane == 3, na.rm = T) +
+                          sum(lab_2_ecoli_reading_membrane == 3, na.rm = T) +
+                          sum(lab_3_ecoli_reading_membrane == 3, na.rm = T) +
+                          # TNTC
+                          sum(lab_1_ecoli_reading_membrane == 1, na.rm = T) +
+                          sum(lab_2_ecoli_reading_membrane == 1, na.rm = T) +
+                          sum(lab_3_ecoli_reading_membrane == 1, na.rm = T),
+                  "invalid" = sum(lab_1_ecoli_reading_membrane == 2, na.rm = T) +
+                          sum(lab_2_ecoli_reading_membrane == 2, na.rm = T) +
+                          sum(lab_3_ecoli_reading_membrane == 2, na.rm = T),
+                  "percent valid" = round( (valid/n)*100, 2)
+                                                ) %>%
+        mutate(`percent valid` = cell_spec(`percent valid`, "html", 
+                                           color = ifelse(`percent valid` < colorcutoff, "red", "black")) ) %>%
+        select(citylabel, n, valid, invalid, `percent valid`)%>%
+        kable(., format = "html",  escape = F, caption = "Valid Membrane Filtration Lab Results by Deployment") %>% 
+        kable_styling(bootstrap_options = c("hover", "bordered","condensed"), full_width = F, position = "left")
+
+# by samples
+df.lab %>% filter(lab_analysis == 2) %>% group_by(lab_sample_type) %>%
+        summarise("n" = sum(!is.na(lab_1_ecoli_reading_membrane)) +
+                          sum(!is.na(lab_2_ecoli_reading_membrane)) + 
+                          sum(!is.na(lab_3_ecoli_reading_membrane)), 
+                  "valid" = sum(lab_1_ecoli_reading_membrane == 3, na.rm = T) +
+                          sum(lab_2_ecoli_reading_membrane == 3, na.rm = T) +
+                          sum(lab_3_ecoli_reading_membrane == 3, na.rm = T) +
+                          # TNTC
+                          sum(lab_1_ecoli_reading_membrane == 1, na.rm = T) +
+                          sum(lab_2_ecoli_reading_membrane == 1, na.rm = T) +
+                          sum(lab_3_ecoli_reading_membrane == 1, na.rm = T),
+                  "invalid" = sum(lab_1_ecoli_reading_membrane == 2, na.rm = T) +
+                          sum(lab_2_ecoli_reading_membrane == 2, na.rm = T) +
+                          sum(lab_3_ecoli_reading_membrane == 2, na.rm = T),
+                  "percent valid" = round( (valid/n)*100, 2)
+                                                ) %>%
+        left_join(meta_sampleID[,c(1,2)], by = c("lab_sample_type" = "id")) %>%
+        mutate(`percent valid` = cell_spec(`percent valid`, "html", 
+                                           color = ifelse(`percent valid` < colorcutoff, "red", "black")) ) %>%
+        select("sample type" = sample_type_name, n, valid, invalid, `percent valid`) %>%
+        kable(., format = "html",  escape = F, caption = "Valid Membrane Filtration Lab Results by Sample Type") %>% 
+        kable_styling(bootstrap_options = c("hover", "bordered","condensed"), full_width = F, position = "left")
+
+
+# by deployment and sample
+df.lab %>% filter(lab_analysis == 2) %>% group_by(citylabel, lab_sample_type) %>%
+        summarise("n" = sum(!is.na(lab_1_ecoli_reading_membrane)) +
+                          sum(!is.na(lab_2_ecoli_reading_membrane)) + 
+                          sum(!is.na(lab_3_ecoli_reading_membrane)), 
+                  "valid" = sum(lab_1_ecoli_reading_membrane == 3, na.rm = T) +
+                          sum(lab_2_ecoli_reading_membrane == 3, na.rm = T) +
+                          sum(lab_3_ecoli_reading_membrane == 3, na.rm = T) +
+                          # TNTC
+                          sum(lab_1_ecoli_reading_membrane == 1, na.rm = T) +
+                          sum(lab_2_ecoli_reading_membrane == 1, na.rm = T) +
+                          sum(lab_3_ecoli_reading_membrane == 1, na.rm = T),
+                  "invalid" = sum(lab_1_ecoli_reading_membrane == 2, na.rm = T) +
+                          sum(lab_2_ecoli_reading_membrane == 2, na.rm = T) +
+                          sum(lab_3_ecoli_reading_membrane == 2, na.rm = T),
+                  "percent valid" = round( (valid/n)*100, 2)
+                                                ) %>%
+        left_join(meta_sampleID[,c(1,2)], by = c("lab_sample_type" = "id")) %>%
+        ungroup() %>%
+        mutate(`percent valid` = cell_spec(`percent valid`, "html", 
+                                           color = ifelse(`percent valid` < colorcutoff, "red", "black")) ) %>%
+        select(citylabel, "sample type" = sample_type_name, n, valid, invalid, `percent valid`) %>%
+        kable(., format = "html",  escape = F, caption = "Valid Membrane Filtration Lab Results by Deployment and Sample Type") %>% 
+        kable_styling(bootstrap_options = c("hover", "bordered","condensed"), full_width = F, position = "left")
+
+```
+These results suggest sample types with a low percentage of validity of MF testing could improve the overall data quality by addressing potential sampling problems in training. Numbers in the "Percent Valid" column in *`RED`* indicate a rate below 80%.
+
+### IDEXX: valid vs. invalid test results
+How many samples tested with IDEXX method produced a valid or invalid result?
+```{r echo=FALSE}
+
+# lab_analysis == 1 IDEXX, 2 Membrane Filtration
+# idex status == 1 Not Valid, 2 Valid
+df.lab %>% filter(lab_analysis == 1) %>% summarise("n" = sum(!is.na(lab_1_ecoli_reading_idexx)) +
+                                                           sum(!is.na(lab_2_ecoli_reading_idexx)) + 
+                                                           sum(!is.na(lab_3_ecoli_reading_idexx)), 
+                                                   "valid" = sum(lab_1_ecoli_reading_idexx == 2, na.rm = T) +
+                                                           sum(lab_2_ecoli_reading_idexx == 2, na.rm = T) +
+                                                           sum(lab_3_ecoli_reading_idexx == 2, na.rm = T),
+                                                   "invalid" = sum(lab_1_ecoli_reading_idexx == 1, na.rm = T) +
+                                                           sum(lab_2_ecoli_reading_idexx == 1, na.rm = T) +
+                                                           sum(lab_3_ecoli_reading_idexx == 1, na.rm = T),
+                                                   "percent valid" = round( (valid/n)*100, 2)
+                                                ) %>%
+        kable(., caption = "Valid IDEXX Lab Results") %>% 
+        kable_styling(bootstrap_options = c("hover", "bordered","condensed"), full_width = F, position = "left")
+
+
+
+
+```
+
+
+******
+
+### Dilution Error
+When a dilution error occurs, meaning that a sample was not properly processed in the laboratory, the SaniPath Tool automatically discards the E. coli results of this sample (e.g. when the E. coli count for the second dilution is higher than the first dilution - including a variety of possible combinations of illogical results and potential errors).   
+This section explores how many samples were lost due to dilution error.
+
+#### Dilution Error Overview:
+```{r echo=FALSE}
+
+# By city
+df.ecdata %>% select(citylabel, ec_conc) %>% 
+        group_by(citylabel) %>% 
+        summarise(omitted = sum(is.na(ec_conc)),
+                  n = n(),
+                  percentage = round((omitted/n)*100, 2)) -> df
+df %>%
+        kable(., caption = "Dilution Error by City") %>% 
+        kable_styling(bootstrap_options = c("hover", "bordered","condensed"), full_width = F, position = "left")
+
+
+df %>% group_by(citylabel) %>%
+        ggplot(., aes(x=reorder(citylabel, desc(citylabel)), y=percentage, fill=citylabel))+ #reverse order for horizontal graph
+        geom_bar(stat = "identity") +
+        # geom_text(aes(label=percentage) ) +
+        labs(fill = "", 
+             title = "Percentage of Dilution Error",
+             x = "",
+             y = "Percentage") +
+        theme_bw() +
+        theme(legend.position="none") +
+        coord_flip() 
+
+
+```
+
+#### Dilution Error By city, by neighborhood
+```{r echo=FALSE}
+df.ecdata %>% select(citylabel, ec_conc, neighb_UID) %>% 
+        group_by(citylabel, neighb_UID) %>% 
+        summarise(omitted = sum(is.na(ec_conc)),
+                  n = n(),
+                  percentage = round((omitted/n)*100, 2)) %>%
+        filter(omitted != 0) -> df
+        
+df %>% kable(., caption = "Dilution Error by City and Neighborhood") %>% 
+        kable_styling(bootstrap_options = c("hover", "bordered","condensed"), full_width = F, position = "left") 
+
+df %>% filter(percentage != 0) %>%
+        ggplot(., aes(x=factor(neighb_UID), y=percentage, fill=citylabel))+
+        geom_bar(stat = "identity") +
+        labs(fill = "", 
+             title = "Percentage of Dilution Error",
+             x = "Neighborhood") +
+        theme_bw() +
+        facet_grid(~ citylabel, scales = "free_x") +
+        theme(legend.position="none")
+
+```
+
+#### Dilution Error By city, by neighborhood, by sample
+```{r echo=FALSE}
+df.ecdata %>% select(citylabel, ec_conc, neighb_UID, sample_type_name) %>% 
+        group_by(citylabel, neighb_UID, sample_type_name) %>% 
+        summarise(omitted = sum(is.na(ec_conc)),
+                  n = n(),
+                  percentage = round((omitted/n)*100, 2)) -> df
+        
+df %>% filter(omitted != 0) %>%
+        kable(., caption = "Dilution Error by City and Neighborhood and Sample Type") %>% 
+        kable_styling(bootstrap_options = c("hover", "bordered","condensed"), full_width = F, position = "left")
+
+```
+
+#### Sample Size Minimum for Model:  
+To correctly perform the QMRA calculations, a minimum sample size of 10 samples has to be met. Which sample types per neighborhood and deployment have fulfilled the requirement? (omitted = sample discarded because of error)
+
+```{r echo=FALSE}
+df.ecdata %>% select(citylabel, ec_conc, neighb_UID, sample_type_name) %>% 
+        group_by(citylabel, neighb_UID, sample_type_name) %>% 
+        summarise(omitted = sum(is.na(ec_conc)),
+                  n = n(),
+                  requ_met = ifelse(n<10, "No", "Yes"), 
+                  net_n = n-omitted,
+                  net_requ_met = ifelse(net_n<10, "No", "Yes")) -> df
+```
+
+
+Number of pathways that did not meet the requred 10 sample minimum, per city:  
+```{r echo=FALSE}
+df %>% group_by(citylabel, neighb_UID) %>% filter(requ_met == "No" ) %>% summarise(not_met = n()) %>% 
+        kable(., caption = "Requirements Not Met - Overview") %>% 
+        kable_styling(bootstrap_options = c("hover", "bordered","condensed"), full_width = F, position = "left")
+
+
+df %>% 
+        kable(., caption = "Minimum Requirement Met?") %>% 
+        kable_styling(bootstrap_options = c("hover", "bordered","condensed"), full_width = F, position = "left") %>%
+        row_spec(which(df$net_requ_met == "No"), background = "lightgrey") 
+
+
+```
+
+
+
+<div align="right"><a href="#top">Back to top</a></div>
+
+
+
+
+
+## Sample Types
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+df.ecdata %>% group_by(sample_type_name) %>% summarise("n" = n(), 
+                                                "min ecoli" = round(log10(min(ec_conc, na.rm = T)),2),
+                                                "max ecoli" = round(log10(max(ec_conc, na.rm = T)),2),
+                                                "mean ecoli" = round(log10(mean(ec_conc, na.rm = T)),2),
+                                                "standard deviation" = round(log10(sd(ec_conc, na.rm = T)),2),
+                                                "variance" = round(log10(var(ec_conc, na.rm = T)),2)
+                                                ) %>%
+        kable(., caption = "E. coli count per Sample Types") %>% 
+        kable_styling(bootstrap_options = c("hover", "bordered","condensed"), full_width = F, position = "left")
+
+df.ecdata %>% group_by(sample_type_name, sample_type) %>% summarise("n" = n()) -> df
+
+for (i in c(1:10, 33)){
+        df.ecdata %>% filter(sample_type == i) %>%
+                ggplot(., aes(log10(ec_conc)) ) +
+                geom_histogram(binwidth = .5, color="white") +
+                theme_bw() +
+                labs(title = paste0("Overall sample distribution of ", meta_sampleID$sample_type_name[meta_sampleID$id == i],
+                                   " (n = ", df$n[df$sample_type==i], ")")
+                     ) -> p
+        print(p)
+}
+
+```
+
+
+### Samples - Membrane Filtration
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+df.ecdata %>% filter(mf == T) %>%
+        group_by(sample_type_name) %>% summarise("n" = n(), 
+                                                "min ecoli" = round(log10(min(ec_conc, na.rm = T)),2),
+                                                "max ecoli" = round(log10(max(ec_conc, na.rm = T)),2),
+                                                "mean ecoli" = round(log10(mean(ec_conc, na.rm = T)),2),
+                                                "standard deviation" = round(log10(sd(ec_conc, na.rm = T)),2),
+                                                "variance" = round(log10(var(ec_conc, na.rm = T)),2)
+                                                ) %>%
+        kable(., caption = "E. coli count per Sample Types - Membrane Filtration") %>% 
+        kable_styling(bootstrap_options = c("hover", "bordered","condensed"), full_width = F, position = "left")
+
+
+```
+
+
+### Samples - IDEXX
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+df.ecdata %>% filter(mf == F) %>%
+        group_by(sample_type_name) %>% summarise("n" = n(), 
+                                                "min ecoli" = round(log10(min(ec_conc, na.rm = T)),2),
+                                                "max ecoli" = round(log10(max(ec_conc, na.rm = T)),2),
+                                                "mean ecoli" = round(log10(mean(ec_conc, na.rm = T)),2),
+                                                "standard deviation" = round(log10(sd(ec_conc, na.rm = T)),2),
+                                                "variance" = round(log10(var(ec_conc, na.rm = T)),2)
+                                                ) %>%
+        kable(., caption = "E. coli count per Sample Types - IDEXX") %>% 
+        kable_styling(bootstrap_options = c("hover", "bordered","condensed"), full_width = F, position = "left")
+
+
+```
+
+
+<div align="right"><a href="#top">Back to top</a></div>
+
+<!-- ------------------------------------------------------------------------------------------------------------ -->
+
+## Produce
+### Contamination of Produce
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+df2 <- df.col %>% filter(col_sample_type == 2) %>% select(col_UID, col_p_type) %>% 
+        left_join(., df.ecdata, by = c("col_UID" = "UID")) %>% 
+        left_join(., meta_produce, by = c("col_p_type" = "produce_id")) %>% 
+        select("UID" = col_UID, dply_num, country, city, citylabel, neighb_UID, col_p_type, produce, ec_conc)
+
+df2 %>% ggplot(., aes(x=factor(citylabel), y=log10(ec_conc), fill=citylabel)) +
+        stat_boxplot(geom = "errorbar", width = 0.35) +
+        geom_boxplot() +
+        labs(title = "E. coli distribution of produce samples by deployment",
+             fill = "By Depolyment",
+             x = "Deployment") +
+        theme_bw() +
+        theme(legend.position="none") +
+        coord_flip()
+
+df2 %>% ggplot(., aes(x=factor(neighb_UID), y=log10(ec_conc), fill=factor(neighb_UID))) +
+        stat_boxplot(geom = "errorbar", width = 0.35) +
+        geom_boxplot() +
+        facet_grid(~citylabel, scales = "free_x", space = "free_x") +
+        labs(fill = "", 
+             title = "E. coli count by type Neighborhood",
+             x = "Neighborhood") +
+        theme_bw() +
+        theme(legend.position="none")
+```
+
+
+
+### Differences within Produce Samples
+General comparison tables indicating how many samples were taken overall.  
+
+```{r echo=FALSE}
+
+df.col %>% filter(col_sample_type == 2) %>% count(col_p_type) %>% na.omit() %>% 
+        left_join(., meta_produce, by = c("col_p_type" = "produce_id")) %>% 
+        select(-col_p_type) %>% select(id, produce, n) %>%
+        kable(., caption = "Types of Produce and Number of Samples") %>% 
+        kable_styling(bootstrap_options = c("hover", "bordered","condensed"), full_width = F, position = "left")
+
+df.col %>% group_by(citylabel) %>% count(col_p_type) %>% na.omit() %>% 
+        left_join(., meta_produce, by = c("col_p_type" = "produce_id")) %>% select(-col_p_type, -id) %>%
+        kable(., caption = "Types of Produce, by Deployment") %>% 
+        kable_styling(bootstrap_options = c("hover", "bordered","condensed"), full_width = F, position = "left")
+
+
+
+df2 %>% group_by(produce) %>% summarise("n" = n(), 
+                                        "min ecoli" = round(log10(min(ec_conc, na.rm = T)),2),
+                                        "max ecoli" = round(log10(max(ec_conc, na.rm = T)),2),
+                                        "mean ecoli" = round(log10(mean(ec_conc, na.rm = T)),2),
+                                        "standard deviation" = round(log10(sd(ec_conc, na.rm = T)),2),
+                                        "variance" = round(log10(var(ec_conc, na.rm = T)),2)
+                                                  ) %>%
+        kable(., caption = "E. coli count per Types of Produce") %>% 
+        kable_styling(bootstrap_options = c("hover", "bordered","condensed"), full_width = F, position = "left")
+
+
+
+DT::datatable(df2 %>% group_by(produce) %>% summarise("n" = n(), 
+                                        "min ecoli" = round(log10(min(ec_conc, na.rm = T)),2),
+                                        "max ecoli" = round(log10(max(ec_conc, na.rm = T)),2),
+                                        "mean ecoli" = round(log10(mean(ec_conc, na.rm = T)),2),
+                                        "standard deviation" = round(log10(sd(ec_conc, na.rm = T)),2),
+                                        "variance" = round(log10(var(ec_conc, na.rm = T)),2)
+                                                  ))
+```
+
+
+
+
+
+### Graphs - Differences within Produce Samples
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+df2 %>% ggplot(., aes(x=factor(produce), y=log10(ec_conc), fill=produce)) +
+        stat_boxplot(geom = "errorbar", width = 0.35) +
+        geom_boxplot() +
+        facet_grid(~citylabel, scales = "free_x", space = "free_x") +
+        labs(title = "E. coli count of produce samples by deployment",
+             fill = "By Depolyment",
+             x = "Type of Produce") +
+        theme_bw() +
+        theme(legend.position="none",
+              axis.text.x = element_text(angle = 45, hjust = 1))
+
+# df2 %>% ggplot(., aes(x=factor(col_p_type), y=log10(ec_conc), fill=produce)) +
+#         geom_boxplot() +
+#         facet_wrap(~neighb_UID) +
+#         labs(title = "E. coli count of produce samples by neighborhood",
+#              fill = "By Neighborhood",
+#              x = "Type of Produce")
+
+# per type of produce
+df2 %>% #filter(!produce == c("cabbage", "carrot", "egg plant", "long bean", "long plant", "water mimosa")) %>%
+        ggplot(., aes(x=factor(neighb_UID), y=log10(ec_conc), fill=factor(neighb_UID))) +
+        stat_boxplot(geom = "errorbar", width = 0.35) +
+        geom_boxplot() +
+        facet_wrap(~produce, scales = "free_x", ncol = 4) +
+        labs(fill = "", 
+             title = "E. coli count by Type of Produce",
+             x = "Neighborhood") +
+        theme_bw() +
+        theme(legend.position="none")
+
+#### produce specific graphs
+df2 %>% filter(produce == "lettuce") %>%
+        ggplot(., aes(x=factor(neighb_UID), y=log10(ec_conc), fill=factor(neighb_UID))) +
+        stat_boxplot(geom = "errorbar", width = 0.35) +
+        geom_boxplot() +
+        facet_grid(~citylabel, scales = "free_x", space = "free_x") +
+        labs(fill = "", 
+             title = "E. coli count by type of Produce - Lettuce",
+             x = "Neighborhood") +
+        theme_bw() +
+        theme(legend.position="none")
+
+
+df2 %>% filter(produce == "cucumber") %>%
+        ggplot(., aes(x=factor(neighb_UID), y=log10(ec_conc), fill=factor(neighb_UID))) +
+        stat_boxplot(geom = "errorbar", width = 0.35) +
+        geom_boxplot() +
+        facet_grid(~citylabel, scales = "free_x", space = "free_x") +
+        labs(fill = "", 
+             title = "E. coli count by type of Produce - Cucumber",
+             x = "Neighborhood") +
+        theme_bw() +
+        theme(legend.position="none")
+
+df2 %>% filter(produce == c( "tomato")) %>%
+        ggplot(., aes(x=factor(neighb_UID), y=log10(ec_conc), fill=factor(neighb_UID))) +
+        stat_boxplot(geom = "errorbar", width = 0.35) +
+        geom_boxplot() +
+        facet_grid(~citylabel, scales = "free_x", space = "free_x") +
+        labs(fill = "", 
+             title = "E. coli count by type of Produce - Tomato",
+             x = "Neighborhood") +
+        theme_bw() +
+        theme(legend.position="none",
+              axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+```
+
+
+### E. coli count by deployment and neighborhood and type of produce
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+# maputo deployment does not have produce samples, therefore dply 5 is not run here
+cities <- meta_dply$citylabel[!meta_dply$citylabel %in% c("Maputo 15")]
+
+for (i in cities) {
+        df2 %>% filter(citylabel == i) %>%
+        ggplot(., aes(x=factor(produce), y=log10(ec_conc), fill=produce)) +
+        stat_boxplot(geom = "errorbar", width = 0.35) +
+        geom_boxplot() +
+        facet_wrap(~neighb_UID, scales = "free_x") +
+        labs(title = paste0("E. coli count by type of Produce in ", i, ", by neighborhood"),
+             fill = "Type of Produce",
+             x = "Type of Produce") +
+        theme_bw() -> p
+        print(p)
+}
+```
+
+
+### E. coli count by deployment and neighborhood and type of produce
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+# maputo deployment does not have produce samples, therefore dply 5 is not run here
+cities <- meta_dply$citylabel[!meta_dply$citylabel %in% c("Maputo 15")]
+
+for (i in cities) {
+        df2 %>% filter(citylabel == i) %>%
+        ggplot(., aes(x=factor(neighb_UID), y=log10(ec_conc), fill=factor(neighb_UID))) +
+        stat_boxplot(geom = "errorbar", width = 0.35) +
+        geom_boxplot() +
+        facet_wrap(~produce, scales = "free_x" ) +
+        labs(title = paste0("E. coli count by type of Produce in " ,i),
+             fill = "Neighborhood",
+             x = "Neighborhood") +
+        theme_bw() +
+        theme(legend.position="none") -> p
+        print(p)
+}
+
+```
+
+
+<div align="right"><a href="#top">Back to top</a></div>
+
+<!-- ------------------------------------------------------------------------------------------------------------ -->
+
+## Latrines
+### Latrines Types from Sample Collection
+```{r echo=FALSE, warning=FALSE}
+
+latrines <- data.frame("answer" = c(1,2,3,4,5,6,7,8,9,88), 
+                 "Type" = c("Flush/pour flush to pit",
+                            "Flush/pour flush to septic tank",
+                            "Flush/pour flush to sewage system",
+                            "Flush/pour flush to elsewhere",
+                            "Pit latrine with slab",
+                            "VIP",
+                            "Compost toilet",
+                            "Open pit latrine (without slab)",
+                            "Hanging toilet",
+                            "Other"))
+
+latrines <- latrines %>% mutate(Type = factor(.$Type, levels = factor(.$Type)))
+
+df2 <- df.col %>% select(-(citylabel)) %>% 
+        filter(col_sample_type == 7) %>% select(col_UID, col_l_toilet_type) %>%
+        left_join(., df.ecdata, by = c("col_UID" = "UID")) 
+
+
+# latrines types overall
+df2 %>% left_join(., latrines, by = c("col_l_toilet_type" = "answer")) %>% 
+        ggplot(., aes(x=factor(citylabel), y=log10(ec_conc), fill=factor(citylabel))) +
+        stat_boxplot(geom = "errorbar", width = 0.35) +
+        geom_boxplot() +
+        labs(title = "E. coli count of Latrine samples by Deployment",
+             fill = "Depolyment",
+             x = "Deployment") +
+        theme_bw() +
+        theme(legend.position="none")
+
+# latrine types by neighborhood
+df2 %>% left_join(., latrines, by = c("col_l_toilet_type" = "answer")) %>% 
+        ggplot(., aes(x=factor(neighb_UID), y=log10(ec_conc), fill=factor(neighb_UID))) +
+        stat_boxplot(geom = "errorbar", width = 0.35) +
+        geom_boxplot() +
+        facet_grid(~citylabel, scales = "free_x", space = "free_x") +
+        labs(title = "Overall Latrine E. coli count by neighorhood",
+             x = "Neighorhood") +
+        theme_bw() +
+        theme(legend.position = "none")
+
+```
+
+
+```{r echo=FALSE}
+
+df.col %>% count(col_l_toilet_type) %>% na.omit() %>% 
+        left_join(., latrines, by = c("col_l_toilet_type" = "answer")) %>% select(-col_l_toilet_type) %>%
+        kable(., caption = "Types of Latrines in all deployments") %>% 
+        kable_styling(bootstrap_options = c("hover", "bordered","condensed"), full_width = F, position = "left")
+
+df.col %>% select(-(citylabel)) %>% 
+        left_join(., df.ecdata, by = c("col_UID" = "UID")) %>%
+        group_by(citylabel) %>% count(col_l_toilet_type) %>% na.omit() %>% 
+        left_join(., latrines, by = c("col_l_toilet_type" = "answer")) %>% select(-col_l_toilet_type) %>%
+        kable(., caption = "Types of Latrines by deployment") %>% 
+        kable_styling(bootstrap_options = c("hover", "bordered","condensed"), full_width = F, position = "left")
+
+df2 %>% group_by(col_l_toilet_type) %>% summarise("n" = n(), 
+                                                  "min ecoli" = round(log10(min(ec_conc, na.rm = T)),2),
+                                                  "max ecoli" = round(log10(max(ec_conc, na.rm = T)),2),
+                                                  "mean ecoli" = round(log10(mean(ec_conc, na.rm = T)),2),
+                                                  "standard deviation" = round(log10(sd(ec_conc, na.rm = T)),2),
+                                                  "variance" = round(log10(var(ec_conc, na.rm = T)),2)
+                                                  ) %>% 
+        left_join(., latrines, by = c("col_l_toilet_type" = "answer")) %>% select(-col_l_toilet_type) %>% 
+        select(Type, everything()) %>% 
+        kable(., caption = "Overall E. coli count per Types of Latrines") %>% 
+        kable_styling(bootstrap_options = c("hover", "bordered","condensed"), full_width = F, position = "left")
+
+df2 %>% group_by(citylabel, col_l_toilet_type) %>% summarise("n" = n(), 
+                                                  "min ecoli" = round(log10(min(ec_conc, na.rm = T)),2),
+                                                  "max ecoli" = round(log10(max(ec_conc, na.rm = T)),2),
+                                                  "mean ecoli" = round(log10(mean(ec_conc, na.rm = T)),2),
+                                                  "standard deviation" = round(log10(sd(ec_conc, na.rm = T)),2),
+                                                  "variance" = round(log10(var(ec_conc, na.rm = T)),2)
+                                                  ) %>% 
+        left_join(., latrines, by = c("col_l_toilet_type" = "answer")) %>% select(-col_l_toilet_type) %>% 
+        select(Type, everything()) %>%
+        kable(., caption = "E. coli count per Types of Latrines by Deployment") %>% 
+        kable_styling(bootstrap_options = c("hover", "bordered","condensed"), full_width = F, position = "left") 
+
+df2 %>% group_by(citylabel, neighb_UID) %>% summarise("n" = n(), 
+                                                  "min ecoli" = round(log10(min(ec_conc, na.rm = T)),2),
+                                                  "max ecoli" = round(log10(max(ec_conc, na.rm = T)),2),
+                                                  "mean ecoli" = round(log10(mean(ec_conc, na.rm = T)),2),
+                                                  "standard deviation" = round(log10(sd(ec_conc, na.rm = T)),2),
+                                                  "variance" = round(log10(var(ec_conc, na.rm = T)),2)
+                                                  ) %>% 
+        select(citylabel, "Neighborhood" = neighb_UID, everything()) %>%
+        kable(., caption = "E. coli count of all latrines by Neighborhood") %>% 
+        kable_styling(bootstrap_options = c("hover", "bordered","condensed"), full_width = F, position = "left") 
+
+# df2 %>% group_by(neighb_UID, col_l_toilet_type) %>% summarise("n" = n(), 
+#                                                   "min ecoli" = round(log10(min(ec_conc, na.rm = T)),2),
+#                                                   "max ecoli" = round(log10(max(ec_conc, na.rm = T)),2),
+#                                                   "mean ecoli" = round(log10(mean(ec_conc, na.rm = T)),2),
+#                                                   "standard deviation" = round(log10(sd(ec_conc, na.rm = T)),2),
+#                                                   "variance" = round(log10(var(ec_conc, na.rm = T)),2)
+#                                                   ) %>% 
+#         left_join(., latrines, by = c("col_l_toilet_type" = "answer")) %>% select(-col_l_toilet_type) %>% 
+#         select(Type, "Neighborhood" = neighb_UID, everything()) %>%
+#         kable(., caption = "E. coli count per Types of latrines, by Neighborhood") %>% 
+#         kable_styling(bootstrap_options = c("hover", "bordered","condensed"), full_width = F, position = "left")
+
+```
+
+### Graphs - Differences within Latrine Types
+```{r echo=FALSE, warning=FALSE}
+
+# latrine types by deployment
+df2 %>% left_join(., latrines, by = c("col_l_toilet_type" = "answer")) %>% 
+        ggplot(., aes(x=factor(col_l_toilet_type), y=log10(ec_conc), fill=Type)) +
+        stat_boxplot(geom = "errorbar", width = 0.35) +
+        geom_boxplot() +
+        facet_wrap(~citylabel) +
+        labs(title = "E. coli count by latrine Type and Deployment",
+             fill = "Latrine Type",
+             x = "Latrine Type") +
+        theme_bw()
+
+
+
+df2 %>% left_join(., latrines, by = c("col_l_toilet_type" = "answer")) %>% 
+        ggplot(., aes(x=factor(col_l_toilet_type), y=log10(ec_conc), fill=Type)) +
+        stat_boxplot(geom = "errorbar", width = 0.35) +
+        geom_boxplot() +
+        facet_wrap(~neighb_UID) +
+        labs(title = "E. coli count by Latrine type and neighborhood",
+             fill = "Latrine Type",
+             x = "Latrine Type") +
+        theme_bw()
+
+
+
+
+```
+
+
+
+
+
+<div align="right"><a href="#top">Back to top</a></div>
+
+<!-- ------------------------------------------------------------------------------------------------------------ -->
+
+## Streetfood
+### Differences within Streetfood 
+
+Streetfood is standardized as one serving size of food available from street vendors.
+
+```{r echo=FALSE}
+df <- df.col %>% filter(col_sample_type == 10) %>% select(col_UID, col_sf_type) %>%
+        left_join(., df.ecdata, by = c("col_UID" = "UID")) %>%
+        left_join(., meta_streetfood, by = c("col_sf_type" = "streetfood_id")) %>%
+        select("UID" = col_UID, dply_num, country, city, citylabel, neighb_UID, col_sf_type, streetfood, ec_conc)
+
+
+
+df %>% group_by(citylabel) %>% summarise("n" = n(), 
+                                        "min ecoli" = round(log10(min(ec_conc, na.rm = T)),2),
+                                        "max ecoli" = round(log10(max(ec_conc, na.rm = T)),2),
+                                        "mean ecoli" = round(log10(mean(ec_conc, na.rm = T)),2),
+                                        "standard deviation" = round(log10(sd(ec_conc, na.rm = T)),2),
+                                        "variance" = round(log10(var(ec_conc, na.rm = T)),2)
+                                                  ) %>%
+        kable(., caption = "Streetfood E. coli count per deployment") %>% 
+        kable_styling(bootstrap_options = c("hover", "bordered","condensed"), full_width = F, position = "left")
+        # column_spec(2, border_right = T) 
+
+
+
+df %>% group_by(neighb_UID, citylabel) %>% summarise("n" = n(), 
+                                        "min ecoli" = round(log10(min(ec_conc, na.rm = T)),2),
+                                        "max ecoli" = round(log10(max(ec_conc, na.rm = T)),2),
+                                        "mean ecoli" = round(log10(mean(ec_conc, na.rm = T)),2),
+                                        "standard deviation" = round(log10(sd(ec_conc, na.rm = T)),2),
+                                        "variance" = round(log10(var(ec_conc, na.rm = T)),2)
+                                                  ) %>%
+        kable(., caption = "Streetfood E. coli count per neighborhood") %>% 
+        kable_styling(bootstrap_options = c("hover", "bordered","condensed"), full_width = F, position = "left")
+
+```
+
+
+### Graphs - Differences within Produce Samples
+```{r echo=FALSE, warning=FALSE}
+df %>% ggplot(., aes(x=factor(citylabel), y=log10(ec_conc), fill=factor(citylabel))) +
+        stat_boxplot(geom = "errorbar", width = 0.35) +
+        geom_boxplot() +
+        labs(title = "Streetfood E. coli count by Deployment",
+             fill = "Depolyment",
+             x = "Deployment") +
+        theme_bw() +
+        theme(legend.position="none")
+
+df %>% ggplot(., aes(x=factor(citylabel), y=log10(ec_conc), fill=factor(citylabel))) +
+        stat_boxplot(geom = "errorbar", width = 0.35) +
+        geom_boxplot() +
+        facet_grid(~streetfood, scales = "free", space = "free_x") +
+        labs(title = "Streetfood E. coli count by Type",
+             fill = "Neighborhood",
+             x = "Neighborhood") +
+        theme_bw() +
+        theme(legend.position="none") 
+
+df %>% ggplot(., aes(x=factor(neighb_UID), y=log10(ec_conc), fill=factor(neighb_UID))) +
+        stat_boxplot(geom = "errorbar", width = 0.35) +
+        geom_boxplot() +
+        facet_grid(~citylabel, scales = "free", space = "free_x") +
+        labs(title = "Streetfood E. coli count by Neighborhood",
+             fill = "Neighborhood",
+             x = "Neighborhood") +
+        theme_bw() +
+        theme(legend.position="none") 
+
+
+df %>% ggplot(., aes(x=reorder(neighb_UID, desc(neighb_UID)), y=log10(ec_conc), fill=factor(citylabel))) +
+        stat_boxplot(geom = "errorbar", width = 0.35) +
+        geom_boxplot() +
+        labs(title = "Streetfood E. coli count by Neighborhood",
+             fill = "Neighborhood",
+             x = "Neighborhood") +
+        theme_bw() +
+        coord_flip()
+```
+
+
+
+
+<div align="right"><a href="#top">Back to top</a></div>
+
+<!-- ------------------------------------------------------------------------------------------------------------ -->
+
+## Drinking Water
+### Differences within Drinking Water 
+
+```{r echo=FALSE}
+df <- df.ecdata %>% filter(sample_type == 3) 
+df33 <- df.ecdata %>% filter(sample_type == 33) 
+
+df %>% group_by(citylabel) %>% summarise("n" = n(), 
+                                        "min ecoli" = round(log10(min(ec_conc, na.rm = T)),2),
+                                        "max ecoli" = round(log10(max(ec_conc, na.rm = T)),2),
+                                        "mean ecoli" = round(log10(mean(ec_conc, na.rm = T)),2),
+                                        "standard deviation" = round(log10(sd(ec_conc, na.rm = T)),2),
+                                        "variance" = round(log10(var(ec_conc, na.rm = T)),2)
+                                                  ) %>%
+        kable(., caption = "Municipal Drinking Water E. coli count per deployment") %>% 
+        kable_styling(bootstrap_options = c("hover", "bordered","condensed"), full_width = F, position = "left")
+
+
+df %>% group_by(neighb_UID, citylabel) %>% summarise("n" = n(), 
+                                        "min ecoli" = round(log10(min(ec_conc, na.rm = T)),2),
+                                        "max ecoli" = round(log10(max(ec_conc, na.rm = T)),2),
+                                        "mean ecoli" = round(log10(mean(ec_conc, na.rm = T)),2),
+                                        "standard deviation" = round(log10(sd(ec_conc, na.rm = T)),2),
+                                        "variance" = round(log10(var(ec_conc, na.rm = T)),2)
+                                                  ) %>%
+        kable(., caption = "Municipal Drinking Water E. coli count per neighborhood") %>% 
+        kable_styling(bootstrap_options = c("hover", "bordered","condensed"), full_width = F, position = "left")
+```
+
+
+### Graphs - Differences within Drinking Water Samples
+```{r echo=FALSE, warning=FALSE}
+df %>% ggplot(., aes(x=factor(citylabel), y=log10(ec_conc), fill=factor(citylabel))) +
+        stat_boxplot(geom = "errorbar", width = 0.35) +
+        geom_boxplot() +
+        labs(title = "Municipal Drinking Water samples E. coli count by deployment",
+             fill = "Depolyment",
+             x = "Depolyment") +
+        theme_bw() +
+        theme(legend.position="none")
+
+
+
+df %>% ggplot(., aes(x=factor(neighb_UID), y=log10(ec_conc), fill=factor(neighb_UID))) +
+        stat_boxplot(geom = "errorbar", width = 0.35) +
+        geom_boxplot() +
+        facet_grid(~ citylabel, scales = "free", space = "free_x") +
+        labs(title = "Municipal Drinking Water samples E. coli count by neighborhood",
+             fill = "Neighborhood",
+             x = "Neighborhood") +
+        theme_bw() +
+        theme(legend.position="none",
+              axis.text.x = element_text(angle = 45, hjust = 1))
+
+# by deployment
+df %>% ggplot(., aes(x=factor(sample_type_name), y=log10(ec_conc), fill=factor(citylabel))) +
+        # stat_boxplot(geom = "errorbar", width = 0.35) +
+        geom_boxplot() +
+        # facet_wrap(~ sample_type, scales = "free_x", nrow=2) +
+        labs(title = "Municipal Drinking Water types samples E. coli count by deployment",
+             fill = "Deployment",
+             x = "Water Source Type") +
+        theme_bw() +
+        theme(legend.position="bottom")
+
+# 
+# df %>% ggplot(., aes(x=factor(sample_type_name), y=log10(ec_conc), fill=factor(citylabel))) +
+#         # stat_boxplot(geom = "errorbar", width = 0.35) +
+#         geom_boxplot() +
+#         facet_wrap(~ sample_type, scales = "free_x", nrow=2) +
+#         labs(title = "Different Drinking Water types samples E. coli count by deployment",
+#              fill = "Deployment",
+#              x = "Water Source Type") +
+#         theme_bw() +
+#         theme(legend.position="bottom")
+
+
+df33 %>% ggplot(., aes(x=factor(col_sample_type_alt), y=log10(ec_conc), fill=factor(citylabel))) +
+        geom_boxplot() +
+        facet_wrap(~ col_sample_type_alt, scales = "free_x", nrow=1) +
+        labs(title = "Different Drinking Water types samples E. coli count by deployment",
+             fill = "Deployment",
+             x = "Water Source Type") +
+        theme_bw() +
+        theme(legend.position="bottom")
+
+
+df %>% ggplot(., aes(x=factor(col_sample_type_alt), y=log10(ec_conc), fill=factor(neighb_UID))) +
+        # stat_boxplot(geom = "errorbar", width = 0.35) +
+        geom_boxplot() +
+        labs(title = "Municipal Drinking Water samples E. coli count by neighborhood",
+             fill = "Neighborhood",
+             x = "Water Source") +
+        theme_bw()
+
+df33 %>% ggplot(., aes(x=factor(col_sample_type_alt), y=log10(ec_conc), fill=factor(neighb_UID))) +
+        geom_boxplot() +
+        facet_wrap(~ col_sample_type_alt, scales = "free_x", nrow=2) +
+        labs(title = "Different Municipal Drinking Water samples E. coli count by neighborhood",
+             fill = "Neighborhood",
+             x = "Water Source") +
+        theme_bw()
+
+```
+
+
+<div align="right"><a href="#top">Back to top</a></div>
+
+
+<!-- ------------------------------------------------------------------------------------------------------------ -->
+<!-- ## Behavior -->
+<!-- ### Behavior - Household -->
+<!-- ```{r echo=FALSE} -->
+
+<!-- df.h %>% group_by(citylabel) %>% summarize("n" = n()) %>%  -->
+<!--         select(citylabel, n) %>% -->
+<!--         kable(., caption = "Overview: Household Survey") %>%  -->
+<!--         kable_styling(bootstrap_options = c("hover", "bordered","condensed"), full_width = F, position = "left") -->
+
+
+<!-- df.h %>% group_by(citylabel, neighb_UID) %>% summarize("n" = n()) %>%  -->
+<!--         ungroup() %>% -->
+<!--         select(neighb_UID, citylabel, n) %>% -->
+<!--         kable(., caption = "Household Survey by Neighborhood") %>%  -->
+<!--         kable_styling(bootstrap_options = c("hover", "bordered","condensed"), full_width = F, position = "left") -->
+
+<!-- ``` -->
+
+
+<!-- ### Household Survey - Adults -->
+<!-- ```{r echo=FALSE} -->
+
+<!-- # take h_ph_a_od out of this loop --> #need to write separate function for this kind of Qs -->
+<!-- variables <- questions %>% filter(population == "adults") %>% filter(!variable == "h_pl_a_od") %>%  -->
+<!--         pull(variable) -->
+
+<!-- for (i in variables) { -->
+<!--         p <- freq.graph.h(df.h, i) -->
+<!--         print(p) -->
+
+<!-- } -->
+
+<!-- ``` -->
+
+<!-- ### Household Survey - Children -->
+<!-- ```{r echo=FALSE} -->
+
+<!-- variables <- questions %>% filter(population == "children") %>% pull(variable) -->
+
+<!-- for (i in variables) { -->
+<!--         p <- freq.graph.h(df.h, i) -->
+<!--         print(p) -->
+
+<!-- } -->
+
+<!-- ``` -->
+
+
+<!-- <div align="right"><a href="#top">Back to top</a></div> -->
+
+
+<!-- ------------------------------------------------------------------------------------------------------------ -->
+
+<!-- ### Behavior - Community -->
+<!-- ```{r echo=FALSE} -->
+
+<!-- df.c %>% group_by(citylabel) %>% summarize("n" = n()) %>%  -->
+<!--         select(citylabel, n) %>% -->
+<!--         kable(., caption = "Overview: Community Survey") %>%  -->
+<!--         kable_styling(bootstrap_options = c("hover", "bordered","condensed"), full_width = F, position = "left") -->
+
+
+<!-- df.c %>% group_by(citylabel, neighb_UID) %>% summarize("n" = n()) %>%  -->
+<!--         ungroup() %>% -->
+<!--         select(neighb_UID, citylabel, n) %>% -->
+<!--         kable(., caption = "Community Survey by Neighborhood") %>%  -->
+<!--         kable_styling(bootstrap_options = c("hover", "bordered","condensed"), full_width = F, position = "left") -->
+
+<!-- ``` -->
+
+<!-- ### Community Survey - Adults -->
+<!-- ```{r echo=FALSE} -->
+
+<!-- variables <- questions.cs %>% filter(form == "c" & population == "adults") %>%  -->
+<!--         pull(variable) %>% str_remove(., "_note") -->
+
+<!-- for (i in variables) { -->
+<!--         p <- freq.graph.cs(df.c, i) -->
+<!--         print(p) -->
+
+<!-- } -->
+
+<!-- ``` -->
+
+
+<!-- ### Community Survey - Children -->
+<!-- ```{r echo=FALSE} -->
+
+<!-- variables <- questions.cs %>% filter(form == "c" & population == "children") %>%  -->
+<!--         pull(variable) %>% str_remove(., "_note") -->
+
+<!-- for (i in variables) { -->
+<!--         p <- freq.graph.cs(df.c, i) -->
+<!--         print(p) -->
+
+<!-- } -->
+
+<!-- ``` -->
+
+<!-- <div align="right"><a href="#top">Back to top</a></div> -->
+
+
+<!-- ------------------------------------------------------------------------------------------------------------ -->
+
+
+<!-- ### Behavior - School -->
+<!-- ```{r echo=FALSE} -->
+
+<!-- df.s %>% group_by(citylabel) %>% summarize("n" = n()) %>%  -->
+<!--         select(citylabel, n) %>% -->
+<!--         kable(., caption = "Overview: School Survey") %>%  -->
+<!--         kable_styling(bootstrap_options = c("hover", "bordered","condensed"), full_width = F, position = "left") -->
+
+
+<!-- df.s %>% group_by(citylabel, neighb_UID) %>% summarize("n" = n()) %>%  -->
+<!--         ungroup() %>% -->
+<!--         select(neighb_UID, citylabel, n) %>% -->
+<!--         kable(., caption = "School Survey by Neighborhood") %>%  -->
+<!--         kable_styling(bootstrap_options = c("hover", "bordered","condensed"), full_width = F, position = "left") -->
+
+<!-- ``` -->
+
+<!-- ### School Survey - Adults -->
+<!-- ```{r echo=FALSE} -->
+
+<!-- variables <- questions.cs %>% filter(form == "s" & population == "adults") %>%  -->
+<!--         pull(variable) %>% str_remove(., "_note") -->
+
+<!-- for (i in variables) { -->
+<!--         p <- freq.graph.cs(df.s, i) -->
+<!--         print(p) -->
+
+<!-- } -->
+
+<!-- ``` -->
+
+
+<!-- ### School Survey - Children -->
+<!-- ```{r echo=FALSE} -->
+
+<!-- variables <- questions.cs %>% filter(form == "s" & population == "children") %>%  -->
+<!--         pull(variable) %>% str_remove(., "_note") -->
+
+<!-- for (i in variables) { -->
+<!--         p <- freq.graph.cs(df.s, i) -->
+<!--         print(p) -->
+
+<!-- } -->
+
+<!-- ``` -->
+
+<!-- <div align="right"><a href="#top">Back to top</a></div> -->
+
+
+<!-- ------------------------------------------------------------------------------------------------------------ -->
+
+<!-- ## Behavior - Comp -->
+<!-- ### Behavior - Comparisons Adults -->
+<!-- ```{r echo=FALSE, fig.width=8, message=FALSE, warning=FALSE} -->
+
+<!-- require(gridExtra) -->
+<!-- require(grid) -->
+
+<!-- # var <- "d_a" -->
+<!-- # title1 <- "Open Drains" -->
+<!-- #  -->
+<!-- # p1 <- freq.graph.h( df.h, paste0("h_", var)) +  -->
+<!-- #         labs(title = paste0(title1, ": Household")) +  -->
+<!-- #         theme(legend.position="bottom", plot.subtitle=element_text(size=8))  -->
+<!-- # p2 <- freq.graph.cs(df.c, paste0("c_", var)) +  -->
+<!-- #         labs(title = paste0(title1, ": Community")) +  -->
+<!-- #         theme(legend.position="bottom", plot.subtitle=element_text(size=8))  -->
+<!-- # p3 <- freq.graph.cs(df.s, paste0("s_", var)) +  -->
+<!-- #         labs(title = paste0(title1, ": School")) +  -->
+<!-- #         theme(legend.position="bottom", plot.subtitle=element_text(size=8))  -->
+<!-- #  -->
+<!-- # grid_arrange_shared_legend(p1, p2, p3, ncol = 3, nrow = 1) -->
+
+
+
+<!-- meta_sampleID1 <- meta_sampleID[-8,] -->
+<!-- for (i in rownames(meta_sampleID1)) { -->
+<!--         var <- paste0(meta_sampleID[i,3], "_a") -->
+<!--         title1 <- meta_sampleID[i,2] -->
+
+<!--         p1 <- freq.graph.h( df.h, paste0("h_", var)) +  -->
+<!--                 labs(title = paste0(title1, ": Household")) +  -->
+<!--                 theme(legend.position = "bottom", plot.subtitle=element_text(size = 8))  -->
+<!--         p2 <- freq.graph.cs(df.c, paste0("c_", var)) +  -->
+<!--                 labs(title = paste0(title1, ": Community")) +  -->
+<!--                 theme(legend.position = "bottom", plot.subtitle=element_text(size = 8))  -->
+<!--         p3 <- freq.graph.cs(df.s, paste0("s_", var)) +  -->
+<!--                 labs(title = paste0(title1, ": School")) +  -->
+<!--                 theme(legend.position = "bottom", plot.subtitle=element_text(size = 8))  -->
+
+<!--         p4 <- grid_arrange_shared_legend(p1, p2, p3, ncol = 3, nrow = 1) -->
+<!--         print(p4) -->
+
+<!-- } -->
+
+<!-- ``` -->
+
+
+<!-- ### Behavior - Comparisons Children -->
+<!-- ```{r echo=FALSE, fig.width=8, message=FALSE, warning=FALSE} -->
+
+<!-- meta_sampleID1 <- meta_sampleID[-8,] -->
+<!-- for (i in rownames(meta_sampleID1)) { -->
+<!--         var <- paste0(meta_sampleID[i,3], "_c") -->
+<!--         title1 <- meta_sampleID[i,2] -->
+
+<!--         p1 <- freq.graph.h( df.h, paste0("h_", var)) +  -->
+<!--                 labs(title = paste0(title1, ": Household")) +  -->
+<!--                 theme(legend.position = "bottom", plot.subtitle = element_text(size = 8))  -->
+<!--         p2 <- freq.graph.cs(df.c, paste0("c_", var)) +  -->
+<!--                 labs(title = paste0(title1, ": Community")) +  -->
+<!--                 theme(legend.position = "bottom", plot.subtitle = element_text(size = 8))  -->
+<!--         p3 <- freq.graph.cs(df.s, paste0("s_", var)) +  -->
+<!--                 labs(title = paste0(title1, ": School")) +  -->
+<!--                 theme(legend.position = "bottom", plot.subtitle = element_text(size = 8))  -->
+
+<!--         p4 <- grid_arrange_shared_legend(p1, p2, p3, ncol = 3, nrow = 1) -->
+<!--         print(p4) -->
+
+<!-- } -->
+
+<!-- ``` -->
+
+
+
+<!-- <div align="right"><a href="#top">Back to top</a></div> -->
+
+
+<!-- ## Behavior - Exposed vs. Not Exposed -->
+<!-- ### Behavior - Comparisons Adults -->
+<!-- ```{r echo=FALSE, fig.width=8, message=FALSE, warning=FALSE} -->
+
+<!-- meta_sampleID1 <- meta_sampleID[-8,] -->
+<!-- for (i in rownames(meta_sampleID1)) { -->
+<!--         var <- paste0(meta_sampleID[i,3], "_a") -->
+<!--         title1 <- meta_sampleID[i,2] -->
+
+<!--         p1 <- freq.graph.h.sn(df.h, paste0("h_", var)) +  -->
+<!--                 labs(title = paste0(title1, ": Household")) +  -->
+<!--                 theme(legend.position = "bottom", plot.subtitle = element_text(size = 8)) -->
+<!--         p2 <- freq.graph.cs.sn(df.c, paste0("c_", var)) +  -->
+<!--                 labs(title = paste0(title1, ": Community")) +  -->
+<!--                 theme(legend.position = "bottom", plot.subtitle = element_text(size = 8))  -->
+<!--         p3 <- freq.graph.cs.sn(df.s, paste0("s_", var)) +  -->
+<!--                 labs(title = paste0(title1, ": School")) +  -->
+<!--                 theme(legend.position = "bottom", plot.subtitle = element_text(size = 8))  -->
+
+<!--         p4 <- grid_arrange_shared_legend(p1, p2, p3, ncol = 3, nrow = 1) -->
+<!--         print(p4) -->
+
+<!-- } -->
+
+<!-- ``` -->
+
+
+
+<!-- <div align="right"><a href="#top">Back to top</a></div> -->
+
+
+## Behavior - Comb
+### Adults - Combined Frequency
+```{r echo=FALSE, fig.width=8, message=FALSE, warning=FALSE}
+
+vec <- meta_sampleID$sample_type_var[-8]
+for (ii in vec){
+        print(freq.comb(ii, adults = T))
+
+}
+
+```
+
+
+### Yes/ No Questions
+```{r echo=FALSE, fig.width=8, message=FALSE, warning=FALSE}
+
+freq.comb.yn("dw_e_wt")
+freq.comb.yn("p_e")
+freq.comb.yn("pl_a_th")
+freq.comb.yn("pl_a_tu")
+freq.comb.yn("pl_a_tw")
+freq.comb.yn("pl_a_tf")
+
+```
+
+
+
+
+### Children - Combined Frequency
+```{r fig.width=8, message=FALSE, warning=FALSE, echo=FALSE}
+
+vec <- meta_sampleID$sample_type_var[-8]
+for (ii in vec){
+        print(freq.comb(ii, adults = F))
+
+}
+
+```
+
+
+
+<div align="right"><a href="#top">Back to top</a></div>
+
+
+## Exposure
+### Adults
+The SaniPath exposure data is displayed here by pathway. The different colors represent the individual deployment, while a dot represents a particular neighborhood.
+
+```{r fig.width=8, message=FALSE, warning=FALSE, echo=FALSE}
+library(plotly)
+
+df.multi %>% filter(pop == "a") -> df.a
+df.multi %>% filter(pop == "c") -> df.c
+
+# adults
+ggplot(df.a, aes(x=log10(dose), y=exposure)) +
+        # geom_point(data = transform(df.a, pathway = NULL), colour = "grey85") +
+        geom_point(aes(color=citylabel), size = 3) +
+        facet_wrap(~pathway, nrow = 2) +
+        theme_bw() +
+        labs(title = "Exposure by Pathway - by Deployment (Adults)",
+             color = "Deployment") 
+ 
+
+#by pathway
+pp <- ggplot(df.a, aes(x=log10(dose), y=exposure, label=neighborhood)) +
+        # geom_point(data = transform(df.a, pathway = NULL), colour = "grey85") +
+        geom_point(aes(color=citylabel), size = 3) +
+        facet_wrap(~pathway, nrow = 2) +
+        theme_bw() +
+        labs(title = "Exposure by Pathway - by Deployment (Adults)",
+             color = "Deployment") 
+
+ggplotly(pp) 
+
+
+# produce
+pp <- ggplot(df.a[df.a$pathway == "Raw Produce",], aes(x=log10(dose), y=exposure, label=neighborhood)) +
+        # geom_point(data = transform(df.a, pathway = NULL), colour = "grey85") +
+        geom_point(aes(color=citylabel), size = 3) +
+        theme_bw() +
+        labs(title = "Exposure by Produce Pathway - by Deployment (Adults)",
+             color = "Deployment") 
+
+ggplotly(pp) 
+```
+
+
+### Children
+```{r fig.width=8, message=FALSE, warning=FALSE, echo=FALSE}
+# children
+ggplot(df.c, aes(x=log10(dose), y=exposure)) +
+        # geom_point(data = transform(df.a, pathway = NULL), colour = "grey85") +
+        geom_point(aes(color=citylabel), size = 3) +
+        facet_wrap(~pathway, nrow = 2) +
+        theme_bw() +
+        labs(title = "Exposure by Pathway - by Deployment (Children)",
+             color = "Deployment")
+ 
+
+#by pathway
+pp <- ggplot(df.c, aes(x=log10(dose), y=exposure, label=neighborhood)) +
+        # geom_point(data = transform(df.a, pathway = NULL), colour = "grey85") +
+        geom_point(aes(color=citylabel), size = 3) +
+        facet_wrap(~pathway, nrow = 2) +
+        theme_bw() +
+        labs(title = "Exposure by Pathway - by Deployment (Children)",
+             color = "Deployment") 
+
+ggplotly(pp) 
+```
+
+
+
+<div align="right"><a href="#top">Back to top</a></div>
+
+
+## Map
+### Country Map
+```{r fig.width=9, message=FALSE, warning=FALSE, echo=FALSE}
+library(leaflet)
+library(RColorBrewer)
+
+# factpal <- colorFactor("plasma", meta_dply$city)
+
+leaflet(meta_dply) %>% 
+        addTiles() %>% 
+        addMarkers(lng = ~long,
+                   lat = ~lat, 
+                   label = ~paste0(city, ", ", country, " (", year, ")"),
+                   # popup = ~paste0(country, ", ", year),
+                   options = markerOptions(draggable = F, riseOnHover = TRUE))
+
+```
+
+### Neighborhood Map
+```{r fig.width=9, message=FALSE, warning=FALSE, echo=FALSE}
+
+
+factpal <- colorFactor("plasma", meta_neighb$deployment)
+df <- left_join(meta_neighb, meta_dply[, c(1,2,4)], by=c("deployment_id" = "id"))
+          
+leaflet(df) %>% 
+        addTiles() %>% 
+        addCircleMarkers(lng = ~long,
+                         lat = ~lat, 
+                         label = paste0(df$neighborhood, ", ", df$city),
+                         popup = ~deployment,
+                         options = markerOptions(draggable = F, riseOnHover = TRUE),
+                         color = ~factpal(deployment)) 
+
+```
+
+<!-- ### All Samples Map -->
+```{r eval=FALSE, fig.width=9, message=FALSE, warning=FALSE, include=FALSE}
+library(leaflet)
+
+df <- left_join(df.ecdata, df.col[, c("col_UID", "lat" = "X_col_location_latitude", "X_col_location_longitude")],
+          by = c("UID" = "col_UID"))
+
+colnames(df)[colnames(df)=="X_col_location_latitude"] <- "lat"
+colnames(df)[colnames(df)=="X_col_location_longitude"] <- "lon"
+
+df$ec_log <- log10(df$ec_conc)
+df <- df %>% filter_all(all_vars(!is.na(.)))
+
+
+# tertiles
+# worldwide
+df <- df %>% mutate(ww_ter = ntile(ec_log, 3))
+df <- df %>% mutate(ww_color = case_when(ww_ter == 1 ~ "green", 
+                                         ww_ter == 2 ~ "yellow",
+                                         ww_ter == 3 ~ "red"))
+leaflet(df) %>% 
+        addTiles() %>% 
+        addCircles(~lon, ~lat, 
+                   popup=factor(round(df$ec_log,2)), weight = 3, radius=20, color=df$ww_color, stroke = TRUE, fillOpacity = 1) 
+
+
+# citywide
+df <- df %>% group_by(city) %>% mutate(cw_ter = dplyr::ntile(ec_log, 3),
+                                       cw_color = case_when(cw_ter == 1 ~ "green",
+                                                            cw_ter == 2 ~ "yellow",
+                                                            cw_ter == 3 ~ "red"))
+
+leaflet(df) %>% 
+        # addTiles() %>% 
+        addCircles(~lon, ~lat, 
+                   popup = paste0(df$sample_type_name, ", log10(" , factor(round(df$ec_log,2)), ") E. coli" ), 
+                   weight = 3, radius=20, color=df$ww_color, stroke = TRUE, fillOpacity = .8,
+                   group = "World Wide") %>%        
+        addCircles(~lon, ~lat, 
+                   popup = paste0(df$sample_type_name, ", log10(" , factor(round(df$ec_log,2)), ") E. coli" ),
+                   weight = 3, radius=20, color=df$cw_color, stroke = TRUE, fillOpacity = .8,
+                   group = "City Wide") %>%
+
+        addLayersControl(
+                baseGroups = c("World Wide", "City Wide"),
+                options = layersControlOptions(collapsed = FALSE) ) %>%
+        addProviderTiles(providers$Esri.WorldGrayCanvas)
+
+
+
+library(leaflet.extras)
+
+```
+
+<div align="right"><a href="#top">Back to top</a></div>
+
+
+The end.

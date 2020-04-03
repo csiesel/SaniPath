@@ -1,0 +1,222 @@
+survey_question_id,answer_type,question_text,answer_required,display_order,survey,module,exposure_frequency,adult_related
+1,8,Raise your hand if you are a girl. ,True,1,1,7,None,False
+2,8,Raise your hand if you are a boy.,True,2,1,7,None,False
+3,8,Raise your hand if you live in this neighborhood. ,True,3,1,7,None,False
+4,1,"1.  Think about whether you go into the ocean for wading, swimming, splashing around, fishing, or to [defecate]. How often do you go into the ocean for any of these reasons?",False,4,1,1,None,False
+5,8,1a. Raise your hand if you go into the ocean more than 10 times total every month.,True,5,1,1,4,False
+6,8,1b. Raise your hand if you go into the ocean 6 to 10 times total every month.,True,6,1,1,3,False
+7,8,1c. Raise your hand if you go into the ocean 1 to 5 times total every month.,True,7,1,1,2,False
+8,8,1d. Raise your hand if you never go in the ocean.,True,8,1,1,1,False
+9,1,"2.  Now think about whether the adults in your [house/compound] go into the ocean for wading, swimming, splashing around, fishing, or to [defecate]. How often do they go into the ocean for any of these reasons?",False,9,1,1,None,True
+10,8,2a. Raise your hand if the adults in your [house/compound] go into the ocean more than 10 times total every month.,True,10,1,1,4,True
+11,8,2b. Raise your hand if the adults in your [house/compound] go into the ocean 6-10 times total every month,True,11,1,1,3,True
+12,8,2c. Raise your hand if the adults in your [house/compound] go into the ocean 1-5 times total every month.,True,12,1,1,2,True
+13,8,2d. Raise your hand if the adults in your [house/compound] never go in the ocean.,True,13,1,1,1,True
+14,8,2e. Raise your hand if you don't know if the adults in your [house/compound] go into the ocean.,True,14,1,1,None,True
+15,1,"3.  Think about whether you go into [rivers or ponds] in your neighborhood. This includes wading, swimming, splashing around, fishing, helping with laundry, or to [defecate]. How often do you go into the [rivers or ponds]?  ",False,15,1,2,None,False
+16,8,3a. Raise your hand if you go into the [rivers or ponds] more than 10 times total every month.,True,16,1,2,4,False
+17,8,3b. Raise your hand if you go into the [rivers or ponds] 6-10 times total every month.,True,17,1,2,3,False
+18,8,3c. Raise your hand if you go into the [rivers or ponds] 1-5 times total every month.,True,18,1,2,2,False
+19,8,3d. Raise your hand if you never go into the [rivers or ponds].,True,19,1,2,1,False
+20,1,"4.  Do the adults in your family ever go into the [rivers or ponds] in your neighborhood? This includes for wading, swimming, splashing around, fishing, helping with laundry, or to [defecate].",False,20,1,2,None,True
+21,8,4a. Raise your hand if the adults in your [house/compound] go into the [rivers or ponds] more than 10 times total every month.,True,21,1,2,4,True
+22,8,4b. Raise your hand if the adults in your [house/compound] go into the [rivers or ponds] 6 to10 times total every month.,True,22,1,2,3,True
+23,8,4c. Raise your hand if the adults in your [house/compound] ever go into the [rivers or ponds] 1 to 5 times total every month.,True,23,1,2,2,True
+24,8,4d. Raise your hand if the adults in your [house/compound]  never go into the [rivers or ponds].,True,24,1,2,1,True
+25,8,4e. Raise your hand if you don't know if the adults in your [house/compound]  go into the [rivers or ponds].,True,25,1,2,None,True
+26,1,"5. Think about whether you ever come into contact with water in open drains. This could include picking up something that fell in there, or going into the drain to cross the street. How often do you go into the drains?  ",False,26,1,9,None,False
+27,8,5a. Raise your hand if you come into contact with drain water more than 10 times total every month.,True,27,1,9,4,False
+28,8,5b. Raise your hand if you come into contact with drain water 6-10 times total every month.,True,28,1,9,3,False
+29,8,5c. Raise your hand if you come into contact with drain water 1-5 times total every month.,True,29,1,9,2,False
+30,8,5d. Raise your hand if you never come into contact with drain water.,True,30,1,9,1,False
+31,1,6. Do the adults in your family ever come into contact with drain water?  ,False,31,1,9,None,True
+32,8,6a. Raise your hand if the adults in your [house/compound] come into contact with drain water more than 10 times total every month.,True,32,1,9,4,True
+33,8,6b. Raise your hand if the adults in your [house/compound] come into contact with drain water 6 to 10 times total every month.,True,33,1,9,3,True
+34,8,6c. Raise your hand if the adults in your [house/compound] come into contact with drain water 1 to 5 times total every month.,True,34,1,9,2,True
+35,8,6d. Raise your hand if the adults in your [house/compound] never come into contact with drain water.,True,35,1,9,1,True
+36,8,6e. Raise your hand if you don't know if the adults in your [house/compound] come into contact with drain water.,True,36,1,9,None,True
+37,1,7. How often do you come into contact with floodwater during the rainy season?,False,37,1,3,None,False
+38,8,7a. Raise your hand if you come into contact with floodwater more than 10 times total every month during the rainy season.,True,38,1,3,4,False
+39,8,7b. Raise your hand if you come into contact with floodwater 6-10 times total every month during the rainy season.,True,39,1,3,3,False
+40,8,7c. Raise your hand if you come into contact with floodwater 1-5 times total every month during the rainy season.,True,40,1,3,2,False
+41,8,7d. Raise your hand if you never come into contact with floodwater during the rainy season.,True,41,1,3,1,False
+42,1,8. Do the adults in your family ever come into contact with floodwater during the rainy season?,False,42,1,3,None,True
+43,8,8a. Raise your hand if the adults in your [house/compound] come into contact with floodwater more than 10 times total every month during the rainy season.,True,43,1,3,4,True
+44,8,8b. Raise your hand if the adults in your [house/compound] come into contact with floodwater 6 to 10 times total every month during the rainy season.,True,44,1,3,3,True
+45,8,8c. Raise your hand if the adults in your [house/compound] come into contact with floodwater 1 to 5 times total every month during the rainy season.,True,45,1,3,2,True
+46,8,8d. Raise your hand if the adults in your [house/compound] never come into contact with floodwater during the rainy season.,True,46,1,3,1,True
+47,8,8e. Raise your hand if you don't know if the adults in your [house/compound] come into contact with floodwater during the rainy season.,True,47,1,3,None,True
+48,1,9. How many days during the week do you drink municipal water? ,False,48,1,8,None,False
+49,8,9a. Raise your hand if you drink municipal water every day.,True,49,1,8,7,False
+50,8,9b. Raise your hand if you drink municipal water 4 to 6 days a week.,True,50,1,8,6,False
+51,8,9c. Raise your hand if you drink municipal water 1 to 3 days a week.,True,51,1,8,5,False
+52,8,9d. Raise your hand if you never drink municipal water.,True,52,1,8,1,False
+53,8,9e.  Raise your hand if you do not know if you drink municipal water.,True,53,1,8,None,False
+54,1,10. How many days during the week do the adults in your family drink municipal water?,False,54,1,8,None,True
+55,8,10a. Raise your hand if the adults in your [house/compound] drink municipal water every day.,True,55,1,8,7,True
+56,8,10b. Raise your hand if the adults in your [house/compound] drink municipal water 4 to 6 days a week.,True,56,1,8,6,True
+57,8,10c. Raise your hand if the adults in your [house/compound] drink municipal water 1 to 3 days a week.,True,57,1,8,5,True
+58,8,10d. Raise your hand if the adults in your [house/compound] never drink municipal water.,True,58,1,8,1,True
+59,8,10e. Raise your hand if you don't know if the adults in your [house/compound] drink municipal water.,True,59,1,8,None,True
+60,8,"11. Does your family regularly treat your water by [boiling, adding chlorine, or using a filter] to make it less cloudy or safer to drink?",True,60,1,8,None,False
+61,1,"12. How many days during the week do you eat produce that is raw (uncooked)? - For this question, we are referring to any produce that does not grow on a tree, and that does not have a peel or shell.  Please think both about the produce you eat whole and produce you prepare but eat raw, such as a salad.  For example [list types of produce identified in the preliminary assessment]?",False,61,1,4,None,False
+62,8,12a. Raise your hand if you eat these produce raw every day.,True,62,1,4,7,False
+63,8,12b. Raise your hand if you eat these produce raw 4 to 6 days a week.,True,63,1,4,6,False
+64,8,12c. Raise your hand if you eat these produce raw 1 to 3 days a week.,True,64,1,4,5,False
+65,8,12d. Raise your hand if you never eat these produce raw.,True,65,1,4,1,False
+66,1,"13. How many days during the week do the adults in your family eat produce that is raw (uncooked)? Again, for this question, we are referring to any produce that does not grow on a tree, and that does not have a peel or shell.  Please think both about produce you eat whole and produce you prepare but eat raw, such as a salad. For example [list types of produce identified in the preliminary assessment]?",False,66,1,4,None,True
+67,8,13a. Raise your hand if the adults in your [house/compound] eat these produce raw every day.,True,67,1,4,7,True
+68,8,13b. Raise your hand if the adults in your [house/compound] eat these produce raw 4 to 6 days a week.,True,68,1,4,6,True
+69,8,13c. Raise your hand if the adults in your [house/compound] eat these produce raw 1 to 3 days a week.,True,69,1,4,5,True
+70,8,13d. Raise your hand if the adults in your [house/compound] never eat these produce raw.,True,70,1,4,1,True
+71,8,13e. Raise your hand if you don't know if the adults in your [house/compound] eat these produce raw.,True,71,1,4,None,True
+72,1,"14. How often do you use public latrines? A public toilet is one that may be at school, shops, or in the community.",False,72,1,5,None,False
+73,8,14a. Raise your hand if you use public latrine more than 10 times total every month.,True,73,1,5,4,False
+74,8,14b. Raise your hand if you use in a public latrine 6 to 10 times total every month.,True,74,1,5,3,False
+75,8,14c. Raise your hand if you use in a public latrine 1 to 5 times total every month.,True,75,1,5,2,False
+76,8,14d. Raise your hand if you never use in a public latrine.,True,76,1,5,1,False
+77,1,"15. How often do the adults in your family use public latrines? A public toilet is one that may be at a school, shops, or in the community.",False,77,1,5,None,True
+78,8,15a. Raise your hand if the adults use in a public latrine more than 10 times total every month.,True,78,1,5,4,True
+79,8,15b. Raise your hand if the adults use in a public latrine 6 to 10 times total every month.,True,79,1,5,3,True
+80,8,15c. Raise your hand if the adults use in a public latrine 1 to 5 times total every month.,True,80,1,5,2,True
+81,8,15d. Raise your hand if the adults never use in a public latrine.,True,81,1,5,1,True
+82,8,15e. Raise your hand if you don't know if the adults use in a public latrine.,True,82,1,5,None,True
+83,8,16. Think about if you have a latrine in your [house/compound].  Raise your hand if you do not have a latrine in your [house/compound].,True,83,1,7,None,False
+84,8,"17.  If you have a latrine in your [house/compound], do you use it?  Raise your hand if you use the latrine in your [house/compound].",True,84,1,7,None,False
+85,8,"18.  If you have a latrine in your [house/compound], do you flush it with water?  Raise your hand if you flush it with water.",True,85,1,7,None,False
+86,8,"19. Raise your hand if you have a latrine, and it ever floods.",True,86,1,7,None,False
+87,1,"20. If you have a latrine in your [house/compound], think about if you share a latrine / toilet with other households. ",False,87,1,7,None,False
+88,8,20a. Raise your hand if you do not share a latrine/toilet with other households.,True,88,1,7,None,False
+89,8,20b. Raise your hand if you share a latrine / toilet with one to four other households.,True,89,1,7,None,False
+90,8,20c. Raise your hand if you share a latrine / toilet with five or more other households.,True,90,1,7,None,False
+91,1,"21. Think of a time when you are outside of your house and you cannot find a latrine, what do you do?  For this question, you may raise your hand for all of the responses that apply to you.",False,91,1,7,None,False
+92,8,21a. Raise your hand if this never happens to you.,True,92,1,7,None,False
+93,8,21b. Raise your hand if you go back to your home.,True,93,1,7,None,False
+94,8,"21c. Raise your hand if you go in search of a latrine (e.g. at a friend's, in a public area).",True,94,1,7,None,False
+95,8,21d. Raise your hand if you use a plastic bag.,True,95,1,7,None,False
+96,8,21e. Raise your hand if you [defecate] in the open.,True,96,1,7,None,False
+97,8,Raise your hand if you are a girl.,True,97,1,7,None,False
+98,8,Raise your hand if you are a boy.,True,98,1,7,None,False
+99,8,Raise your hand if you live in this neighborhood.,True,99,1,7,None,False
+200,8,"If you are a woman, vote with one button.",True,1,2,7,None,False
+201,8,"If you are a man, vote with one button. ",True,2,2,7,None,False
+202,8,"If you live in this neighborhood, vote with one button.",True,3,2,7,None,False
+203,8,1.  Do you have children between the ages of 5 and 12? Vote with one button for yes.,True,4,2,7,None,False
+204,1,"2.  Think about whether you go into the ocean for wading, swimming, splashing around, fishing, or to [defecate]. How often do you go into the ocean for any of these reasons?  Vote with one button for one answer.",False,5,2,1,None,True
+205,8,2a. I go into the ocean more than 10 times total every month.,True,6,2,1,4,True
+206,8,2b. I go into the ocean 6 to 10 times total every month.,True,7,2,1,3,True
+207,8,2c. I go into the ocean 1 to 5 times total every month.,True,8,2,1,2,True
+208,8,2d. I never go into the ocean.,True,9,2,1,1,True
+209,1,"3.  Now think about whether your children go into the ocean for wading, swimming, splashing around, fishing, or to [defecate]. How often do your children go into the ocean for any of these reasons? Vote one button for one answer.",False,10,2,1,None,False
+210,8,3a. My children go into the ocean more than 10 times total every month.,True,11,2,1,4,False
+211,8,3b. My children go into the ocean 6 to 10 times total every month.,True,12,2,1,3,False
+212,8,3c. My children go into the ocean 1 to 5 times total every month.,True,13,2,1,2,False
+213,8,3d. My children never go into the ocean,True,14,2,1,1,False
+214,8,3e. I do not know how often my children go into the ocean.,True,15,2,1,None,False
+215,1,"4.  Think about whether you ever go into [rivers or ponds] in your neighborhood?  This includes wading, swimming, splashing around, fishing, doing laundry. How often do you go into the [rivers or ponds]? Vote one button for one answer.",False,16,2,2,None,True
+216,8,4a. I go into the [rivers or ponds] more than 10 times total every month.,True,17,2,2,4,True
+217,8,4b. I go into the [rivers or ponds] 6 to 10 times total every month.,True,18,2,2,3,True
+218,8,4c. I go into the [rivers or ponds] 1 to 5 times total every month.,True,19,2,2,2,True
+219,8,4d. I never go into the [rivers or ponds].,True,20,2,2,1,True
+220,1,"5.  Think about whether your children ever go into the [rivers or ponds] in your neighborhood?  This includes wading, swimming, splashing around, fishing, helping with laundry. How often do your children go into the [rivers or ponds]? Vote one button for one answer.",False,21,2,2,None,False
+221,8,5a. My children go into the [rivers or ponds] more than 10 times total every month.,True,22,2,2,4,False
+222,8,5b. My children go into the [rivers or ponds] 6 to 10 times total every month.,True,23,2,2,3,False
+223,8,5c. My children go into the [rivers or ponds] 1 to 5 times total every month.,True,24,2,2,2,False
+224,8,5d. My children never go into the [rivers or ponds].,True,25,2,2,1,False
+225,8,5e. I do not know how often my children go into the [rivers or ponds].,True,26,2,2,None,False
+226,1,"6. Think about whether you ever go into open drains. This could include picking up something that fell in there, or having to go through the drain to cross the street. How often do you go into the drains? Vote one button for one answer. ",False,27,2,9,None,True
+227,8,6a. I come into contact with drain water more than 10 times total every month.,True,28,2,9,4,True
+228,8,6b. I come into contact with drain water 6 to 10 times total every month.,True,29,2,9,3,True
+229,8,6c. I come into contact with drain water 1 to 5 times total every month.,True,30,2,9,2,True
+230,8,6d. I never come into contact with drain water.,True,31,2,9,1,True
+231,1,"7. Think about whether your children ever go into the drains to pick up something that fell in there, or going through the drain to cross the street.  How often do your children go into the drains? Vote one button for one answer. ",False,32,2,9,None,False
+232,8,7a. My children come into contact with drain water more than 10 times total every month.,True,33,2,9,4,False
+233,8,7b. My children come into contact with drain water 6 to 10 times total every month.,True,34,2,9,3,False
+234,8,7c. My children come into contact with drain water 1 to 5 times total every month.,True,35,2,9,2,False
+235,8,7d. My children never come into contact with drain water.,True,36,2,9,1,False
+236,8,7e. I do not know how often my children come into contact with drain water.,True,37,2,9,None,False
+237,1,8. How often do you come into contact with floodwater during the rainy season? Vote with one button for one answer.,False,38,2,3,None,True
+238,8,8a. I come into contact with floodwater during the rainy season more than 10 times total every month during the rainy season.,True,39,2,3,4,True
+239,8,8b. I come into contact with floodwater 6 to 10 times total every month during the rainy season.,True,40,2,3,3,True
+240,8,8c. I come into contact with floodwater 1 to 5 times total every month during the rainy season.,True,41,2,3,2,True
+241,8,8d. I never come into contact with floodwater during the rainy season.,True,42,2,3,1,True
+242,1,9. How often do your children come into contact with floodwater during the rainy season? Vote with one button for each answer.,False,43,2,3,None,False
+243,8,9a. My children come into contact with floodwater during the rainy season more than 10 times total every month.,True,44,2,3,4,False
+244,8,9b. My children come into contact with floodwater 6 to 10 times total every month during the rainy season.,True,45,2,3,3,False
+245,8,9c. My children come into contact with floodwater 1 to 5 times total every month during the rainy season.,True,46,2,3,2,False
+246,8,9d. My children never come into contact with floodwater during the rainy season.,True,47,2,3,1,False
+247,8,9e. I do not know how often my children come into contact with floodwater during the rainy season.,True,48,2,3,None,False
+248,1,10. How many days a week do you drink municipal water? Vote one button for one answer,False,49,2,8,None,True
+249,8,10a. I drink municipal water every day.,True,50,2,8,7,True
+250,8,10b. I drink municipal water 4 to 6 days a week.,True,51,2,8,6,True
+251,8,10c. I drink municipal water 1 to 3 days a week.,True,52,2,8,5,True
+252,8,10d. I never drink municipal water.,True,53,2,8,1,True
+253,8,10e. I do not know if I drink municipal water.,True,54,2,8,None,True
+254,1,11. How many days per week do your children drink municipal water? Vote one button for one answer.,False,55,2,8,None,False
+255,8,11a. My children drink municipal water every day.,True,56,2,8,7,False
+256,8,11b. My children drink municipal water 4 to 6 days a week.,True,57,2,8,6,False
+257,8,11c. My children drink municipal water 1 to 3 days a week.,True,58,2,8,5,False
+258,8,11d. My children never drink municipal water.,True,59,2,8,1,False
+259,8,11e. I do not know how often my children drink municipal water.,True,60,2,8,None,False
+260,8,"12. Does your family regularly treat your water by [boiling, adding chlorine, or using a filter] to make it less cloudy or safer to drink? Vote with one button if yes.",True,61,2,8,None,False
+261,1,"13. How many days during the week do you eat produce that is raw (uncooked)? For this question, we are referring to any produce that does not grow on a tree, and that does not have a peel or shell.  Please think both about produce you eat whole and produce you prepare but eat raw, such as a salad. For example [list types of produce identified in the preliminary assessment]? Vote one button for one answer.",False,62,2,4,None,True
+262,8,13a. I eat raw produce every day.,True,63,2,4,7,True
+263,8,13b. I eat raw produce 4 to 6 days a week.,True,64,2,4,6,True
+264,8,13c. I eat raw produce 1 to 3 days a week.,True,65,2,4,5,True
+265,8,13d. I never eat raw produce.,True,66,2,4,1,True
+266,1,"14. How many days during the week do your children eat produce that is raw (uncooked)? Again, for this question, we are referring to any produce that does not grow on a tree, and that does not have a peel or shell.  Please think both about produce you eat whole and produce you prepare but eat raw, such as a salad. For example [list types of produce identified in the preliminary assessment]? Vote one button for one answer.",False,67,2,4,None,False
+267,8,14a. My children eat raw produce every day of the week.,True,68,2,4,7,False
+268,8,14b. My children eat raw produce 4 to 6 days a week.,True,69,2,4,6,False
+269,8,14c. My children eat raw produce 1 to 3 days a week.,True,70,2,4,5,False
+270,8,14d. My children never eat raw produce.,True,71,2,4,1,False
+271,8,14e. I do not know if my children eat raw produce.,True,72,2,4,None,False
+272,1,"15. How often do you use public latrines? [define public - community, school, or work] Vote one button for only one answer.",False,73,2,5,None,True
+273,8,15a. I use a public latrine more than 10 times total every month.,True,74,2,5,4,True
+274,8,15b. I use a public latrine 6 to 10 times total every month.,True,75,2,5,3,True
+275,8,15c. I use a public latrine 1 to 5 times total every month.,True,76,2,5,2,True
+276,8,15d. I never use a public latrine.,True,77,2,5,1,True
+277,1,"16. How often do your children use public latrines? [define public - community, school, or work] Vote one button for one answer.",False,78,2,5,None,False
+278,8,16a. My children use public latrines more than 10 times total every month.,True,79,2,5,4,False
+279,8,16b. My children use public latrines 6 to 10 times total every month.,True,80,2,5,3,False
+280,8,16c. My children use public latrines 1 to 5 times total every month.,True,81,2,5,2,False
+281,8,16d. My children never use public latrines.,True,82,2,5,1,False
+282,8,16e. I do not know how often my children use public latrines.,True,83,2,5,None,False
+283,8,17. Think about if you have a latrine in your [house/compound]. Do you have any latrines in your [house/compound]? Vote one button for yes.,True,84,2,7,None,False
+284,8,"18. If you have a latrine in your [house/compound], do you use it? Vote with one button for yes.",True,85,2,7,None,False
+285,8,"19. If you have a latrine in your [house/compound], do you flush it with water? Vote with one button for yes.",True,86,2,7,None,False
+286,8,20. Does the latrine in your [house/compound] ever flood? Vote with one button for yes.,True,87,2,7,None,False
+287,1,"21. If you have a latrine in your [house/compound], do you share a latrine with another household? If so, vote one button for one answer.",False,88,2,7,None,False
+288,8,21a. I do not share a latrine with another household.,True,89,2,7,None,False
+289,8,21b. I share a latrine with one to four other households.,True,90,2,7,None,False
+290,8,21c. I share a latrine with five or more other households.,True,91,2,7,None,False
+291,1,"22. If you are outside of your house and you cannot find a latrine, what do you do?  For this question, you may vote for all of the responses that apply to you.",False,92,2,7,None,False
+292,8,22a. This never happens to me.,True,93,2,7,None,False
+293,8,22b. I go back to my home.,True,94,2,7,None,False
+294,8,"22c. I go in search of a latrine (e.g. at a friend's, or in a public area).",True,95,2,7,None,False
+295,8,22d. I use a plastic bag.,True,96,2,7,None,False
+296,8,22e. I [defecate] outside.,True,97,2,7,None,False
+297,8,"If you are a woman, vote with one button.",True,98,2,7,None,False
+298,8,"If you are a man, vote with one button.",True,99,2,7,None,False
+299,8,"If you live in this neighborhood, vote with one button.",True,100,2,7,None,False
+400,6,1.  Do you have children between the ages of 5-12? (Y/N),True,1,3,7,None,False
+401,6,"2.  Think about whether you go into the ocean. This includes wading, swimming, splashing around, fishing, doing laundry, or to [defecate]. How often do you go into the ocean for any of these reasons?  (select one option)",True,2,3,1,None,True
+402,6,"3.  Now think about whether your children go into the ocean. This includes wading, swimming, splashing around, fishing, helping with laundry, or to [defecate]. How often do your children go into the ocean for any of these reasons? (select one option)",False,3,3,1,None,False
+403,6,"4.  Think about whether you ever go into [rivers or ponds] in your neighborhood?  This includes wading, swimming, splashing around, fishing, doing laundry, or to [defecate]. How often do you go into the [rivers or ponds]?  (select one option)",True,4,3,2,None,True
+404,6,"5.  Think about whether your children ever go into the [rivers or ponds] in your neighborhood: this includes wading, swimming, splashing around, fishing, helping with laundry, or to [defecate]. How often do your children go into the [rivers or ponds]? (select one option)",False,5,3,2,None,False
+405,6,"6. Think about whether you ever go into open drains. This could include picking up something that fell in there, or having to go through the drain to cross the street. How often do you go into the drains? (select one option)",True,6,3,9,None,True
+406,6,"7. Think about whether your children ever go into the drains. This could include picking up something that fell in there, or having to go through the drain to cross the street.  How often do your children go into the drains?  (select one option)",False,7,3,9,None,False
+407,6,8. How often do you come into contact with floodwater during the rainy season?  (select one option),True,8,3,3,None,True
+408,6,9. How often do your children come into contact with floodwater during the rainy season? (select one option),False,9,3,3,None,False
+409,6,10. How many days a week do you drink municipal water? (select one option),True,10,3,8,None,True
+410,6,11. How many days a week do your children drink municipal water? (select one option),False,11,3,8,None,False
+411,6,"12. Does your family regularly treat your water by [boiling, adding chlorine, or using a filter] to make it less cloudy or safer to drink? (Y/N)",True,12,3,8,None,False
+412,6,"13. How many days during the week do you eat produce that is raw (uncooked)? For this question, we are referring to any produce that does not grow on a tree, and that does not have a peel or shell.  Please think both about produce you eat whole and produce you prepare but eat raw, such as a salad. For example [list types of produce identified in the preliminary assessment]?  (select one option)",True,13,3,4,None,True
+413,6,"14. How many days during the week do your children eat produce that is raw (uncooked)? Again, for this question, we are referring to any produce that does not grow on a tree, and that does not have a peel or shell.  Please think both about produce you eat whole and produce you prepare but eat raw, such as a salad. For example [list types of produce identified in the preliminary assessment]?  (select one option)",False,14,3,4,None,False
+414,6,"15. How often do you use public latrines - that means a community shared toilet, school toilet, or work toilet? (select one option)",True,15,3,5,None,True
+415,6,"16. How often do your children use public latrines - that means a community shared toilet, school toilet, or work toilet? (select one option)",False,16,3,5,None,False
+416,6,17. Do you have a latrine in your [house/compound]?  (Y/N),True,17,3,7,None,False
+417,6,"18. If you have a latrine in your [house/compound], do you use it? (Y/N)",False,18,3,7,None,False
+418,6,"19. If you have a latrine, do you flush it with water?  (Y/N)",False,19,3,7,None,False
+419,6,20. Does the latrine in your [house/compound] ever flood? (Y/N),False,20,3,7,None,False
+420,4,"21. If you have a latrine in your [house/compound], how many households do you share a latrine with? Your answer can be a zero or higher. (number)",False,21,3,7,None,False
+421,7,"22. If you are outside of your house and you cannot find a latrine, what do you do?  For this question, you may select all that apply.",True,22,3,7,None,False

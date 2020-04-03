@@ -1,0 +1,6 @@
+"id","deployment_id","deployment","neighborhood_id","neighb_UID","neighborhood","note","lat","long","SES","population","pop_male","pop_female","households","size_m2","size_km2","pop_density_pop.km2","source"
+32,9,"Uganda",1,901,"Makindye","",0.3005187,32.62259,"",,,,,,,,""
+33,9,"Uganda",2,902,"Central","",0.3444703,32.5875,"",,,,,,,,""
+34,9,"Uganda",3,903,"Kawempe","",0.3555728,32.56152,"",,,,,,,,""
+35,9,"Uganda",4,904,"Rubaga","",0.2827107,32.55198,"",,,,,,,,""
+36,9,"Uganda",5,905,"Nakawa","",0.334497,32.6342,"",,,,,,,,""

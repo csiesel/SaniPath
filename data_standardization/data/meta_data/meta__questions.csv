@@ -1,0 +1,34 @@
+form,variable,population,answer,question
+h,h_neighborhood,all,integer,Neighborhood:
+h,h_home_type,all,home,What type of home the respondent is living in?
+h,h_rainweek,all,yn,Did it rain in the past week?
+h,h_population,all,integer,How many people live in your home?
+h,h_c,all,yn,Do you have children between the ages of 5-12?
+h,h_s_a,adults,month,"How many times in the past month did you go into the rivers, ponds, or lakes?"
+h,h_s_c,children,month,"How many times in the past month did your children go into the rivers, ponds, or lakes?"
+h,h_d_a,adults,month,How many times in the past month did you go into the drains?
+h,h_d_c,children,month,How many times in the past month did your children go into the drains?
+h,h_f_a,adults,week,How many times total every week do you come into contact with floodwater during the rainy season?
+h,h_f_c,children,week,How many times total every week do your children come into contact with floodwater during the rainy season?
+h,h_dw_a,adults,week,How many days within the past week did you drink municipal water?
+h,h_dw_c,children,week,How many days within the past week did your children drink municipal water?
+h,h_dw_e_wt,all,yno,Does your household regularly treat your household's water?
+h,h_o_a,adults,month,How many times within the past month did you go into the ocean for any of these reasons?
+h,h_o_c,children,month,How many times within the past month did your children go into the ocean for any of these reasons? 
+h,h_bw_a,adults,week2,How many times in the past week did you bathe?
+h,h_bw_c,children,week2,How many times in the past week did your children bathe?
+h,h_p_a,adults,week2,How many times within the past week did you eat raw produce?
+h,h_p_c,children,week2,How many times within the past week did your children eat raw produce?
+h,h_p_e,all,yno,Does anyone in your household wash the produce that your household eats before eating it?
+h,h_sf_a,adults,week2,How many times within the past week did you eat street food?
+h,h_sf_c,children,week2,How many times within the past week did your children eat street food?
+h,h_l_a,adults,week2,How many times within the past week did you use public latrines in your neighborhood? 
+h,h_l_c,children,week2,How many times within the past week did your children use public latrines in your neighborhood? 
+h,h_pl_a_th,adults,yno,Do you have any toilets in your household/compound?
+h,h_pl_a_tu,adults,yno,Do you use the toilet in your household/compound?
+h,h_pl_a_tw,adults,yno,Do you flush the toilet with water?
+h,h_pl_a_tf,adults,yno,Does the toilet in your household/compound ever flood?
+h,h_pl_a_ts,adults,share,How many households do you share the toilet in your household/compound with?
+h,h_pl_a_od,adults,opendef,What do you do if you are outside of your house and cannot find a toilet?
+h,h_odw_a,adults,week,How many days within the past week did you drink other water?
+h,h_odw_c,children,week,How many days within the past week did your children drink other water?

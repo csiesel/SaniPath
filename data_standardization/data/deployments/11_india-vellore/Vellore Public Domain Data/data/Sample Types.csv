@@ -1,0 +1,9 @@
+sample_type_id,module,sample_type_name,sample_type_abbrev
+1,7,Particulate,PAR
+2,5,Swabs,SWB
+3,4,Produce,PRO
+4,8,Piped Water,PIP
+5,1,Ocean Water,OCN
+6,2,Surface Water,SRF
+7,6,Bathing Water,BTH
+8,9,Drain Water,DRN

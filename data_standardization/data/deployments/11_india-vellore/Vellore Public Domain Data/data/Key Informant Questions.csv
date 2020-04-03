@@ -1,0 +1,94 @@
+ki_question_id,answer_type,question_text,answer_required,display_order,ki_type
+1,5,1.  How long has the official lived in the city (Years)?,True,1,city
+2,3,2.  What are the city official's primary roles?,True,2,city
+3,3,What are some of the city official's primary responsibilities?,True,3,city
+4,6,"3.  Are there any oceans, rivers, lagoons, or ponds in this city? Circle yes or no.",True,4,city
+5,3,"3a. If yes, please list their names, and where they are located:",False,5,city
+6,6,4.  Are there any public toilets in the city? Circle yes or no.,True,6,city
+7,3,Notes for question 4:,False,7,city
+8,5,5.  Does the official have an estimate of how many public toilets there are in the city?,False,8,city
+9,6,6.  Are there any open drains in this city? Circle yes or no.,True,9,city
+10,3,Notes for question 6:,False,10,city
+11,3,7.  Where (what source) do people get their drinking water from in the city?,True,11,city
+12,3,8.  Where does the water people bathe in come from?,True,12,city
+13,1,9.  Are there any sections of the city that flood every year?,False,13,city
+14,3,Where:,False,14,city
+15,3,Why do you think so?:,False,15,city
+16,6,10. Are there farms that grow produce within the city limits? Circle yes or no.,True,16,city
+17,3,Notes for question 10:,False,17,city
+18,6,11. Is there a functional sewage treatment plant in this city? Circle yes or no.,True,18,city
+19,3,Notes for question 11:,False,19,city
+20,6,12. Is there a functional water treatment plant in this city? Circle yes or no.,True,20,city
+21,3,Notes for question 12:,False,21,city
+22,3,"13. How does the official generally feel about the city's water quality?  If so, is there any documented evidence to their suggestions?",True,22,city
+23,3,"14. How does the official generally feel about the way sewage is managed in the city?  If so, is there any documented evidence to their suggestions?",True,23,city
+24,6,15. Does the official know if sewage is disposed of directly into any of the bodies of water or drains in the city? Circle yes or no.,True,24,city
+25,3,"If so, where?",False,25,city
+26,3,"If so, how?",False,26,city
+27,6,16. Is open [defecation] common in the city? Circle yes or no.,True,27,city
+28,3,Notes for question 16:,False,28,city
+29,6,"17. To the best of the official's knowledge, are any of the fruits or vegetables produced and/or consumed in the city irrigated with wastewater or biosolids? Circle yes or no.",True,29,city
+30,3,Notes for question 17:,False,30,city
+31,3,18. Does the offical think there is fecal contamination in the piped water supply?,True,31,city
+32,6,"19. If and when it floods, is it likely that there is fecal contamination in the floodwater? Circle yes or no.",True,32,city
+33,3,Notes for question 19:,False,33,city
+34,1,20. Are there any particular parts of this city or specific communities that are known to be contaminated or have very poor sanitation? Fill in the table below.,False,34,city
+35,6,21. Is it common for people in this city to use public latrines? Circle yes or no.,True,35,city
+36,3,Notes for question 21:,False,36,city
+37,7,22. In what way does the official think people in the city come into contact with fecal matter in [city name]? Circle any that apply.,True,37,city
+38,2,Other response:,False,38,city
+39,1,"23. What does the official think are the biggest environmental health or water and sanitation related problems in the city related to infrastructure, policy, and behavior?",False,39,city
+40,1,24. Why does the official think these problems are an issue here?,False,40,city
+41,1,"25. Is there a particular part of the city where the official thinks these problems may be the worst? If so, why?",False,41,city
+42,1,26. For whom (what subsections of the population) does the official think these problems are the worst? Why?,False,42,city
+44,3,"Notes for questions 23, 24, 25, and 26:",False,44,city
+45,3,27. Is there any further information or data that you are able to provide?,False,45,city
+46,3,"28. Were there any other environmental health issues in [city name] that were not discussed, and that the official felt are important?",False,46,city
+47,1,29. Did the official recommend that you speak to anyone else regarding these questions?,False,47,city
+48,2,Name:,False,48,city
+49,2,Phone #:,False,49,city
+50,2,Email:,False,50,city
+51,2,Address:,False,51,city
+52,3,"If there is anything that you were not able to address in previous questions, or any additional notes that accompany previous questions, please record the question number along with the additional notes in the box below.",False,52,city
+100,5,1.  How long have you lived lived in [neighborhood name] (Years)?,True,1,community
+101,3,2.  What is your role as a community leader in [neighborhood name]?,True,2,community
+102,5,3.  How long has this neighborhood been here? (Years),True,3,community
+103,4,4.  What is your best estimate of how many people live in this neighborhood?,True,4,community
+104,1,5.  How does the water and sanitation infrastructure in this neighborhood compare to other similar neighborhoods? Fill in similarities and differences with other neighborhoods in the table below.,False,5,community
+105,7,6.  What public facilities are available in this neighborhood? Circle all that apply.,True,6,community
+106,2,Other response:,False,7,community
+107,6,7.  Does this neighborhood flood? Circle yes or no.,True,8,community
+108,3,"If so, how often?",False,9,community
+109,6,8.  Are there open (uncovered) drains in the neighborhood? Circle yes or no.,True,10,community
+110,3,Notes for question 8:,False,11,community
+111,6,9.  Is there a municipal water source in this neighborhood? Circle yes or no.,True,12,community
+112,6,Do people drink the municipal water source? Circle yes or no.,False,13,community
+113,3,Notes for question 9:,False,14,community
+114,3,"10. Is the municipal water source consistently available, or is it intermittent?",False,15,community
+115,3,11. What water source do people use primarily for bathing?,True,16,community
+116,6,12. Are there public latrines in this community? Circle yes or no.,True,17,community
+117,4,"If so, how many?",False,18,community
+118,1,"13. Are there bodies of water, such as a surface water (an ocean, ponds, lagoons or rivers) in this neighborhood? If so, what are their names? Fill in the table below.",False,19,community
+119,6,14. Are there farms that produce vegetables and fruit in your community? Circle yes or no.,True,20,community
+120,3,Notes for question 14:,False,21,community
+121,6,15. Would children or adults in your community go into the ocean/rivers/lakes/ponds for any reason? Circle yes or no.,False,22,community
+122,3,"If so, for what?",False,23,community
+123,6,16. Would adults or children in your community come into contact with open drains for any reason? Circle yes or no.,True,24,community
+124,3,"If so, for what?",False,25,community
+125,6,17. Would adults or children in your community ever come into contact with floodwater? Circle yes or no.,True,26,community
+126,3,"If so, for what?",False,27,community
+127,6,18. Is it common for adults or children to eat uncooked vegetables or fruit in the city? Circle yes or no.,True,28,community
+128,3,"If so, what sort of produce?",False,29,community
+129,3,19. Where are the vegetables and fruits sold?,False,30,community
+130,6,20. Do you think that the water used for irrigation of fruit and vegatables contains fecal contamination? Circle yes or no.,True,31,community
+131,6,Do you think that wastewater is used to fertilize the fruit and vegatable plants? Circle yes or no.,True,32,community
+132,6,21. Do you think people might be exposed to fecal contamination in public latrines? Circle yes or no.,True,33,community
+133,3,Notes for question 21:,False,34,community
+134,3,22. How do public latrines dispose of human waste? Where does the waste end up?,True,35,community
+135,7,23. Where do most people in your community go to [defecate]? Circle all that apply.,True,36,community
+136,2,Other response:,False,37,community
+137,3,24. What is your main environmental health concern with relation to water and sanitation in your neighborhood?,True,38,community
+138,3,25. Are there any other important characteristics of this neighborhood or environmental health issues that we have not discussed?,False,39,community
+139,6,"26. Can we now walk through the neighborhood together to visit some of the areas that you have described? Circle yes or no.  Prioritize, public latrines, drinking and bathing water sources, surface and ocean water, open drains and wastewater irrigated farms as places to visit.",True,40,community
+140,3,Notes for question 26:,False,41,community
+141,3,"If there is anything that you were not able to address in previous questions, or any additional notes that accompany previous questions, please record the question number along with the additional notes in the box below.",False,42,community

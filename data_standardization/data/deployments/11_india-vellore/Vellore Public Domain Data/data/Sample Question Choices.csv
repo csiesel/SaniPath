@@ -1,0 +1,30 @@
+sample_choice_id,question,sample_choice_text
+1,4,Within 3m of feces
+2,4,Within 30m of latrine or defecation area
+3,5,Soil
+4,5,Sand
+5,21,Traditional Pit
+6,21,VIP or KVIP
+7,21,Bucket/Pan
+8,21,Pour Flush
+9,21,Flush Toilet
+10,21,Mixed Typology
+11,21,Other
+12,23,In No Stalls
+13,23,In Few Stalls
+14,23,In Roughly Half of the Stalls
+15,23,In Most Stalls
+16,23,In Every Stall
+17,24,Yes
+18,24,No
+19,54,Tube Well/Borehole
+20,54,Hand-dug well
+21,54,Piped Water
+22,54,Other
+23,71,Open Water
+24,71,Inland
+25,71,Other
+26,99,Tube Well/Borehole
+27,99,Hand-dug well
+28,99,Piped Water
+29,99,Other

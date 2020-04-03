@@ -1,0 +1,22 @@
+sample_question_id,answer_type,question_text,answer_required,display_order,sample_type
+4,7,Mark if sample was:,False,4,1
+5,6,Check box for Sample Type,True,5,1
+6,2,Description of Location:,True,6,1
+15,5,Weight (g),True,15,1
+21,6,Type of Latrine:,True,4,2
+22,2,"If ""other"", specify:",False,5,2
+23,6,Visible Feces on Latrine Walls and Slabs:,True,6,2
+24,6,Hand Washing Station Present?,True,7,2
+25,4,Daily Number of Users:,True,8,2
+39,2,Enter the type of food collected:,True,4,3
+40,4,Number collected:,True,5,3
+54,6,Mark the source type for drinking or bathing water:,True,4,4
+55,2,"If ""other"", specify:",False,5,4
+56,5,"Physiochemical Characteristics, Free chlorine residual",True,6,4
+57,5,"Physiochemical Characteristics, Total chlorine residual",True,7,4
+71,6,"For ocean water, complete the following (select one):",True,4,5
+72,2,"If ""other"", specify:",False,5,5
+99,6,Mark the source type for drinking or bathing water:,True,4,7
+100,2,"If ""other"", specify:",False,5,7
+101,5,"Physiochemical Characteristics, Free chlorine residual",True,6,7
+102,5,"Physiochemical Characteristics, Total chlorine residual",True,7,7

@@ -1,0 +1,9 @@
+answer_type_id,answer_type_name
+1,none
+2,text - short
+3,text - long
+4,integer
+5,number
+6,choice - one
+7,choice - many
+8,counts2

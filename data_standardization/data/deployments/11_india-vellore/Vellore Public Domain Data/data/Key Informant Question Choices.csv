@@ -1,0 +1,71 @@
+ki_choice_id,question,choice_text
+1,4,Yes
+2,4,No
+3,6,Yes
+4,6,No
+5,9,Yes
+6,9,No
+7,16,Yes
+8,16,No
+9,18,Yes
+10,18,No
+11,20,Yes
+12,20,No
+13,24,Yes
+14,24,No
+15,27,Yes
+16,27,No
+17,29,Yes
+18,29,No
+19,32,Yes
+20,32,No
+21,35,Yes
+22,35,No
+23,37,Food
+24,37,[Lack of] handwashing
+25,37,Latrines
+26,37,Occupation
+27,37,Surface Water
+28,37,Drinking Water
+29,37,Other
+100,105,Schools 
+101,105,Clinics
+102,105,Sports Facilities
+103,105,Churches
+104,105,Burial Grounds
+105,105,Theater Venues
+106,105,Community Centers
+107,105,Other
+108,107,Yes
+109,107,No
+110,109,Yes
+111,109,No
+112,111,Yes
+113,111,No
+114,112,Yes
+115,112,No
+116,116,Yes
+117,116,No
+118,119,Yes
+119,119,No
+120,121,Yes
+121,121,No
+122,123,Yes
+123,123,No
+124,125,Yes
+125,125,No
+126,127,Yes
+127,127,No
+128,130,Yes
+129,130,No
+130,131,Yes
+131,131,No
+132,132,Yes
+133,132,No
+134,135,Private/Household Toilet
+135,135,Public Toilet
+136,135,In a Plastic Bag
+137,135,Chamber Pot
+138,135,Other
+139,139,Yes
+140,139,No

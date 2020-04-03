@@ -1,0 +1,6 @@
+"id","deployment_id","deployment","neighborhood_id","neighb_UID","neighborhood","note","lat","long","SES","population","pop_male","pop_female","households","size_m2","size_km2","pop_density_pop.km2","source"
+40,12,"Senegal",1,1201,"WakhinaneNimzatt","",14.78108,-17.36672,"",,,,,,,,""
+41,12,"Senegal",2,1202,"MedinaGounass","",14.77206,-17.3839,"",,,,,,,,""
+42,12,"Senegal",3,1203,"DTK","",14.76227,-17.3844,"",,,,,,,,""
+43,12,"Senegal",4,1204,"RufisqueEst","",14.72218,-17.25996,"",,,,,,,,""
+44,12,"Senegal",5,1205,"SicapLiberte","",14.71356,-17.45842,"",,,,,,,,""

@@ -1,0 +1,82 @@
+choice_id,question,exposure_frequency,choice_text
+1,400,None,Yes
+2,400,None,No
+3,401,4,2a. I go into the ocean more than 10 times total every month.
+4,401,3,2b. I go into the ocean 6-10 times total every month.
+5,401,2,2c. I go into the ocean 1-5 times total every month.  
+6,401,1,2d. I never go into the ocean.
+7,402,4,3a. My children go into the ocean more than 10 times total every month.
+8,402,3,3b. My children go into the ocean 6 to 10 times total every month.
+9,402,2,3c. My children go into the ocean 1 to 5 times total every month.
+10,402,1,3d. My children never go into the ocean.
+11,402,None,3e. I do not know how often my children go into the ocean.
+12,403,4,4a. I go into the [rivers or ponds] more than 10 times total every month.
+13,403,3,4b. I go into the [rivers or ponds] 6 to 10 times total every month.
+14,403,2,4c. I go into the [rivers or ponds] 1 to 5 times total every month.
+15,403,1,4d. I never go into the [rivers or ponds].
+16,404,4,5a. My children go into the [rivers or ponds] more than 10 times total every month.
+17,404,3,5b. My children go into the [rivers or ponds] 6 to 10 times total every month.
+18,404,2,5c. My children go into the [rivers or ponds] 1 to 5 times total every month.
+19,404,1,5d. My children never go into the [rivers or ponds].
+20,404,None,5e. I do not know how often my children go into the [rivers or ponds].
+21,405,4,6a. I come into contact with drain water more than 10 times total every month.
+22,405,3,6b. I come into contact with drain water 6 to 10 times total every month.
+23,405,2,6c. I come into contact with drain water 1 to 5 times total every month.
+24,405,1,6d. I never come into contact with drain water.
+25,406,4,7a. My children come into contact with drain water more than 10 times every month.
+26,406,3,7b. My children come into contact with drain water 6 to 10 times total every month.
+27,406,2,7c. My children come into contact with drain water 1 to 5 times total every month.
+28,406,1,7d. My children never come into contact with drain water.
+29,406,None,7e. I do not know how often my children come into contact with drain water.
+30,407,4,8a. I come into contact with floodwater more than 10 times total every month during the rainy season.
+31,407,3,8b. I come into contact with floodwater 6 to 10 times total every month during the rainy season.
+32,407,2,8c. I come into contact with floodwater 1 to 5 times total every month during the rainy season.
+33,407,1,8d. I never come into contact with floodwater.
+34,408,4,9a. My children come into contact with floodwater more than 10 times total every month during the rainy season.
+35,408,3,9b. My children come into contact with floodwater 6 to 10 times total every month during the rainy season.
+36,408,2,9c. My children come into contact with floodwater 1 to 5 times total every month during the rainy season.
+37,408,1,9d. My children never come into contact with floodwater during the rainy season.
+38,408,None,9e. I do not know how often my children come into contact with floodwater.
+39,409,7,10a. I drink municipal water every day.
+40,409,6,10b. I drink municipal water 4 to 6 days a week.
+41,409,5,10c. I drink municipal water 1 to 3 days a week.
+42,409,1,10d. I never drink municipal water.
+43,409,None,10e. I do not know if I drink municipal water.
+44,410,7,11a. My children drink municipal water every day.
+45,410,6,11b. My children drink municipal water 4 to 6 days a week.
+46,410,5,11c. My children drink municipal water 1 to 3 days a week.
+47,410,1,11d. My children never drink municipal water.
+48,410,None,11e. I do not know how often my children drink municipal water.
+49,411,None,Yes
+50,411,None,No
+51,412,7,13a. I eat raw produce every day.
+52,412,6,13b. I eat raw produce 4 to 6 days a week.
+53,412,5,13c. I eat raw produce 1 to 3 days a week.
+54,412,1,13d. I never eat raw produce.
+55,413,7,14a. My children eat raw produce every day.
+56,413,6,14b. My children eat raw produce 4 to 6 days a week.
+57,413,5,14c. My children eat raw produce 1 to 3 days a week.
+58,413,1,14d. My children never eat raw produce.
+59,413,None,14e. I do not know if my children eat raw produce.
+60,414,4,15a. I use a public latrine more than 10 times total every month.
+61,414,3,15b. I use a public latrine 6 to 10 times total every month.
+62,414,2,15c. I use a public latrine 1 to 5 times total every month.
+63,414,1,15d. I never use a public latrine.
+64,415,4,16a. My children use public latrines more than 10 times total every month.
+65,415,3,16b. My children use public latrines 6 to 10 times total every month.
+66,415,2,16c. My children use public latrines 1 to 5 times total every month.
+67,415,1,16d. My children never use public latrines.
+68,415,None,16e.  I do not know how often my children use a public latrine.
+69,416,None,Yes
+70,416,None,No
+71,417,None,Yes
+72,417,None,No
+73,418,None,Yes
+74,418,None,No
+75,419,None,Yes
+76,419,None,No
+77,421,None,22a. This never happens to me.
+78,421,None,22b. I go back to my home.
+79,421,None,"22c. I go in search of a latrine (e.g. at a friend's, or in a public area)."
+80,421,None,22d. I use a plastic bag.
+81,421,None,22e. I [defecate] in the open.

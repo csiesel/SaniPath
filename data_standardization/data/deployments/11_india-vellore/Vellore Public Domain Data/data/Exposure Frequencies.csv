@@ -1,0 +1,8 @@
+frequency_id,frequency_description,exposures_per_month
+1,Never,0.0
+2,1-5 times a month,3.0
+3,6-10 times a month,8.0
+4,> 10 times a month,20.5
+5,1-3 days a week,8.6
+6,4-6 days a week,21.4
+7,every day,30.0

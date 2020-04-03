@@ -1,0 +1,63 @@
+question_id,question_text,choice_id,choice_text
+400,1.  Do you have children between the ages of 5-12? (Y/N),1,Yes
+400,1.  Do you have children between the ages of 5-12? (Y/N),2,No
+405,"6. Think about whether you ever go into open drains. This could include picking up something that fell in there, or having to go through the drain to cross the street. How often do you go into the drains? (select one option)",21,6a. I come into contact with drain water more than 10 times total every month.
+405,"6. Think about whether you ever go into open drains. This could include picking up something that fell in there, or having to go through the drain to cross the street. How often do you go into the drains? (select one option)",22,6b. I come into contact with drain water 6 to 10 times total every month.
+405,"6. Think about whether you ever go into open drains. This could include picking up something that fell in there, or having to go through the drain to cross the street. How often do you go into the drains? (select one option)",23,6c. I come into contact with drain water 1 to 5 times total every month.
+405,"6. Think about whether you ever go into open drains. This could include picking up something that fell in there, or having to go through the drain to cross the street. How often do you go into the drains? (select one option)",24,6d. I never come into contact with drain water.
+406,"7. Think about whether your children ever go into the drains. This could include picking up something that fell in there, or having to go through the drain to cross the street.  How often do your children go into the drains?",25,7a. My children come into contact with drain water more than 10 times every month.
+406,"7. Think about whether your children ever go into the drains. This could include picking up something that fell in there, or having to go through the drain to cross the street.  How often do your children go into the drains?",26,7b. My children come into contact with drain water 6 to 10 times total every month.
+406,"7. Think about whether your children ever go into the drains. This could include picking up something that fell in there, or having to go through the drain to cross the street.  How often do your children go into the drains?",27,7c. My children come into contact with drain water 1 to 5 times total every month.
+406,"7. Think about whether your children ever go into the drains. This could include picking up something that fell in there, or having to go through the drain to cross the street.  How often do your children go into the drains?",28,7d. My children never come into contact with drain water.
+406,"7. Think about whether your children ever go into the drains. This could include picking up something that fell in there, or having to go through the drain to cross the street.  How often do your children go into the drains?",29,7e. I do not know how often my children come into contact with drain water.
+407,8. How often do you come into contact with floodwater during the rainy season?  (select one option),30,8a. I come into contact with floodwater more than 10 times total every month during
+407,8. How often do you come into contact with floodwater during the rainy season?  (select one option),31,8b. I come into contact with floodwater 6 to 10 times total every month during the
+407,8. How often do you come into contact with floodwater during the rainy season?  (select one option),32,8c. I come into contact with floodwater 1 to 5 times total every month during the r
+407,8. How often do you come into contact with floodwater during the rainy season?  (select one option),33,8d. I never come into contact with floodwater.
+408,9. How often do your children come into contact with floodwater during the rainy season? (select one option),34,9a. My children come into contact with floodwater more than 10 times total every mo
+408,9. How often do your children come into contact with floodwater during the rainy season? (select one option),35,9b. My children come into contact with floodwater 6 to 10 times total every month d
+408,9. How often do your children come into contact with floodwater during the rainy season? (select one option),36,9c. My children come into contact with floodwater 1 to 5 times total every month du
+408,9. How often do your children come into contact with floodwater during the rainy season? (select one option),37,9d. My children never come into contact with floodwater during the rainy season.
+408,9. How often do your children come into contact with floodwater during the rainy season? (select one option),38,9e. I do not know how often my children come into contact with floodwater.
+409,10. How many days a week do you drink municipal water? (select one option),39,10a. I drink municipal water every day.
+409,10. How many days a week do you drink municipal water? (select one option),40,10b. I drink municipal water 4 to 6 days a week.
+409,10. How many days a week do you drink municipal water? (select one option),41,10c. I drink municipal water 1 to 3 days a week.
+409,10. How many days a week do you drink municipal water? (select one option),42,10d. I never drink municipal water.
+409,10. How many days a week do you drink municipal water? (select one option),43,10e. I do not know if I drink municipal water.
+410,11. How many days a week do your children drink municipal water? (select one option),44,11a. My children drink municipal water every day.
+410,11. How many days a week do your children drink municipal water? (select one option),45,11b. My children drink municipal water 4 to 6 days a week.
+410,11. How many days a week do your children drink municipal water? (select one option),46,11c. My children drink municipal water 1 to 3 days a week.
+410,11. How many days a week do your children drink municipal water? (select one option),47,11d. My children never drink municipal water.
+410,11. How many days a week do your children drink municipal water? (select one option),48,11e. I do not know how often my children drink municipal water.
+411,"12. Does your family regularly treat your water by [boiling, adding chlorine, or using a filter] to make it less cloudy or safer to drink? (Y/N)",49,Yes
+411,"12. Does your family regularly treat your water by [boiling, adding chlorine, or using a filter] to make it less cloudy or safer to drink? (Y/N)",50,No
+412,"13. How many days during the week do you eat produce that is raw (uncooked)? For this question, we are referring to any produce that does not grow on a tree, and that does not have a peel or shell.  Please think both about pro",51,13a. I eat raw produce every day.
+412,"13. How many days during the week do you eat produce that is raw (uncooked)? For this question, we are referring to any produce that does not grow on a tree, and that does not have a peel or shell.  Please think both about pro",52,13b. I eat raw produce 4 to 6 days a week.
+412,"13. How many days during the week do you eat produce that is raw (uncooked)? For this question, we are referring to any produce that does not grow on a tree, and that does not have a peel or shell.  Please think both about pro",53,13c. I eat raw produce 1 to 3 days a week.
+412,"13. How many days during the week do you eat produce that is raw (uncooked)? For this question, we are referring to any produce that does not grow on a tree, and that does not have a peel or shell.  Please think both about pro",54,13d. I never eat raw produce.
+413,"14. How many days during the week do your children eat produce that is raw (uncooked)? Again, for this question, we are referring to any produce that does not grow on a tree, and that does not have a peel or shell.  Please thi",55,14a. My children eat raw produce every day.
+413,"14. How many days during the week do your children eat produce that is raw (uncooked)? Again, for this question, we are referring to any produce that does not grow on a tree, and that does not have a peel or shell.  Please thi",56,14b. My children eat raw produce 4 to 6 days a week.
+413,"14. How many days during the week do your children eat produce that is raw (uncooked)? Again, for this question, we are referring to any produce that does not grow on a tree, and that does not have a peel or shell.  Please thi",57,14c. My children eat raw produce 1 to 3 days a week.
+413,"14. How many days during the week do your children eat produce that is raw (uncooked)? Again, for this question, we are referring to any produce that does not grow on a tree, and that does not have a peel or shell.  Please thi",58,14d. My children never eat raw produce.
+413,"14. How many days during the week do your children eat produce that is raw (uncooked)? Again, for this question, we are referring to any produce that does not grow on a tree, and that does not have a peel or shell.  Please thi",59,14e. I do not know if my children eat raw produce.
+414,"15. How often do you use public latrines - that means a community shared toilet, school toilet, or work toilet? (select one option)",60,15a. I use a public latrine more than 10 times total every month.
+414,"15. How often do you use public latrines - that means a community shared toilet, school toilet, or work toilet? (select one option)",61,15b. I use a public latrine 6 to 10 times total every month.
+414,"15. How often do you use public latrines - that means a community shared toilet, school toilet, or work toilet? (select one option)",62,15c. I use a public latrine 1 to 5 times total every month.
+414,"15. How often do you use public latrines - that means a community shared toilet, school toilet, or work toilet? (select one option)",63,15d. I never use a public latrine.
+415,"16. How often do your children use public latrines - that means a community shared toilet, school toilet, or work toilet? (select one option)",64,16a. My children use public latrines more than 10 times total every month.
+415,"16. How often do your children use public latrines - that means a community shared toilet, school toilet, or work toilet? (select one option)",65,16b. My children use public latrines 6 to 10 times total every month.
+415,"16. How often do your children use public latrines - that means a community shared toilet, school toilet, or work toilet? (select one option)",66,16c. My children use public latrines 1 to 5 times total every month.
+415,"16. How often do your children use public latrines - that means a community shared toilet, school toilet, or work toilet? (select one option)",67,16d. My children never use public latrines.
+415,"16. How often do your children use public latrines - that means a community shared toilet, school toilet, or work toilet? (select one option)",68,16e.  I do not know how often my children use a public latrine.
+416,17. Do you have a latrine in your [house/compound]?  (Y/N),69,Yes
+416,17. Do you have a latrine in your [house/compound]?  (Y/N),70,No
+417,"18. If you have a latrine in your [house/compound], do you use it? (Y/N)",71,Yes
+417,"18. If you have a latrine in your [house/compound], do you use it? (Y/N)",72,No
+418,"19. If you have a latrine, do you flush it with water?  (Y/N)",73,Yes
+418,"19. If you have a latrine, do you flush it with water?  (Y/N)",74,No
+419,20. Does the latrine in your [house/compound] ever flood? (Y/N),75,Yes
+419,20. Does the latrine in your [house/compound] ever flood? (Y/N),76,No
+421,"22. If you are outside of your house and you cannot find a latrine, what do you do?  For this question, you may select all that apply.",77,22a. This never happens to me.
+421,"22. If you are outside of your house and you cannot find a latrine, what do you do?  For this question, you may select all that apply.",78,22b. I go back to my home.
+421,"22. If you are outside of your house and you cannot find a latrine, what do you do?  For this question, you may select all that apply.",79,"22c. I go in search of a latrine (e.g. at a friend's, or in a public area)."
+421,"22. If you are outside of your house and you cannot find a latrine, what do you do?  For this question, you may select all that apply.",81,22e. I [defecate] in the open.

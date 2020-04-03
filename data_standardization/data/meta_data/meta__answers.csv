@@ -1,0 +1,42 @@
+answer,coding,label
+home,1,Single family home
+home,2,Compound
+yn,1,Yes
+yn,0,No
+gender,0,All male
+gender,1,All female
+gender,2,A combination of male and female
+month,1,10+
+month,2,6 to 10
+month,3,<5
+month,4,Never
+month,5,Do not know
+month,6,N/A
+week,1,Every day
+week,2,4 to 6
+week,3,<3
+week,4,Never
+week,5,Do not know
+week,6,N/A
+week2,1,10+
+week2,2,6 to 10
+week2,3,<5
+week2,4,Never
+week2,5,Do not know
+week2,6,N/A
+yno,1,Yes
+yno,2,No 
+yno,3,Do not know
+yno,4,N/A
+share,1,1 to 5
+share,2,5+
+share,3,Do not share
+share,4,Do not know
+share,5,N/A
+opendef,1,Go back to my home
+opendef,2,Go in search of a toilet
+opendef,3,Use a plastic bag/ container
+opendef,4,Defecate outside
+opendef,5,This never happens
+opendef,6,Do not know
+opendef,7,N/A

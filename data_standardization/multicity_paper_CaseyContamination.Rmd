@@ -1,0 +1,73 @@
+---
+title: "Env Contamination Update"
+author: "Casey"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  html_document:
+    # toc: yes
+    # toc_float: true
+    # number_sections: true
+  # pdf_document:
+    # toc: yes
+---
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+
+# Import data:
+source("helper_dataload_all.R")
+source("helper_graph.R")
+source("helper_graph_combined.R")
+
+
+# data setup (adding country and city names etc.)
+df.ecdata <- df.ecdata %>% 
+        left_join(., meta_sampleID, by = c("sample_type" = "id")) %>%
+        left_join(., meta_dply[, c("id", "country", "city", "citylabel")], by = c("dply_num" = "id"))
+
+# check:
+# levels(df.ecdata$sample_type_name)
+# factor(meta_dply$citylabel)
+
+# alternative drinking water declarations
+# add dw level for factors
+# df.ecdata$col_sample_type_alt <- factor(df.ecdata$col_sample_type_alt, 
+#                                         levels=levels(df.ecdata$col_sample_type_alt))
+
+# df.ecdata$col_sample_type_alt[df.ecdata$sample_type == 3 & df.ecdata$col_sample_type_alt == ""] <- "Drinking Water"
+
+#recode other drinking water
+# df.ecdata$sample_type[df.ecdata$sample_type == 3 & df.ecdata$col_sample_type_alt != "Drinking Water" 
+#                       & df.ecdata$col_sample_type_alt != "" ] <- 33
+
+
+df.col <- df.col %>% left_join(., meta_dply[c("id", "citylabel")], by = c("dply_num" = "id"))
+df.lab <- df.lab %>% left_join(., meta_dply[c("id", "citylabel")], by = c("dply_num" = "id"))
+df.h <- df.h %>% left_join(., meta_dply[c("id", "citylabel")], by = c("dply_num" = "id"))
+df.c <- df.c %>% left_join(., meta_dply[c("id", "citylabel")], by = c("dply_num" = "id"))
+df.s <- df.s %>% left_join(., meta_dply[c("id", "citylabel")], by = c("dply_num" = "id"))
+
+
+```
+
+# {.tabset}
+
+
+## Contamination
+### Stats on ec_conc
+
+```{r echo=TRUE}
+
+
+df.ecdata %>% group_by(citylabel, sample_type_name) %>% summarise("n" = n(), 
+                                        "min ecoli" = round(min(log10(ec_conc), na.rm = T),2),
+                                        "max ecoli" = round(max(log10(ec_conc), na.rm = T),2),
+                                        "mean ecoli" = round(mean(log10(ec_conc), na.rm = T),2),
+                                        "standard deviation" = round(sd(log10(ec_conc), na.rm = T),2),
+                                        "variance" = round(var(log10(ec_conc), na.rm = T),2)
+                                                  ) %>%
+        kable(., caption = "E. coli count per deployment by pathway") %>% 
+        kable_styling(bootstrap_options = c("hover", "bordered","condensed"), full_width = F, position = "left")
+

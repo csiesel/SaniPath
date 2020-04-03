@@ -1,0 +1,11 @@
+module_id,pathway,module_name,is_risk_module
+1,2,Ocean Water,True
+2,6,"Rivers, Lakes, or Ponds",True
+3,None,Flood Water Contact,False
+4,3,Fruits/Vegetables,True
+5,4,Public Latrines,True
+6,7,Bathing Water,True
+7,None,All,False
+8,1,Municipal Drinking Water,True
+9,5,Drains,True
+10,None,Soil,False
