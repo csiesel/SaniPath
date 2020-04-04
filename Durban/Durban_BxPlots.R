@@ -36,7 +36,7 @@ df.h <- read.csv("~/Downloads/spdurban-household-2192.csv", header=TRUE)
                 exclude = sum(sum(coding==5, na.rm = T), sum(coding==6, na.rm = T)),
                 na = sum(is.na(coding)),
                 sum1 = n(),
-                sum=(some1+never1) ) %>%
+                sum=(some1+never1)) %>%
       select(h_neighborhood, a3, a2, a1, a0, some1, never1, sum) %>% 
       data.frame() -> df1
     

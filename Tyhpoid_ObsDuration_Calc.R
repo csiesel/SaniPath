@@ -4,7 +4,6 @@ library(anytime)
 
 
 ##### Child Observation #####
-
 childobs <- read_excel("~/Downloads/1-5 SO - Children - Obs - all versions - False - 2020-04-02-12-56-29.xlsx")
 childobs$startdate <- as.Date(childobs$`so_startgr/so_time_start`)
 childobs$`so_endgr/so_time_end`[which(childobs$`so_endgr/so_time_end`=="2019-08-14 09:58:49")] <- "2019-08-13 14:50:49"
