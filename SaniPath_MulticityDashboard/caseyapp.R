@@ -81,7 +81,7 @@ ui <-
         checkboxGroupButtons(
           "city",
           NULL,
-          c(cities),
+          c(sort(cities)),
           selected = "Accra",
           direction = "vertical",
           justified = TRUE,
