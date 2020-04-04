@@ -1,0 +1,79 @@
+pathway_code,pathway_label,intervention_domain,intervention
+d,Open Drains,public_domain,Better FSM (liquid/solid waste management)
+d,Open Drains,public_domain,Improve drainage system
+d,Open Drains,public_domain,Cover the open drain
+d,Open Drains,public_domain,Reduce open defecation
+d,Open Drains,public_domain,Improve animal husbandry/control to reduce animal feces
+d,Open Drains,public_domain,"Increase access to quality, affordable public latrines that safely contain feces"
+p,Produce,public_domain,Increase regulation of wastewater reuse and quality standards
+p,Produce,public_domain, Provide an enabling environment for formalized markets for safe wastewater reuse in farming
+p,Produce,public_domain, Increased regulation of produce quality and transport
+dw,Municipal Water,public_domain,"Improve regulation and quality (safety, taste, smell) of municipal water"
+dw,Municipal Water,public_domain,Water treatment (chlorine)
+dw,Municipal Water,public_domain,Improve water distribution system (no leaks)
+dw,Municipal Water,public_domain, Improve access to drinking water (reduce number of illegal connections)
+o,Ocean Water,public_domain,Better FSM (liquid/solid waste management)
+o,Ocean Water,public_domain,Reduce open defecation at the sea
+o,Ocean Water,public_domain, Regulate activity at the sea
+s,Surface Water,public_domain,Better FSM (liquid/solid waste management)
+s,Surface Water,public_domain,Reduce open defecation
+s,Surface Water,public_domain,Avoid activity at the contaminated surface water
+f,Floodwater,public_domain,Improve drainage system
+f,Floodwater,public_domain,Reduce open defecation
+f,Floodwater,public_domain,improve animal husbandry/control to reduce animal feces
+f,Floodwater,public_domain,"Increase access to quality, affordable public latrines that safely contain feces"
+f,Floodwater,public_domain, Develop provisions to evacuate flood-prone areas
+pl,Public Latrine,public_domain,"Increase access to quality, affordable public latrines that safely contain feces"
+pl,Public Latrine,public_domain,Improve latrine maintenance
+bw,Bathing Water,public_domain,"Improve the quality (safety, taste, smell) of municipal water"
+bw,Bathing Water,public_domain,Water treatment (chlorine)
+bw,Bathing Water,public_domain,"Improve water distribution system (no leaks, no illegal connection)"
+sf,Street Food,public_domain,Increase regulation of street vendor licensing
+sf,Street Food,public_domain,"Increased regulation of street food hygiene, quality, and handling practices"
+sf,Street Food,public_domain, Implement health safety inspections for street food vendor stalls
+d,Open Drains,private_domain,Education about the risk of contact with open drain
+d,Open Drains,private_domain,Better hand hygiene practice (education)
+p,Produce,private_domain,Better food hygiene practice (education)
+p,Produce,private_domain,Better hand hygiene practice (education for shop keepers and consumers)
+p,Produce,private_domain,Education for farmers on safe wastewater reuse practices and on crops at greater risk of contamination
+p,Produce,private_domain,Education for farmers on crop rotation strategies
+p,Produce,private_domain,Promote breastfeeding
+p,Produce,private_domain,Avoid high contaminated food (e.g. street food)
+dw,Municipal Water,private_domain,Point of use water treatment
+dw,Municipal Water,private_domain, Alternative source of drinking water
+o,Ocean Water,private_domain,Education about the risk of contact with ocean water or beach
+o,Ocean Water,private_domain,Better hand hygiene practice (education)
+s,Surface Water,private_domain,Education about the risk of contact with dirty surface water
+s,Surface Water,private_domain,Better hand hygiene practice (education)
+f,Floodwater,private_domain,Education about the risk of contact with dirty flood water
+f,Floodwater,private_domain,Better hand hygiene practice (education)
+pl,Public Latrine,private_domain,Build private latrine or shared latrines in the community
+bw,Bathing Water,private_domain,Alternative source of bathing water
+sf,Street Food,private_domain,Better food hygiene practice (education)
+sf,Street Food,private_domain,Better hand hygiene practice (education for street food vendors and consumers)
+sf,Street Food,private_domain,Promote breastfeeding
+sf,Street Food,private_domain,Avoid high contaminated food (e.g. street food)
+d,Open Drains,combined,Improve drainage systems and provide covers for open drains
+d,Open Drains,combined," Reduce environmental contamination by controlling open defecation, animal husbandry practices, and by improving access to and quality of public latrines"
+d,Open Drains,combined, Educate communities on risk associated with open drains and proper hand hygiene practices
+p,Produce,combined,Increase regulation of wastewater reuse quality and produce quality and transport 
+p,Produce,combined, Provide education for shopkeepers and consumers on proper food and hand hygiene practices
+p,Produce,combined, Educate farmers on safe wastewater reuse practices and risk of contamination for crops
+dw,Municipal Water,combined,Improve regulations of water quality and improve treatment and distribution mechanisms
+dw,Municipal Water,combined, Improve access to drinking water and remove illegal connections
+dw,Municipal Water,combined, Promote point-of-use water treatment and alternative sources of drinking water
+o,Ocean Water,combined,Improve FSM in communities and reduce open defecation practices near or in the sea
+o,Ocean Water,combined, Increase regulation of activities at the sea
+o,Ocean Water,combined, Provide education about the risk of contact with ocean water and the beach and promote proper hand hygiene
+s,Surface Water,combined,Improve FSM in communities and reduce open defecation practices
+s,Surface Water,combined, Provide education about the risk of contact with contaminated surface water and promote hand hygiene
+f,Floodwater,combined,"Improve drainage systems and reduce environmental contamination by controlling open defecation, improving animal husbandry practices, and by improving access to and quality of public latrines"
+f,Floodwater,combined, Develop evacuation provisions for flood-prone areas
+f,Floodwater,combined, Educate communities on risk associated with flood water and proper hand hygiene practices
+pl,Public Latrine,combined,Increase access to and quality of public latrines that safely contain feces and improve maintenance mechanisms
+pl,Public Latrine,combined, Build private or shared latrines in the community
+bw,Bathing Water,combined,Improve regulations of water quality and improve treatment and distribution mechanisms
+bw,Bathing Water,combined, Improve water distribution systems and remove illegal connections
+bw,Bathing Water,combined, Promote alternative sources of bathing water
+sf,Street Food,combined,"Increase regulation of street vendor licensing, street food hygiene, quality, and handling practices, and implement health safety inspections"
+sf,Street Food,combined, Provide education on proper food and hand hygiene practices for vendors and consumers and educate consumers on highly contaminated foods

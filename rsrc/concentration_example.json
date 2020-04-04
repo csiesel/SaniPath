@@ -1,0 +1,812 @@
+[
+ {
+ "s": "p",
+"neighb":     11,
+"sample": "Produce",
+"neighborhood": "Kalshi Mirpure",
+"data": [      5,   7894,      5, null,    123,   65.5,     55,      5, 5471.7,      5 ],
+"plot_name": "Kalshi Mirpure, Produce\n(N=10)",
+"fn": "11_p.png" 
+},
+{
+ "s": "s",
+"neighb":     11,
+"sample": "Surface Water",
+"neighborhood": "Kalshi Mirpure",
+"data": [ null, 1867.7, null, null, null, null, null, null, null, null ],
+"plot_name": "Kalshi Mirpure, Surface Water\n(N=10)",
+"fn": "11_s.png" 
+},
+{
+ "s": "pa",
+"neighb":     11,
+"sample": "Particulate",
+"neighborhood": "Kalshi Mirpure",
+"data": [  54003,  60013, null, null, 1.616e+05, null,     50,    200,   4485,    100 ],
+"plot_name": "Kalshi Mirpure, Particulate\n(N=10)",
+"fn": "11_pa.png" 
+},
+{
+ "s": "d",
+"neighb":     11,
+"sample": "Drain Water",
+"neighborhood": "Kalshi Mirpure",
+"data": [ null, null, null, null, null, null, null, null, null, null ],
+"plot_name": "Kalshi Mirpure, Drain Water\n(N=10)",
+"fn": "11_d.png" 
+},
+{
+ "s": "bw",
+"neighb":     11,
+"sample": "Bathing Water",
+"neighborhood": "Kalshi Mirpure",
+"data": [ null, null, null, null, null, null, null, null, null, null ],
+"plot_name": "Kalshi Mirpure, Bathing Water\n(N=10)",
+"fn": "11_bw.png" 
+},
+{
+ "s": "f",
+"neighb":     11,
+"sample": "Flood Water",
+"neighborhood": "Kalshi Mirpure",
+"data": [ 6.3677e+05, 1.0811e+06,  67700,  49700, 3.2003e+05, null, null, 1.1121e+06, 1.7674e+06, null ],
+"plot_name": "Kalshi Mirpure, Flood Water\n(N=10)",
+"fn": "11_f.png" 
+},
+{
+ "s": "dw",
+"neighb":     11,
+"sample": "Municipal and Piped Water",
+"neighborhood": "Kalshi Mirpure",
+"data": [ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ],
+"plot_name": "Kalshi Mirpure, Municipal and Piped Water\n(N=20)",
+"fn": "11_dw.png" 
+},
+{
+ "s": "l",
+"neighb":     11,
+"sample": "Public Latrine",
+"neighborhood": "Kalshi Mirpure",
+"data": [ null, null, null, null, null, null, null, null, null, null ],
+"plot_name": "Kalshi Mirpure, Public Latrine\n(N=10)",
+"fn": "11_l.png" 
+},
+{
+ "s": "sf",
+"neighb":     11,
+"sample": "Street Food",
+"neighborhood": "Kalshi Mirpure",
+"data": [      5,      5,   1475, null,     31,     74, null, null,  19094,  646.5 ],
+"plot_name": "Kalshi Mirpure, Street Food\n(N=10)",
+"fn": "11_sf.png" 
+},
+{
+ "s": "p",
+"neighb":     77,
+"sample": "Produce",
+"neighborhood": "Gendaria Railway Station",
+"data": [     96, null,   9353,      5, null, null, 4298.7, null,  204.5,      5 ],
+"plot_name": "Gendaria Railway Station, Produce\n(N=10)",
+"fn": "77_p.png" 
+},
+{
+ "s": "s",
+"neighb":     77,
+"sample": "Surface Water",
+"neighborhood": "Gendaria Railway Station",
+"data": [ null, null, 2611.3,  13190,  17461, null, null, null,  27052, null ],
+"plot_name": "Gendaria Railway Station, Surface Water\n(N=10)",
+"fn": "77_s.png" 
+},
+{
+ "s": "pa",
+"neighb":     77,
+"sample": "Particulate",
+"neighborhood": "Gendaria Railway Station",
+"data": [ null,   1175,    310,    655,  42357,   2995, null,     50,  31147,  24490 ],
+"plot_name": "Gendaria Railway Station, Particulate\n(N=10)",
+"fn": "77_pa.png" 
+},
+{
+ "s": "d",
+"neighb":     77,
+"sample": "Drain Water",
+"neighborhood": "Gendaria Railway Station",
+"data": [ null, null, null, null, null, null, null, null, null, null ],
+"plot_name": "Gendaria Railway Station, Drain Water\n(N=10)",
+"fn": "77_d.png" 
+},
+{
+ "s": "bw",
+"neighb":     77,
+"sample": "Bathing Water",
+"neighborhood": "Gendaria Railway Station",
+"data": [ null, null, null, null, null, null, null, null, null, null ],
+"plot_name": "Gendaria Railway Station, Bathing Water\n(N=10)",
+"fn": "77_bw.png" 
+},
+{
+ "s": "f",
+"neighb":     77,
+"sample": "Flood Water",
+"neighborhood": "Gendaria Railway Station",
+"data": [ 2.683e+05,  14600, 2.2428e+06, null,  58350,  61600, null, 2.224e+05,   7400, null ],
+"plot_name": "Gendaria Railway Station, Flood Water\n(N=10)",
+"fn": "77_f.png" 
+},
+{
+ "s": "dw",
+"neighb":     77,
+"sample": "Municipal and Piped Water",
+"neighborhood": "Gendaria Railway Station",
+"data": [ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ],
+"plot_name": "Gendaria Railway Station, Municipal and Piped Water\n(N=20)",
+"fn": "77_dw.png" 
+},
+{
+ "s": "l",
+"neighb":     77,
+"sample": "Public Latrine",
+"neighborhood": "Gendaria Railway Station",
+"data": [ null, null, null, null, null, null, null, null, null, null ],
+"plot_name": "Gendaria Railway Station, Public Latrine\n(N=10)",
+"fn": "77_l.png" 
+},
+{
+ "s": "sf",
+"neighb":     77,
+"sample": "Street Food",
+"neighborhood": "Gendaria Railway Station",
+"data": [     76,     31,     76,      5,     20,  884.5,     63, 2497.7,      5,     31 ],
+"plot_name": "Gendaria Railway Station, Street Food\n(N=10)",
+"fn": "77_sf.png" 
+},
+{
+ "s": "p",
+"neighb":     88,
+"sample": "Produce",
+"neighborhood": "Hazaribagh",
+"data": [     97,     10,      5,     95,   6898, null,     60,     97,   4435,     31 ],
+"plot_name": "Hazaribagh, Produce\n(N=10)",
+"fn": "88_p.png" 
+},
+{
+ "s": "s",
+"neighb":     88,
+"sample": "Surface Water",
+"neighborhood": "Hazaribagh",
+"data": [ null, null, null, null, null, null, null, null, null, null ],
+"plot_name": "Hazaribagh, Surface Water\n(N=10)",
+"fn": "88_s.png" 
+},
+{
+ "s": "pa",
+"neighb":     88,
+"sample": "Particulate",
+"neighborhood": "Hazaribagh",
+"data": [ 1.0844e+05,  33357, null, null, 1.1934e+05, null,   2545,   1260,  20563,  73060 ],
+"plot_name": "Hazaribagh, Particulate\n(N=10)",
+"fn": "88_pa.png" 
+},
+{
+ "s": "d",
+"neighb":     88,
+"sample": "Drain Water",
+"neighborhood": "Hazaribagh",
+"data": [ null, null, null, null, null, null, null, null, null, null ],
+"plot_name": "Hazaribagh, Drain Water\n(N=10)",
+"fn": "88_d.png" 
+},
+{
+ "s": "bw",
+"neighb":     88,
+"sample": "Bathing Water",
+"neighborhood": "Hazaribagh",
+"data": [ null, null, null, null, null, null, null, null, null, null ],
+"plot_name": "Hazaribagh, Bathing Water\n(N=10)",
+"fn": "88_bw.png" 
+},
+{
+ "s": "f",
+"neighb":     88,
+"sample": "Flood Water",
+"neighborhood": "Hazaribagh",
+"data": [ null, 2.077e+05, null, null, 3.2525e+06, 6.388e+05, null, null, null, null ],
+"plot_name": "Hazaribagh, Flood Water\n(N=10)",
+"fn": "88_f.png" 
+},
+{
+ "s": "dw",
+"neighb":     88,
+"sample": "Municipal and Piped Water",
+"neighborhood": "Hazaribagh",
+"data": [ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ],
+"plot_name": "Hazaribagh, Municipal and Piped Water\n(N=20)",
+"fn": "88_dw.png" 
+},
+{
+ "s": "l",
+"neighb":     88,
+"sample": "Public Latrine",
+"neighborhood": "Hazaribagh",
+"data": [ null, null, null, null, null, null, null, null, null, null ],
+"plot_name": "Hazaribagh, Public Latrine\n(N=10)",
+"fn": "88_l.png" 
+},
+{
+ "s": "sf",
+"neighb":     88,
+"sample": "Street Food",
+"neighborhood": "Hazaribagh",
+"data": [   2545, 6161.3, null, 4420.3,    278,    583,  230.5, null,  265.5, 9524.7 ],
+"plot_name": "Hazaribagh, Street Food\n(N=10)",
+"fn": "88_sf.png" 
+},
+{
+ "s": "p",
+"neighb":     99,
+"sample": "Produce",
+"neighborhood": "Motijhil",
+"data": [ null,  17757,     81,    430, null,     52,      5, 3497.7,    426,      5 ],
+"plot_name": "Motijhil, Produce\n(N=10)",
+"fn": "99_p.png" 
+},
+{
+ "s": "s",
+"neighb":     99,
+"sample": "Surface Water",
+"neighborhood": "Motijhil",
+"data": [    409,   9544, null,    288,  221.5,     75, null,     52,     31,    173 ],
+"plot_name": "Motijhil, Surface Water\n(N=10)",
+"fn": "99_s.png" 
+},
+{
+ "s": "pa",
+"neighb":     99,
+"sample": "Particulate",
+"neighborhood": "Motijhil",
+"data": [   5755,   1050,   4655, null,  36037,   2705,  31973, null,   4695, 1.1853e+05 ],
+"plot_name": "Motijhil, Particulate\n(N=10)",
+"fn": "99_pa.png" 
+},
+{
+ "s": "d",
+"neighb":     99,
+"sample": "Drain Water",
+"neighborhood": "Motijhil",
+"data": [ null, null, null, null, null, null, null, null, null, null ],
+"plot_name": "Motijhil, Drain Water\n(N=10)",
+"fn": "99_d.png" 
+},
+{
+ "s": "bw",
+"neighb":     99,
+"sample": "Bathing Water",
+"neighborhood": "Motijhil",
+"data": [ null, null, null, null, null, null, null, null, null, null ],
+"plot_name": "Motijhil, Bathing Water\n(N=10)",
+"fn": "99_bw.png" 
+},
+{
+ "s": "f",
+"neighb":     99,
+"sample": "Flood Water",
+"neighborhood": "Motijhil",
+"data": [ 1.2885e+05, 1.3365e+05, 3.0993e+05, null, 2.1975e+06, 2.6418e+06, 2.0077e+05,  81150, null, 4.9677e+05 ],
+"plot_name": "Motijhil, Flood Water\n(N=10)",
+"fn": "99_f.png" 
+},
+{
+ "s": "dw",
+"neighb":     99,
+"sample": "Municipal and Piped Water",
+"neighborhood": "Motijhil",
+"data": [ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ],
+"plot_name": "Motijhil, Municipal and Piped Water\n(N=20)",
+"fn": "99_dw.png" 
+},
+{
+ "s": "l",
+"neighb":     99,
+"sample": "Public Latrine",
+"neighborhood": "Motijhil",
+"data": [ null, null, null, null, null, null, null, null, null, null ],
+"plot_name": "Motijhil, Public Latrine\n(N=10)",
+"fn": "99_l.png" 
+},
+{
+ "s": "sf",
+"neighb":     99,
+"sample": "Street Food",
+"neighborhood": "Motijhil",
+"data": [ null, null, null,  270.5, null, 3867.7, null,      5,    171, null ],
+"plot_name": "Motijhil, Street Food\n(N=10)",
+"fn": "99_sf.png" 
+},
+{
+ "s": "p",
+"neighb":     44,
+"sample": "Produce",
+"neighborhood": "Uttar Khan",
+"data": [     10,  22350,   70.5,      5,    228,     20, null, null,      5,   6424 ],
+"plot_name": "Uttar Khan, Produce\n(N=10)",
+"fn": "44_p.png" 
+},
+{
+ "s": "s",
+"neighb":     44,
+"sample": "Surface Water",
+"neighborhood": "Uttar Khan",
+"data": [  285.5,     20, null,   3793, null, null, null, 7387.3,  326.5, 5583.3 ],
+"plot_name": "Uttar Khan, Surface Water\n(N=10)",
+"fn": "44_s.png" 
+},
+{
+ "s": "pa",
+"neighb":     44,
+"sample": "Particulate",
+"neighborhood": "Uttar Khan",
+"data": [  87213,  29637, null,    100,     50,     50,  12165,     50,     50,     50 ],
+"plot_name": "Uttar Khan, Particulate\n(N=10)",
+"fn": "44_pa.png" 
+},
+{
+ "s": "d",
+"neighb":     44,
+"sample": "Drain Water",
+"neighborhood": "Uttar Khan",
+"data": [ null, null, null, null, null, null, null, null, null, null ],
+"plot_name": "Uttar Khan, Drain Water\n(N=10)",
+"fn": "44_d.png" 
+},
+{
+ "s": "bw",
+"neighb":     44,
+"sample": "Bathing Water",
+"neighborhood": "Uttar Khan",
+"data": [ null, null, null, null, null, null, null, null, null, null ],
+"plot_name": "Uttar Khan, Bathing Water\n(N=10)",
+"fn": "44_bw.png" 
+},
+{
+ "s": "f",
+"neighb":     44,
+"sample": "Flood Water",
+"neighborhood": "Uttar Khan",
+"data": [ 4.0007e+05,  14600, 5.764e+05,  41550, null, 4.252e+05, 5.3713e+05, null,  14600,  14450 ],
+"plot_name": "Uttar Khan, Flood Water\n(N=10)",
+"fn": "44_f.png" 
+},
+{
+ "s": "dw",
+"neighb":     44,
+"sample": "Municipal and Piped Water",
+"neighborhood": "Uttar Khan",
+"data": [ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ],
+"plot_name": "Uttar Khan, Municipal and Piped Water\n(N=20)",
+"fn": "44_dw.png" 
+},
+{
+ "s": "l",
+"neighb":     44,
+"sample": "Public Latrine",
+"neighborhood": "Uttar Khan",
+"data": [ null, null, null, null, null, null, null, null, null, null ],
+"plot_name": "Uttar Khan, Public Latrine\n(N=10)",
+"fn": "44_l.png" 
+},
+{
+ "s": "sf",
+"neighb":     44,
+"sample": "Street Food",
+"neighborhood": "Uttar Khan",
+"data": [     20,  14804, null, null, null,  844.5,    173, 1067.5,      5, null ],
+"plot_name": "Uttar Khan, Street Food\n(N=10)",
+"fn": "44_sf.png" 
+},
+{
+ "s": "p",
+"neighb":      0,
+"sample": "Produce",
+"neighborhood": "Dhanmondi",
+"data": [     10,  41052,  423.5,      5, 3874.7,     10, null,     41,  21679,   87.5 ],
+"plot_name": "Dhanmondi, Produce\n(N=10)",
+"fn": "0_p.png" 
+},
+{
+ "s": "s",
+"neighb":      0,
+"sample": "Surface Water",
+"neighborhood": "Dhanmondi",
+"data": [   3705,   5145,  11830,  26750,  87080,  37373,  79480, null,   8840,   3140 ],
+"plot_name": "Dhanmondi, Surface Water\n(N=10)",
+"fn": "0_s.png" 
+},
+{
+ "s": "pa",
+"neighb":      0,
+"sample": "Particulate",
+"neighborhood": "Dhanmondi",
+"data": [ null,   1515,   8105,  79583,   2705,   1865,   2160,     50,     50,   1305 ],
+"plot_name": "Dhanmondi, Particulate\n(N=10)",
+"fn": "0_pa.png" 
+},
+{
+ "s": "d",
+"neighb":      0,
+"sample": "Drain Water",
+"neighborhood": "Dhanmondi",
+"data": [ null, null, null, null, null, null, null, null, null, null ],
+"plot_name": "Dhanmondi, Drain Water\n(N=10)",
+"fn": "0_d.png" 
+},
+{
+ "s": "bw",
+"neighb":      0,
+"sample": "Bathing Water",
+"neighborhood": "Dhanmondi",
+"data": [ null, null, null, null, null, null, null, null, null, null ],
+"plot_name": "Dhanmondi, Bathing Water\n(N=10)",
+"fn": "0_bw.png" 
+},
+{
+ "s": "f",
+"neighb":      0,
+"sample": "Flood Water",
+"neighborhood": "Dhanmondi",
+"data": [  15500,  40200, null, null, null, 5.409e+05, 2.141e+06,   1000,   2000,   2000 ],
+"plot_name": "Dhanmondi, Flood Water\n(N=10)",
+"fn": "0_f.png" 
+},
+{
+ "s": "dw",
+"neighb":      0,
+"sample": "Municipal and Piped Water",
+"neighborhood": "Dhanmondi",
+"data": [ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ],
+"plot_name": "Dhanmondi, Municipal and Piped Water\n(N=20)",
+"fn": "0_dw.png" 
+},
+{
+ "s": "l",
+"neighb":      0,
+"sample": "Public Latrine",
+"neighborhood": "Dhanmondi",
+"data": [ null, null, null, null, null, null, null, null, null, null ],
+"plot_name": "Dhanmondi, Public Latrine\n(N=10)",
+"fn": "0_l.png" 
+},
+{
+ "s": "sf",
+"neighb":      0,
+"sample": "Street Food",
+"neighborhood": "Dhanmondi",
+"data": [   6178, null,     20,     31, null, null, 4951.3, null, null, null ],
+"plot_name": "Dhanmondi, Street Food\n(N=10)",
+"fn": "0_sf.png" 
+},
+{
+ "s": "p",
+"neighb":     55,
+"sample": "Produce",
+"neighborhood": "Gulshan",
+"data": [  15520,      5,     75,    539,  13574,    348,      5,      5, 5138.3,  10764 ],
+"plot_name": "Gulshan, Produce\n(N=10)",
+"fn": "55_p.png" 
+},
+{
+ "s": "s",
+"neighb":     55,
+"sample": "Surface Water",
+"neighborhood": "Gulshan",
+"data": [ 3.5715e+05,  48073,  35763,  80887,  49947, 1.2301e+05,  13580, null,  91470, null ],
+"plot_name": "Gulshan, Surface Water\n(N=10)",
+"fn": "55_s.png" 
+},
+{
+ "s": "pa",
+"neighb":     55,
+"sample": "Particulate",
+"neighborhood": "Gulshan",
+"data": [    705,    760,     50,     50, 1.2281e+05,   1800,   3945,    100, 1.5817e+05,  26250 ],
+"plot_name": "Gulshan, Particulate\n(N=10)",
+"fn": "55_pa.png" 
+},
+{
+ "s": "d",
+"neighb":     55,
+"sample": "Drain Water",
+"neighborhood": "Gulshan",
+"data": [ null, null, null, null, null, null, null, null, null, null ],
+"plot_name": "Gulshan, Drain Water\n(N=10)",
+"fn": "55_d.png" 
+},
+{
+ "s": "bw",
+"neighb":     55,
+"sample": "Bathing Water",
+"neighborhood": "Gulshan",
+"data": [ null, null, null, null, null, null, null, null, null, null ],
+"plot_name": "Gulshan, Bathing Water\n(N=10)",
+"fn": "55_bw.png" 
+},
+{
+ "s": "f",
+"neighb":     55,
+"sample": "Flood Water",
+"neighborhood": "Gulshan",
+"data": [ 3.297e+05, 2.9833e+05, null, 4.261e+05, 6.4383e+05, 3.0323e+05, 1.9782e+06, 9.2747e+05, 3.8313e+05, 4.3053e+05 ],
+"plot_name": "Gulshan, Flood Water\n(N=10)",
+"fn": "55_f.png" 
+},
+{
+ "s": "dw",
+"neighb":     55,
+"sample": "Municipal and Piped Water",
+"neighborhood": "Gulshan",
+"data": [ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ],
+"plot_name": "Gulshan, Municipal and Piped Water\n(N=20)",
+"fn": "55_dw.png" 
+},
+{
+ "s": "l",
+"neighb":     55,
+"sample": "Public Latrine",
+"neighborhood": "Gulshan",
+"data": [ null, null, null, null, null, null, null, null, null, null ],
+"plot_name": "Gulshan, Public Latrine\n(N=10)",
+"fn": "55_l.png" 
+},
+{
+ "s": "sf",
+"neighb":     55,
+"sample": "Street Food",
+"neighborhood": "Gulshan",
+"data": [   3032, null,     41,    221,   81.5,    328, 4898.3,      5,     10,   3544 ],
+"plot_name": "Gulshan, Street Food\n(N=10)",
+"fn": "55_sf.png" 
+},
+{
+ "s": "p",
+"neighb":     22,
+"sample": "Produce",
+"neighborhood": "Badda",
+"data": [     31,   3362,     74,      5, null,  617.5, null, null, 2966.3,    586 ],
+"plot_name": "Badda, Produce\n(N=10)",
+"fn": "22_p.png" 
+},
+{
+ "s": "s",
+"neighb":     22,
+"sample": "Surface Water",
+"neighborhood": "Badda",
+"data": [  70303, null, 1.9566e+05, 1.5315e+05, 2.0631e+05,  80607,  10155, null, null, null ],
+"plot_name": "Badda, Surface Water\n(N=10)",
+"fn": "22_s.png" 
+},
+{
+ "s": "pa",
+"neighb":     22,
+"sample": "Particulate",
+"neighborhood": "Badda",
+"data": [ 1.5766e+05,   6300,    410,    815,  16220, 5.3235e+05, null, 4.5339e+05, null,  88480 ],
+"plot_name": "Badda, Particulate\n(N=10)",
+"fn": "22_pa.png" 
+},
+{
+ "s": "d",
+"neighb":     22,
+"sample": "Drain Water",
+"neighborhood": "Badda",
+"data": [ null, null, null, null, null, null, null, null, null, null ],
+"plot_name": "Badda, Drain Water\n(N=10)",
+"fn": "22_d.png" 
+},
+{
+ "s": "bw",
+"neighb":     22,
+"sample": "Bathing Water",
+"neighborhood": "Badda",
+"data": [ null, null, null, null, null, null, null, null, null, null ],
+"plot_name": "Badda, Bathing Water\n(N=10)",
+"fn": "22_bw.png" 
+},
+{
+ "s": "f",
+"neighb":     22,
+"sample": "Flood Water",
+"neighborhood": "Badda",
+"data": [ 1.2402e+06, 2.5373e+05, 1.5655e+06, 2.1087e+06, 4.7123e+05, 1.422e+05, null, 9.988e+05, 9.533e+05, 4.9583e+05 ],
+"plot_name": "Badda, Flood Water\n(N=10)",
+"fn": "22_f.png" 
+},
+{
+ "s": "dw",
+"neighb":     22,
+"sample": "Municipal and Piped Water",
+"neighborhood": "Badda",
+"data": [ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ],
+"plot_name": "Badda, Municipal and Piped Water\n(N=20)",
+"fn": "22_dw.png" 
+},
+{
+ "s": "l",
+"neighb":     22,
+"sample": "Public Latrine",
+"neighborhood": "Badda",
+"data": [ null, null, null, null, null, null, null, null, null, null ],
+"plot_name": "Badda, Public Latrine\n(N=10)",
+"fn": "22_l.png" 
+},
+{
+ "s": "sf",
+"neighb":     22,
+"sample": "Street Food",
+"neighborhood": "Badda",
+"data": [  10546, 2930.7,     65,    121,    175, 2111.5,  415.5,  12800,  19306, null ],
+"plot_name": "Badda, Street Food\n(N=10)",
+"fn": "22_sf.png" 
+},
+{
+ "s": "p",
+"neighb":     33,
+"sample": "Produce",
+"neighborhood": "Gabtoli Bus Terminal",
+"data": [  204.5,      5,   8016, null, null,  11399,  131.5,      5,  13258,      5 ],
+"plot_name": "Gabtoli Bus Terminal, Produce\n(N=10)",
+"fn": "33_p.png" 
+},
+{
+ "s": "s",
+"neighb":     33,
+"sample": "Surface Water",
+"neighborhood": "Gabtoli Bus Terminal",
+"data": [   4155, null,  75270, null, null, 1.4249e+05, 1.2182e+05, null,  21983, null ],
+"plot_name": "Gabtoli Bus Terminal, Surface Water\n(N=10)",
+"fn": "33_s.png" 
+},
+{
+ "s": "pa",
+"neighb":     33,
+"sample": "Particulate",
+"neighborhood": "Gabtoli Bus Terminal",
+"data": [   1220,  50860, null, null,   4075, null,  84703, null, null, 1.3614e+05 ],
+"plot_name": "Gabtoli Bus Terminal, Particulate\n(N=10)",
+"fn": "33_pa.png" 
+},
+{
+ "s": "d",
+"neighb":     33,
+"sample": "Drain Water",
+"neighborhood": "Gabtoli Bus Terminal",
+"data": [ null, null, null, null, null, null, null, null, null, null ],
+"plot_name": "Gabtoli Bus Terminal, Drain Water\n(N=10)",
+"fn": "33_d.png" 
+},
+{
+ "s": "bw",
+"neighb":     33,
+"sample": "Bathing Water",
+"neighborhood": "Gabtoli Bus Terminal",
+"data": [ null, null, null, null, null, null, null, null, null, null ],
+"plot_name": "Gabtoli Bus Terminal, Bathing Water\n(N=10)",
+"fn": "33_bw.png" 
+},
+{
+ "s": "f",
+"neighb":     33,
+"sample": "Flood Water",
+"neighborhood": "Gabtoli Bus Terminal",
+"data": [ 1.7582e+06, null, 9.4977e+05, 1.1835e+06, null,   4100,   7600,   2000,    500, 2.4775e+06 ],
+"plot_name": "Gabtoli Bus Terminal, Flood Water\n(N=10)",
+"fn": "33_f.png" 
+},
+{
+ "s": "dw",
+"neighb":     33,
+"sample": "Municipal and Piped Water",
+"neighborhood": "Gabtoli Bus Terminal",
+"data": [ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ],
+"plot_name": "Gabtoli Bus Terminal, Municipal and Piped Water\n(N=20)",
+"fn": "33_dw.png" 
+},
+{
+ "s": "l",
+"neighb":     33,
+"sample": "Public Latrine",
+"neighborhood": "Gabtoli Bus Terminal",
+"data": [ null, null, null, null, null, null, null, null, null, null ],
+"plot_name": "Gabtoli Bus Terminal, Public Latrine\n(N=10)",
+"fn": "33_l.png" 
+},
+{
+ "s": "sf",
+"neighb":     33,
+"sample": "Street Food",
+"neighborhood": "Gabtoli Bus Terminal",
+"data": [  298.5, null,     41, 6642.7, null, null,     20,     10,    160,     75 ],
+"plot_name": "Gabtoli Bus Terminal, Street Food\n(N=10)",
+"fn": "33_sf.png" 
+},
+{
+ "s": "p",
+"neighb":     66,
+"sample": "Produce",
+"neighborhood": "Kamalapur Ticket Counter",
+"data": [  136.5, null,      5,      5,  179.5,   1444,  20782, null, 2209.7, null ],
+"plot_name": "Kamalapur Ticket Counter, Produce\n(N=10)",
+"fn": "66_p.png" 
+},
+{
+ "s": "s",
+"neighb":     66,
+"sample": "Surface Water",
+"neighborhood": "Kamalapur Ticket Counter",
+"data": [   1605,   2780,   3635, null, null, null, null, null, null, null ],
+"plot_name": "Kamalapur Ticket Counter, Surface Water\n(N=10)",
+"fn": "66_s.png" 
+},
+{
+ "s": "pa",
+"neighb":     66,
+"sample": "Particulate",
+"neighborhood": "Kamalapur Ticket Counter",
+"data": [  16805, 1.1391e+05,  19795,  80300, null, 1.2439e+05, null, 1.2081e+05,  30680,  29075 ],
+"plot_name": "Kamalapur Ticket Counter, Particulate\n(N=10)",
+"fn": "66_pa.png" 
+},
+{
+ "s": "d",
+"neighb":     66,
+"sample": "Drain Water",
+"neighborhood": "Kamalapur Ticket Counter",
+"data": [ null, null, null, null, null, null, null, null, null, null ],
+"plot_name": "Kamalapur Ticket Counter, Drain Water\n(N=10)",
+"fn": "66_d.png" 
+},
+{
+ "s": "bw",
+"neighb":     66,
+"sample": "Bathing Water",
+"neighborhood": "Kamalapur Ticket Counter",
+"data": [ null, null, null, null, null, null, null, null, null, null ],
+"plot_name": "Kamalapur Ticket Counter, Bathing Water\n(N=10)",
+"fn": "66_bw.png" 
+},
+{
+ "s": "f",
+"neighb":     66,
+"sample": "Flood Water",
+"neighborhood": "Kamalapur Ticket Counter",
+"data": [ 1.7496e+06, 4.138e+05,  62900, 9.547e+05, null, 1.0045e+05, null, null, null, 1.616e+05 ],
+"plot_name": "Kamalapur Ticket Counter, Flood Water\n(N=10)",
+"fn": "66_f.png" 
+},
+{
+ "s": "dw",
+"neighb":     66,
+"sample": "Municipal and Piped Water",
+"neighborhood": "Kamalapur Ticket Counter",
+"data": [ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ],
+"plot_name": "Kamalapur Ticket Counter, Municipal and Piped Water\n(N=20)",
+"fn": "66_dw.png" 
+},
+{
+ "s": "l",
+"neighb":     66,
+"sample": "Public Latrine",
+"neighborhood": "Kamalapur Ticket Counter",
+"data": [ null, null, null, null, null, null, null, null, null, null ],
+"plot_name": "Kamalapur Ticket Counter, Public Latrine\n(N=10)",
+"fn": "66_l.png" 
+},
+{
+ "s": "sf",
+"neighb":     66,
+"sample": "Street Food",
+"neighborhood": "Kamalapur Ticket Counter",
+"data": [  23508, 1733.5,  492.5,  156.5,  564.5, 2669.7,  120.5, null, null,     52 ],
+"plot_name": "Kamalapur Ticket Counter, Street Food\n(N=10)",
+"fn": "66_sf.png" 
+} 
+]
