@@ -8,9 +8,11 @@ library(RColorBrewer)
 
 
 # read data
-ff.multi <- read_excel("~/Desktop/SaniPath/Durban/Durban_Exposure.xlsx")
-ff.multi$perExposed = ff.multi$Percent/100
-ff.multi$Dose = 10^ff.multi$Dose
+# ff.multi <- read_excel("~/Desktop/SaniPath/Durban/Durban_Exposure.xlsx")
+load("~/Desktop/SaniPath/Durban/expo_durban.rda")
+ff.multi <- dat.expo
+# ff.multi$perExposed = ff.multi$Percent/100
+# ff.multi$Dose = 10^ff.multi$Dose
 
 
 #USE THIS TO GET RID OF ANY ESTIMATES WITH <=5 usable samples
@@ -23,7 +25,7 @@ df.multi$citylabel <- "Durban"
 df.multi$citylabel <-  factor(df.multi$citylabel, levels = unique(df.multi$citylabel))
 
 df.multi <- df.multi %>% 
-  mutate(sample = factor(.$Pathway, levels = factor(unique(Pathway))))
+  mutate(sample = factor(.$sample, levels = factor(unique(sample))))
 df.multi$sample
 
 
@@ -35,23 +37,22 @@ df.multi$sample
 
 # df.multi <- subset(df.multi, neighborhood=="Central")
 
+
 df.multi %>%
-  group_by(Hood, Age) %>%
+  group_by(neighborhood, age) %>%
   mutate(sum = sum(Dose)) %>%
-  mutate(perc = (Dose / sum) * 100) -> df.kampala
+  mutate(perc = (Dose / sum) * 100) -> df.durban
 
 # multi <- read_excel(paste0(getwd(),"/cross_country_data.xlsx"), col_names=TRUE, na="NA")
 
 
-
-
-multi <- df.kampala
+multi <- df.durban
 multi$dominant = "No"
 multi$dominantcount = 0
 multi$exposure=0
 multi$logexp=0
 sites <- unique(multi$site)
-neighborhoods <- unique(multi$Hood)
+neighborhoods <- unique(multi$neighborhood)
 
 # calculating exposure and log exposure
 for(p in 1:nrow(multi)){
@@ -66,9 +67,9 @@ for(p in 1:nrow(multi)){
 multiFinal = list()
 
 for(q in 1:length(neighborhoods)){
-  tempmulti1 <- filter(multi, Hood == neighborhoods[q], Age=='adult')
-  tempmulti2 <- filter(multi, Hood == neighborhoods[q], Age=='child')
-  print(tempmulti1$Hood)
+  tempmulti1 <- filter(multi, neighborhood == neighborhoods[q], pop=='a')
+  tempmulti2 <- filter(multi, neighborhood == neighborhoods[q], pop=='c')
+  print(tempmulti1$neighborhood)
   for(a in 1:nrow(tempmulti1)){
     maxExpA = max(tempmulti1$logexp)
     botRangeA = maxExpA - 1
@@ -99,23 +100,12 @@ for(q in 1:length(neighborhoods)){
 # combining the lists
 multiFinalGood = do.call(rbind, multiFinal)
 
-adult <- filter(multiFinalGood, Age=='adult')
-child <- filter(multiFinalGood, Age=='child')
+adult <- filter(multiFinalGood, pop=='a')
+child <- filter(multiFinalGood, pop=='c')
 
 # counting the number of dominant by pop and pathway
-with(multiFinalGood, table(Pathway, dominant, Age, Hood))
+with(multiFinalGood, table(sample, dominant, pop, neighborhood))
 
-
-# plotting count of dominant pathways
-colors <- c('#1a3157', '#3e65ae', '#086fba', '#588fc7', '#6fb4dd', '#81d1ef', '#8d98ab', '#ffffff', '#cccccc')
-asdf <- colorRampPalette(c('#1a3157', '#d4eaf7'))
-asdf2 <- asdf(10)
-plot_ly(data=adult, values=~dominantcount, labels=~sample, type='pie', hole=0.4,
-        marker=list(colors=colors, line=list(color='#CCCCCC', width=1)),
-        textinfo='label+value')
-plot_ly(data=child, values=~dominantcount, labels=~sample, type='pie', hole=0.4,
-        marker=list(colors=colors, line=list(color='#CCCCCC', width=1)),
-        textinfo="label+value")
 
 ###################################################################
 library(treemap)
@@ -129,9 +119,8 @@ library(readxl)
 
 
 # read data
-ff.multi <- read_excel("~/Desktop/SaniPath/Durban/Durban_Exposure.xlsx")
-ff.multi$perExposed = ff.multi$Percent/100
-ff.multi$Dose = 10^ff.multi$Dose
+load("~/Desktop/SaniPath/Durban/expo_durban.rda")
+ff.multi <- dat.expo
 
 
 #USE THIS TO GET RID OF ANY ESTIMATES WITH <=5 usable samples
@@ -144,22 +133,21 @@ df.multi$citylabel <- "Durban"
 df.multi$citylabel <-  factor(df.multi$citylabel, levels = unique(df.multi$citylabel))
 
 df.multi <- df.multi %>% 
-  mutate(sample = factor(.$Pathway, levels = factor(unique(Pathway))))
+  mutate(sample = factor(.$sample, levels = factor(unique(sample))))
 df.multi$sample
 
 
-
 df.multi %>%
-  group_by(Hood, Age) %>%
+  group_by(neighborhood, age) %>%
   mutate(sum = sum(Dose)) %>%
-  mutate(perc = (Dose / sum) * 100) -> df.kampala
+  mutate(perc = (Dose / sum) * 100) -> df.durban
 
 
 {
-  df.kampala %>% filter(Age == "adult") %>% {
+  df.durban %>% filter(age == "Adults") %>% {
     ggplot(., aes(area = Dose,
                   fill = log10(Dose),
-                  label = paste(Pathway, "\n", paste0(round(perc, 0), "%"), "\n"))) +
+                  label = paste(sample, "\n", paste0(round(perc, 0), "%"), "\n"))) +
       geom_treemap() +
       geom_treemap_text(colour = "white", place = "centre", grow = F, reflow = T) +
       scale_fill_gradient(
@@ -167,17 +155,17 @@ df.multi %>%
         breaks = log10(range(.$Dose)),
         labels = round(range(log10(.$Dose)))
       ) + theme_bw() +
-      facet_wrap(~Hood, nrow = 1) +
+      facet_wrap(~neighborhood, nrow = 1) +
       theme(legend.position = "none") +
       labs(fill = "Exposure",
-           title = "Total Exposure in Durban",
+           title = "Total Exposure in Durban, South Africa",
            subtitle = "Adults") 
   } -> plot.adults
   
-  df.kampala %>% filter(Age == "child") %>% {
+  df.durban %>% filter(age == "Children") %>% {
     ggplot(., aes(area = Dose,
                   fill = log10(Dose),
-                  label = paste(Pathway, "\n", paste0(round(perc, 0), "%"), "\n"))) +
+                  label = paste(sample, "\n", paste0(round(perc, 0), "%"), "\n"))) +
       geom_treemap() +
       geom_treemap_text(colour = "white", place = "centre", grow = F, reflow = T) +
       scale_fill_gradient(
@@ -185,10 +173,10 @@ df.multi %>%
         breaks = log10(range(.$Dose)),
         labels = round(range(log10(.$Dose)),0)
       ) + theme_bw() +
-      facet_wrap(~Hood, nrow = 1) +
+      facet_wrap(~neighborhood, nrow = 1) +
       theme(legend.position = "bottom") +
       labs(fill = "Exposure",
-           title = "Total Exposure in Durban",
+           title = "Total Exposure in Durban, South Africa",
            subtitle = "Children") 
   } -> plot.children
   
@@ -207,6 +195,7 @@ plot <- arrangeGrob(plot.adults, plot.children + theme(legend.position = "none")
                     heights = c(1.1, 1.1, 0.3)
 )
 
-ggsave(plot = plot, paste0("Durban/exposure_treemap_Durban_noremoval", Sys.Date(), ".png"), dpi = 300, width = 7, height = 6, units = "in")
+
+ggsave(plot = plot, paste0("~/Desktop/SaniPath/Durban/exposure_treemap_Durban_noremoval", Sys.Date(), ".png"), dpi = 300, width = 7, height = 6, units = "in")
 
 

@@ -1,0 +1,89 @@
+idexx_reading:
+  not_valid: 1.0
+  valid: 2.0
+idexx_value:
+  negative: 0.5
+  lower_limit: 1.0
+  cut_point: 200.0
+  upper_limit: 2419.6
+  censored: 9999.0
+membrane_reading:
+  TNTC: 1.0
+  TDTC: 2.0
+  valid: 3.0
+membrane_value:
+  negative: 0.5
+  lower_limit: 0.0e+00
+  cut_point: 10.0
+  upper_limit: 200.0
+  TDTC: 998.0
+  TNTC: 999.0
+denoms:
+  default: 100.0
+  p: 500.0
+  l: 20.0
+  coa: 20.0
+  cob: 20.0
+  fpa: 20.0
+  fpc: 20.0
+  pa: 2.0
+  # should this be 12 ^^^ instead of 2.0
+  sf: 10.0
+#####CASEY ADDED
+sample_type_code:
+  d: 1
+  p: 2
+  dw: 3
+  o: 4
+  s: 5
+  f: 6
+  l: 7
+  pa: 8
+  bw: 9
+  sf: 10
+  pl: 11
+  ms: 12
+  fb: 99
+  nc: 98
+  pc: 97
+  coa: 151
+  cob: 152
+  cofb: 159
+  fpa: 141
+  fpb: 142
+  fpc: 143
+  fpd: 144
+  fpe: 145
+  fpfb: 149
+  
+jags_par_env:
+  niter: 10000.0
+  nburn: 1000.0
+  thin: 1.0
+jags_par_freq:
+  niter: 10000.0
+  nburn: 1000.0
+  thin: 1.0
+cut_point:
+  times:
+  - 0.0e+00
+  - 5.0e+00
+  - 1.0e+01
+  days:
+  - 0.0e+00
+  - 3.0e+00
+  - 6.0e+00
+init_freq:
+  times:
+  - .na.real
+  - 2.0
+  - 7.0
+  - 12.0
+  days:
+  - .na.real
+  - 2.0
+  - 5.0
+  - 7.0
+  r: 1.0
+  p: 0.2
+nsim: 1000.0
