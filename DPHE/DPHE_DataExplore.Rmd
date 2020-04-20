@@ -1,0 +1,222 @@
+---
+title: "DPHE_DataExploration"
+author: "Casey Siesel"
+date: "4/9/2020"
+output: html_document
+---
+
+```{r setup, include=TRUE, message=FALSE, warning=FALSE}
+library(readxl)
+library(ggplot2)
+library(tidyverse)
+library(shiny)
+library(leaflet)
+library(expss)
+library(DT)
+library(hablar)
+
+setwd("~/Desktop/SaniPath/DPHE")
+
+#Importing datasets
+cumilla <- read_xlsx("cumilla_fsm.xlsx")
+gopalganj <- read_xlsx("gopalganj_fsm.xlsx")
+
+#reworking cumilla data to match colname of gopalganj and formatting gps
+cumilla <- cumilla %>%
+  mutate(city = "cumilla") %>%
+  mutate(`_Q_1_1 Location_longitude`= as.numeric(`_Q_1_1 Location_longitude`)) %>%
+  mutate(`_Q_1_1 Location_latitude`= as.numeric(`_Q_1_1 Location_latitude`)) %>%
+  rename("Q_5_5 Where is containment outlet connected?" = `Q_5_5 Where is the septic tank outlet connected?`)
+
+#formatting gps of gopalganj
+gopalganj <- gopalganj %>%
+  mutate(city = "gopalganj") %>%
+  mutate(`_Q_1_1 Location_longitude`= as.numeric(`_Q_1_1 Location_longitude`)) %>%
+  mutate(`_Q_1_1 Location_latitude`= as.numeric(`_Q_1_1 Location_latitude`))
+
+#merging datasets
+all_data <- merge.data.frame(cumilla, gopalganj, by=intersect(names(cumilla), names(gopalganj)), all=TRUE)
+
+#getting list of questions of interest (from Suraja)
+questions <- c("city", "Q_1 Settlement Type",
+"Q_2_3 Number of household members",
+"Q_2_4 Number of households in the structure",
+"Q_2_5 Number of residents in the structure",
+"Q_2_6 Household head",
+"Q_2_7 Main occupation of the household head",
+"Q_2_8 Source of income",
+"Q_2_8_1 Other Source of income",
+"Q_3_1 Main source of drinking water",
+"Q_3_2 Distance between containment and tube-well",
+"Q_3_3 Who usually carry drinking water?",
+"Q_4_1 Is there any toilet in the household?",
+"Q_4_2 Which toilet they use?",
+"Q_4_2_1 How much time it takes to reach the community toilet?",
+"Q_4_2_2 Waiting time for community toilet",
+"Q_4_2_3 Monthly cost for using community toilet in Taka",
+"Q_4_2_4 Do you pay for emptying containment of community toilet",
+"Q_4_2_5 How much do you pay for it?",
+"Q_4_3 How many toilets in the house?",
+"Q_4_3_1 Condition of the toilet 1",
+"Q_4_3_2 Condition of the toilet 2",
+"Q_4_3_3 Condition of the toilet 3",
+"Q_4_4_1 Flush type of the toilet 1",
+"Q_4_4_2 Flush type of the toilet 2",
+"Q_4_4_3 Flush type of the toilet 3",
+"Q_4_5 Source of pour flushing water",
+"Q_4_6 Quantity of water for pour flushing",
+"Q_4_7 Who usually carry pour flushing water?",
+"Q_4_8 Who is responsible to clean the toilet?",
+"Q_4_9 Why there is no toilet?",
+"Q 4_9_1 Other reason for no toilet",
+"Q_4_10 Are you willing to build/ improve your toilet?",
+"Q_4_11 What do you want to improve?",
+"Q_4_12 Amount of money willing to spend for improving toilet in Taka",
+"Q_4_13 Reason for not to improve the toilet",
+"Q_4_13_1 Other reasons not to improve toilet",
+"Q_5_1 Type of Containment",
+"Q_5_2_1 Length of the septic tank in feet",
+"Q_5_2_2 Width of the septic tank in feet",
+"Q_5_2_3 Depth of the septic tank in feet",
+"Q_5_2_1_1 Length of the septic tank in feet (measured)",
+"Q_5_2_2_1 Width of the septic tank in feet (measured)",
+"Q_5_2_3_1 Depth of the septic tank in feet (measured)",
+"Q 5_3 How many pits are there?",
+"Q 5_3_1 How do you use the double pit?",
+"Q 5_3_2 How often do you empty your one chamber?",
+"Q 5_4_1 Diameter of each pit in feet",
+"Q_5_4_2 Depth of each pit in feet",
+"Q_5_5 Where is containment outlet connected?",
+"Q_5_6 Construction year of containment",
+"Q_5_7 Condition of the containment",
+"Q_5_8 Outlet for gray water from bath, kitchen etc.",
+"Q_5_9 Ever desludged before?",
+"Q_5_10 How often do you desludge containment?",
+"Q_5_11 Year of last desludged",
+"Q_5_12 By whom was desludging done?",
+"Q_5_13 Which process was followed?",
+"Q_5_14 Where was desludged?",
+"Q_5_15 Reason of not desludging",
+"Q_5_16 Willingness to construct/ improve containment",
+"Q_5_17 Land availability to construct/ improve containment",
+"Q_5_18 Willingness to spend to construct/ improve containment in Taka",
+"Q_5_19 Reason of not constructing/ improving containment",
+"Q_5_20 Condition of surroundings of the respondent’s house by observation",
+"Q_6_1 Access road type",
+"Q_6_2 Vehicle type to access the containment",
+"Q_6_3 Distance of parking place from containment",
+"Q_6_4 Blockage of traffic if vehicle is parked during desludging",
+"Q_6_5 Containment readily accessible for emptying",
+"Q_6_6 Reason for not being readily accessible",
+#"Q_6_6_1 Other reasons not being readily accessible", no responses
+"Q_6_7 Condition of the tank lids/manual covers",
+"Q_6_8 How to reach out to the desludging operator/sweepers?",
+"Q_6_9 Required time to come the operators/sweepers",
+"Q_6_10 Cost per emptying in Taka",
+"Q_6_11 Interested to pay for improved desludging service?",
+"Q_6_11_1 How much do you want to spend per emptying in Taka?",
+"Q_6_12 Awareness about safe disposal of sludge material",
+"Q_7_1 Do you sell the recyclable waste?",
+"Q_7_2 Do you keep degradable and non-degradable wastes separately?",
+"Q_7_3 Interested to keep degradable and non-degradable wastes separately?",
+"Q_7_4 Who collect the solid waste from house?",
+"Q_7_5 Who usually dump solid waste?",
+"Q_7_6 Where is the waste dumped?",
+"Q_7_7 What is used to carry solid waste?",
+#"Q_7_7_1 Others used to carry solid waste", no responses
+"Q_7_8 Willingness to pay for waste collection service",
+"Q_7_9 How much do you want to pay monthly in Taka?",
+"Q_7_10 Reason of not being interested",
+"Q_7_11 Frequency of primary disposal",
+"Q_7_12 Condition of surrounding locality of the respondent’s house based on solid waste by observation",
+"Q_8_1 Average monthly income in Taka",
+"Q_8_2 Average monthly expenditure in Taka",
+"Q_8_3 Average monthly expenditure for sanitation",
+"Q_8_4 Average monthly expenditure for solid waste disposal")
+
+#changint the types of variables (all were char, some should be int)
+for(i in 1:length(questions)){
+  all_data[questions[i]]<-retype(all_data[questions[i]])
+  #special case for dates since the above function isn't super useful
+  if(questions[i]=="Q_5_6 Construction year of containment" | questions[i]=="Q_5_11 Year of last desludged"){
+    all_data[[questions[i]]]<-as.numeric(format(all_data[[questions[i]]],'%Y'))
+  }
+}
+
+#filtering the dataset to be only the questions of interest
+all_data <- select(all_data, c(questions))
+
+#getting lists of variable indices for character and integer variables
+#~will be used to determine if we calc mean,sd,max/min or freq of responses
+index_int <- c()
+index_char <- c()
+for(i in 1:length(questions)){
+  if(is.character(all_data[[i]])){
+    reference <- grep(questions[i], colnames(all_data))
+    index_char <- append(index_char, reference)
+  }
+  else{
+    reference <- grep(questions[i], colnames(all_data))
+    index_int <- append(index_int, reference)
+  }
+}
+
+
+```
+
+
+### Map of Surveys Cumilla
+
+```{r, echo=FALSE}
+col_cumilla <- colorFactor(palette=c("blue", "red"), cumilla$`Q_1 Settlement Type`)
+leaflet() %>%
+  addTiles() %>%
+  # addProviderTiles(providers$Esri.WorldImagery) %>%
+  addCircles(data=cumilla, lng=~`_Q_1_1 Location_longitude`, lat=~`_Q_1_1 Location_latitude`,
+             color=~col_cumilla(`Q_1 Settlement Type`), fillOpacity=1) %>%
+  addLegend(colors=c("blue", "red"), labels= c("Non-Slum", "Slum"))
+```
+
+
+### Map of Surveys Gopalganj
+
+```{r, echo=FALSE}
+col_gopal <- colorFactor(palette=c("blue", "red"), gopalganj$`Q_1 Settlement Type`)
+leaflet() %>%
+  addTiles() %>%
+  # addProviderTiles(providers$Esri.WorldImagery) %>%
+  addCircles(data=gopalganj, lng=~`_Q_1_1 Location_longitude`, lat=~`_Q_1_1 Location_latitude`,
+             color=~col_gopal(`Q_1 Settlement Type`), fillOpacity=1) %>%
+  addLegend(colors=c("blue", "red"), labels= c("Non-Slum", "Slum"))
+```
+
+
+
+### Questions of Interest
+```{r, results='asis', message=FALSE, warning=FALSE}
+for (i in 2:length(all_data)){
+  print(tags$h4(questions[i]))
+  if(i %in% index_char){
+    # print(with(all_data, htmlTable(city, all_data[[i]])))
+    temp <- all_data %>% 
+      with(., table(city, get(questions[i])))
+    print(htmlTable(temp, css.cell = "width: 250px", align="c"))
+    print(tags$br())
+    
+  }
+  else{
+    temp <- all_data %>% 
+      group_by(city) %>% 
+      summarise(., n=n()-sum(is.na(.data[[questions[i]]])),
+                mean=round(mean(.data[[questions[i]]], na.rm=T),2),
+                sd = round(sd(.data[[questions[i]]], na.rm=T),2),
+                min = min(.data[[questions[i]]], na.rm=T),
+                max = max(.data[[questions[i]]], na.rm=T))
+    print(htmlTable(temp, css.cell = c("width: 250px"), align="c"))
+    print(tags$br())    
+
+  }
+}
+
+
+```
