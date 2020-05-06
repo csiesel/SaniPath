@@ -13,11 +13,12 @@ child <-childobs %>%
   mutate(max=anytime(max), min=anytime(min), duration=difftime(max, min, units="hours"))
 
 #This is removing Jamie's observations
-child <- filter(child, !deviceid %in% c("ee.kobotoolbox.org:4sj639LhGFXbnASb",
+child <- filter(child, !deviceid %in% c(
+                                      "ee.kobotoolbox.org:4sj639LhGFXbnASb",
                                       "ee.kobotoolbox.org:uk0Tf91i44cc9x9s",
                                       "ee.kobotoolbox.org:4sj639LhGFXbnASb",
                                       "ee.kobotoolbox.org:6b7NqDTLxgxecLgc"))
-#This is removing practice observatins
+#This is removing practice observations
 child <- filter(child,  startdate >=as.Date("2019-08-22"))
 sum(child$duration)
 

@@ -9,9 +9,11 @@ library(shinyWidgets)
 library(ggh4x)
 #devtools::install_github("teunbrand/ggh4x")
 library(DT)
+library(typed)
 library(expss)
 library(tidyverse)
 library(reshape2)
+library(ggrepel)
 library(leaflet)
 library(RColorBrewer)
 library(ggplot2)
@@ -30,6 +32,13 @@ ui <-
     dashboardHeader(title = logo_sanipath),
     dashboardSidebar(
       sidebarMenu(
+        
+        menuItem(
+          "Dashboard Introduction",
+          tabName="intro",
+          icon=icon("atlas")
+        ),
+        
         HTML(
           "<div style=background-color:rgb(84,84,84);height:20px;> <h5 align=center> <b>
           <font color=white> SaniPath Multi-City Comparison </font>
@@ -96,6 +105,150 @@ ui <-
       #THis is loading the custom theme
       sanipath,
       tabItems(
+        
+        # **************************************************************************************************
+        ##### Tab 0: Intro ####
+        tabItem(
+          tabName = "intro",
+          tags$div(
+            style = "display:table;
+            background: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), url('od.png');
+            width:100%;
+            height:200px;
+            background-position:center;
+            background-size:cover;",
+            tags$div(
+              style = "display:table-cell;vertical-align:middle;",
+              tags$h1("SaniPath Multi-City Dashboard: Introduction",
+                      style = "text-align:center;color:rgb(255,255,255);font-weight:bold;")
+            )
+          ),
+          wellPanel(
+            style = "padding:10px;",
+            #Overview of tool
+            tags$h2(
+              "The SaniPath Exposure Assessment Tool is designed to assess public
+                      health risks associated with poor sanitation and to help prioritize sanitation
+                      investments based on the exposures that have the greatest public health impact.",
+              style = "text-align:center; color:rgb(26,49,87);"
+            ),
+            #extra line
+            tags$br(),
+            #typing cool thing
+            tags$h4(
+              style = "text-align:center;",
+              "The SaniPath Tool is for ",
+              tags$span(style = "color:#9E1A1A;",
+                        typed(
+                          c(
+                            "Researchers ^1000",
+                            "Municipal Authorities ^1000",
+                            "NGOs ^1000",
+                            "Funding Agencies ^1000",
+                            "Everyone ^10000"),
+                          backSpeed = 50, typeSpeed = 40, loop=TRUE)
+                        )
+            )
+          ),
+          tags$div(
+            style = "display:table;
+            background: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), url('sw.png');
+            width:100%;
+            height:200px;
+            background-position:center;
+            background-size:cover;",
+            tags$div(
+              style = "display:table-cell;vertical-align:middle;",
+              tags$h1("The Process",
+                      style = "text-align:center;color:rgb(255,255,255);font-weight:bold;")
+            )
+          ),
+          fluidRow(
+            column(6,
+                   wellPanel(
+                     style = "padding:10px; height:400px; display:table;",
+                     tags$div(style = "display:table-cell;vertical-align:middle;text-align:center;",
+                     tags$img(src = "sp_process.png", width = "90%")
+                   ))),
+            column(6,
+                   wellPanel(
+                     style = "padding:10px; height:400px; display:table;",
+                     tags$div(style = "display:table-cell;vertical-align:middle;",
+                     tags$h3(style="text-align:center;",
+                       "The SaniPath Tool is comprised of sequential modules that guide users
+                        through the SaniPath Exposure Assessment Process – from planning to data analysis. 
+                        The tool is systematic yet customizable to local contexts. Data is collected 
+                        via downloadable mobile forms that can be used on any Android mobile device 
+                        and is uploaded to an online repository. The user can then visit an online interface 
+                        to analyze the data and access graphical output of summary statistics and risk profiles.
+                        Lastly, a final report including key summary statistics, risk profiles,
+                        and program recommendations is generated for the user online."
+                     )
+                     )
+                     
+                   ))
+            ),
+          
+          tags$div(
+            style = "display:table;
+            background: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), url('ug_lt.png');
+            width:100%;
+            height:200px;
+            background-position:center;
+            background-size:cover;",
+            tags$div(
+              style = "display:table-cell;vertical-align:middle;",
+              tags$h1("The Data:", tags$br(), "From Behavior and Environmental Contamination to Exposure",
+                      style = "text-align:center;color:rgb(255,255,255);font-weight:bold;")
+            )
+          ),
+          wellPanel(style = "padding:10px;",
+            tags$h3("Estimating Exposure", style="text-align:center;text-decoration:underline;"),
+            tags$img(src="data.png", width="100%")
+          ),
+          tags$div(
+            style = "display:table;
+            background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url('durban.png');
+            width:100%;
+            height:200px;
+            background-position:center;
+            background-size:cover;",
+            tags$div(
+              style = "display:table-cell;vertical-align:middle;",
+              tags$h1("The Data:", tags$br(), "Dominant Pathways of Exposure",
+                      style = "text-align:center;color:rgb(255,255,255);font-weight:bold;")
+            )
+          ),
+          fluidRow(
+            column(6,
+                   wellPanel(
+                     style = "padding:10px; height:500px; display:table;",
+                     tags$div(style = "display:table-cell;vertical-align:middle;text-align:center;",
+                              tags$img(src = "dom.png", width = "90%")
+                     ))),
+            column(6,
+                   wellPanel(
+                     style = "padding:10px; height:500px; display:table;",
+                     tags$div(style = "display:table-cell;vertical-align:middle;",
+                              tags$h3(style="text-align:center;",
+                                      "To help guide sanitation investment and intervention, the SaniPath
+                                      Tool identifies dominant pathways of exposure to fecal contamination. 
+                                      The dominant pathways are defined as the pathways that make the greatest 
+                                      contributions to the total fecal exposure (Pathway B in the figure). By 
+                                      identifying the dominant pathways, action can be guided towards areas 
+                                      with the greatest potential for public health impact (greatest reduction 
+                                      in total exposure, bottom figure).
+"
+                              )
+                     )
+                     
+                   ))
+          ),
+          
+          
+          
+        ), #This is the end of the intro section
+
         # **************************************************************************************************
         ##### Tab 1: MultiCity Comparison ####
         tabItem(
@@ -132,7 +285,7 @@ ui <-
               )
             ),
             wellPanel(
-            h2("Count of Dominant Pathways across Cities", align = "center"),
+            h2("Total Count of Dominant Pathways for Adults and Children across Study Sites", align = "center"),
             plotOutput("multidom")
             )
         ),
@@ -407,7 +560,7 @@ server <- function(input, output, session) {
           #multineighborhood box
           output$multiboxneighb <- renderValueBox({
             valueBox(
-              length(unique(meta_neighb$neighborhood)), "Neighborhoods", icon = icon("city"),
+              length(unique(meta_neighb$neighborhood)), "Neighborhoods", icon = icon("city", lib='font-awesome'),
               color = "teal")
           })
           
@@ -425,17 +578,17 @@ server <- function(input, output, session) {
           
           #multi hh survey box
           output$multiboxhhsurveys <- renderValueBox({
-            valueBox(nrow(df.hh), "Household Surveys", icon=icon("clipboard"), color="aqua")
+            valueBox(nrow(df.hh), "Household Surveys", icon=icon("clipboard", lib='font-awesome'), color="aqua")
           })
           
           #multi cc survey box
           output$multiboxccsurveys <- renderValueBox({
-            valueBox(nrow(df.cc), "Community Surveys", icon=icon("clipboard"), color="aqua")
+            valueBox(nrow(df.cc), "Community Surveys", icon=icon("clipboard", lib='font-awesome'), color="aqua")
           })
           
           #multi sc survey box
           output$multiboxsssurveys <- renderValueBox({
-            valueBox(nrow(df.sc), "School Surveys", icon=icon("clipboard"), color="aqua")
+            valueBox(nrow(df.sc), "School Surveys", icon=icon("clipboard", lib='font-awesome'), color="aqua")
           })
           
           #multi dom Lollipop chart
@@ -461,7 +614,7 @@ server <- function(input, output, session) {
               coord_flip() +
               scale_color_manual(values = colors) +
               guides(fill=FALSE, size=FALSE, alpha=FALSE) +
-              labs(y="Dominant Pathway Count Across Neighborhoods", x="", color="Age") +
+              labs(y="Count of Neighborhoods with the Pathway as Dominant", x="", color="Age") +
               theme(
                 panel.grid.major.y = element_blank(),
                 panel.border = element_blank(),
@@ -506,7 +659,8 @@ server <- function(input, output, session) {
           #country-level map
           output$mapcountries <- renderLeaflet({
             leaflet(meta_dply) %>% 
-              addTiles() %>% 
+              setView(0,0,2) %>%
+              addProviderTiles(providers$Esri.WorldStreetMap) %>% 
               addMarkers(lng = ~long,
                          lat = ~lat, 
                          label = paste0(meta_dply$city, ", ", meta_dply$country),
@@ -520,7 +674,7 @@ server <- function(input, output, session) {
           #neighborhood box
           boxneighb <- reactive({
             meta_full <- filter(meta_full, city %in% citychoice())
-            valueBox(length(unique(meta_full$neighborhood)), "Neighborhoods", icon = icon("city"), color = "teal")
+            valueBox(length(unique(meta_full$neighborhood)), "Neighborhoods", icon = icon("city", lib='font-awesome'), color = "teal")
           })
           output$boxneighb <-renderValueBox(boxneighb())
           
@@ -534,21 +688,21 @@ server <- function(input, output, session) {
           #hhsurvey box
           boxhhsurveys <- reactive({
             df.hh <- filter(df.hh, city %in% citychoice())
-            valueBox(nrow(df.hh), "Household Surveys", icon=icon("clipboard"), color="aqua")
+            valueBox(nrow(df.hh), "Household Surveys", icon=icon("clipboard", lib='font-awesome'), color="aqua")
           })
           output$boxhhsurveys <- renderValueBox(boxhhsurveys())
   
           #ccsurvey box
           boxccsurveys <- reactive({
             df.cc <- filter(df.cc, city %in% citychoice())
-            valueBox(nrow(df.cc), "Community Surveys", icon=icon("clipboard"), color="aqua")
+            valueBox(nrow(df.cc), "Community Surveys", icon=icon("clipboard", lib='font-awesome'), color="aqua")
           })
           output$boxccsurveys <- renderValueBox(boxccsurveys())
           
           #ssurvey box
           boxsssurveys <- reactive({
             df.sc <- filter(df.sc, city %in% citychoice())
-            valueBox(nrow(df.sc), "School Surveys", icon=icon("clipboard"), color="aqua")
+            valueBox(nrow(df.sc), "School Surveys", icon=icon("clipboard", lib='font-awesome'), color="aqua")
           })
           output$boxsssurveys <- renderValueBox(boxsssurveys())
           
@@ -557,14 +711,56 @@ server <- function(input, output, session) {
             factpal <- colorFactor("plasma", meta_neighb$city)
             df11 <- left_join(meta_neighb, meta_dply[, c(1,2,4)], by=c("deployment_id" = "id"))
             df11 <- filter(df11, city %in% citychoice())
+            df.dominant <- aggregate(pathway ~ neighborhood + age + city, data=df.dominant, paste, collapse=", ")
+            
+            df11$adult_dom <- ""
+            df11$child_dom <- ""
+            
+            for(i in 1:nrow(df11)){
+              df11$adult_dom[i] <- df.dominant$pathway[which(df11$neighborhood[i]==df.dominant$neighborhood &
+                                                               df.dominant$age=="Adults")]
+              df11$child_dom[i] <- df.dominant$pathway[which(df11$neighborhood[i]==df.dominant$neighborhood &
+                                                               df.dominant$age=="Children")]
+            }
+            
+            labs <- lapply(seq(nrow(df11)), function(i) {
+              paste0('<p><b>',df11[i, "neighborhood"], ', ', df11[i, "city"],', ',df11[i, "country"], '</b>'," (", df11[i,"SES"],")",'</p>',
+                     '<p><u>', 'Dominant Pathways', "</u></p>",
+                '<p>', 'Adults: ', df11[i, "adult_dom"], '</p>',
+                '<p>', 'Children: ', df11[i, "child_dom"], '</p>') 
+            })
+            
+            
+            # df11 <- df11 %>%
+            #   mutate(icon = case_when(
+            #     SES== "very low income" | SES=="low income" ~ 'certificate',
+            #     SES=="middle income" ~ 'square',
+            #     SES=="high income" ~ 'play',
+            #     SES==NA ~ 'circle'
+            #   ))
+            # 
+            # my_icons <- awesomeIconList(
+            #   `very low income`= makeAwesomeIcon(icon='certificate', library='fa', markerColor='lightgray'),
+            #   `low income` = makeAwesomeIcon(icon='certificate', library='fa', markerColor='lightgray'),
+            #   `middle income` = makeAwesomeIcon(icon='square', library='fa', markerColor='lightgray'),
+            #   `high income` = makeAwesomeIcon(icon='play', library='fa', markerColor='lightgray')
+            # )
+            
+            
             leaflet(df11) %>% 
-              addTiles() %>%
+              addProviderTiles(providers$Esri.WorldStreetMap) %>%
+              # addAwesomeMarkers(lng = ~long,
+              #                  lat = ~lat, 
+              #                  icon = ~my_icons[SES],
+              #                  label = lapply(labs, htmltools::HTML),
+              #                  popup = ~deployment,
+              #                  options = markerOptions(draggable = F, riseOnHover = TRUE)) %>%
               addCircleMarkers(lng = ~long,
                                lat = ~lat, 
-                               label = paste0(df11$neighborhood, ", ", df11$city, " (", df11$country, ")"),
+                               color = factpal(df11$city),
+                               label = lapply(labs, htmltools::HTML),
                                popup = ~deployment,
-                               options = markerOptions(draggable = F, riseOnHover = TRUE),
-                               color = ~factpal(city))
+                               options = markerOptions(draggable = F, riseOnHover = TRUE))
             
           })
           output$mapneighborhoods <- renderLeaflet(mapneighborhoods())
@@ -577,14 +773,14 @@ server <- function(input, output, session) {
               return(NULL)
             }
               df.dominant <- filter(df.dominant, city %in% citychoice())
-              df.dominant <- aggregate(pathway ~ neighborhood + age + city, data=df.dominant, paste, collapse=", ")
+              df.dominant <- aggregate(pathway ~ neighborhood + age + city + SES, data=df.dominant, paste, collapse=", ")
               
               tableColor <- getPalette2(n=length(unique(df.dominant$city)))
               
               df.dominant <- df.dominant %>%
-                select(., c("city", "neighborhood", "age", "pathway")) %>%
+                select(., c("city", "neighborhood", "SES", "age", "pathway")) %>%
                 apply_labels(., neighborhood="Neighborhood", age="Age", pathway="Dominant Pathway(s)")
-              dom_table <- datatable(df.dominant, colnames=c("City", "Neighborhood","Age", "Dominant Pathway(s)"),
+              dom_table <- datatable(df.dominant, colnames=c("City", "Neighborhood", "SES","Age", "Dominant Pathway(s)"),
                                     options = list(pageLength=25,
                                                    columnDefs = list(list(className = 'dt-center',targets = 0:4))))
               dom_table %>% formatStyle(columns= "city", target="row",
@@ -594,33 +790,43 @@ server <- function(input, output, session) {
 
         # **************************************************************************************************
         #### Behavior Tab####
+       
+          
           output$plot_behavior <- renderPlot({
             if(is.null(citychoice()) | is.null(bxchoice())){
               return(NULL)
             }
+
             df.behav.city %>%
               filter(., city %in% citychoice() & sample_type %in% bxchoice()) %>%
-              melt(., id.vars = c("neighb_UID", "sample_type", "pop", "city", "country", "citylabel", "deployment_id", "neighborhood")) %>%
+              melt(., id.vars = c("neighb_UID", "sample_type", "pop", "city", "country", "citylabel", "deployment_id", "neighborhood", "unit", "SES")) %>%
               na.omit(value) %>%
               # ggplot(aes(x = factor(neighb_UID), y = value, fill = variable)) +
-              ggplot(aes(x = neighborhood, y = value, fill = variable)) + #add value labels
-              geom_bar(stat = "identity") +
-              facet_nested(pop ~ sample_type + city, scales = "free", space = "free") + #scales = "free_x"
+              ggplot(., aes(x = neighborhood, y = value, fill = variable)) + #add value labels, add linetype=SES if interested
+              geom_bar(stat = "identity", colour="black") +
+              geom_point(aes(x= neighborhood, y=-.01, shape=SES)) +
+              # geom_text(aes(label=SES), stat="identity", position=position_stack(0.5)) +
+              coord_flip() +
+              facet_nested(pop + city ~ sample_type + unit, scales = "free", space = "free") + #scales = "free_x"
               theme_bw() +
               labs(title = "Distribution of Behaviors",
                    fill = "Frequency",
-                   x = "City",
+                   shape = "SES",
+                   x = "Neighborhood",
                    y = "Percent") +
               # theme(strip.text.y = element_text(size = 7)) +
               scale_fill_brewer(palette="Set2") +
+              # scale_linetype_manual(values=c("solid", "dashed", "dotted", "twodash")) +
               theme(axis.text.x = element_text(angle = 45, hjust = 0.95, size = 7),
                     # theme(axis.text.x = element_text(angle = 90, hjust = 0.95, vjust = 0.2),
                     strip.text.x = element_text(size = 10),
                     strip.text.y = element_text(size = 10),
                     strip.background = element_rect(fill="grey"),
+                    strip.placement = "outside",
                     legend.position="bottom",
                     panel.spacing=unit(0.5,"lines")) + 
-              scale_y_continuous(labels = scales::percent)
+              scale_y_continuous(breaks=seq(0,1,by=.5), labels = scales::percent) +
+              guides(fill = guide_legend(override.aes = list(shape = NA)))
                   
                   
                   
@@ -632,12 +838,12 @@ server <- function(input, output, session) {
             }
             df.behav.all %>%
               filter(., city %in% citychoice() & sample_type %in% bxchoice()) %>%
-              melt(., id.vars = c("city", "sample_type", "pop")) %>%
+              melt(., id.vars = c("city", "sample_type", "pop", "unit")) %>%
               na.omit(value) %>%
               # ggplot(aes(x = factor(neighb_UID), y = value, fill = variable)) +
               ggplot(aes(x = city, y = value, fill = variable)) + #add value labels
               geom_bar(stat = "identity") +
-              facet_nested(pop ~ sample_type, scales = "free", space = "free") + #scales = "free_x"
+              facet_nested(pop ~ sample_type + unit, scales = "free", space = "free") + #scales = "free_x"
               theme_bw() +
               labs(title = "Distribution of Behaviors",
                    fill = "Frequency",
@@ -650,6 +856,9 @@ server <- function(input, output, session) {
                     strip.text.x = element_text(size = 10),
                     strip.text.y = element_text(size = 10),
                     strip.background = element_rect(fill="grey"),
+                    
+                    strip.placement = "outside",
+                    
                     legend.position="bottom",
                     panel.spacing=unit(0.5,"lines")) + 
               scale_y_continuous(labels = scales::percent)
@@ -696,7 +905,7 @@ server <- function(input, output, session) {
             df11 <- filter(df11, city %in% citychoice())
             
             leaflet() %>% 
-              addTiles() %>%
+              addProviderTiles(providers$Esri.WorldStreetMap) %>%
               # addProviderTiles(providers$MtbMap) %>%
               # addProviderTiles(providers$Stamen.TonerLines,
               #                  options = providerTileOptions(opacity = 0.35)) %>%
@@ -728,7 +937,7 @@ server <- function(input, output, session) {
               summarise(mean.cont = mean(log10(ec_conc), na.rm=TRUE))
             
             df.ecdata %>%
-              ggplot(., aes(y=factor(hood, levels=(unique(hood))), x=log10(ec_conc))) +
+              ggplot(., aes(y=factor(hood, levels=(unique(hood))), x=log10(ec_conc), linetype=SES)) +
               geom_density_ridges(aes(fill=city), quantile_lines=TRUE, quantiles=2, panel_scaling=FALSE
                                   #comment this chunk out to get rid of lines: from here
                                   ,
@@ -745,15 +954,18 @@ server <- function(input, output, session) {
               # facet_grid( ~ sample_type_name, scales = "free_x", space = "free_x") +
               facet_wrap( ~ sample_type_name, scales = "fixed", nrow=4, ncol=3) +
               labs(fill = "City",
+                   linetype = "SES",
                    x = "E. coli (Log10)",
                    y = "") +
               scale_x_continuous(breaks = c(0,2,4,6,8,10)) +
+              scale_linetype_manual(values=c("solid", "dashed", "dotted", "twodash")) +
               theme_bw() +
               theme(axis.text.x = element_text(hjust = 0.95, vjust = 0.2),
                     axis.text=element_text(size=8),
                     strip.background = element_rect(fill="white"),
                     legend.position="bottom",
-                    legend.justification="center") +
+                    legend.justification="center",
+                    legend.box = "vertical") +
               colScale
             
           })

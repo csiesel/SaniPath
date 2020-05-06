@@ -1,4 +1,4 @@
-sanipath <- shinyDashboardThemeDIY(
+sanipath <- shinyDashboardThemeDIYCasey(
   
   #SP Top BLue: 26,49,87
   #SP Light blue: 212, 234, 247

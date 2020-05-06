@@ -43,6 +43,10 @@ df.multi %>%
   mutate(perc = (Dose / sum) * 100) -> df.kampala
 
 
+
+#THIS IS REMOVING SF from DTK neighborhood!!!!!!
+df.kampala$Dose[which(df.kampala$neighborhood=="DTK" & df.kampala$sample=="Street Food")] <- 0
+
 {
   df.kampala %>% filter(age == "Adults") %>% {
     ggplot(., aes(area = Dose,
@@ -95,5 +99,5 @@ plot <- arrangeGrob(plot.adults, plot.children + theme(legend.position = "none")
                     heights = c(1.1, 1.1, 0.3)
 )
 
-ggsave(plot = plot, paste0("exposure_treemap_dakar", Sys.Date(), ".png"), dpi = 300, width = 7, height = 6, units = "in")
+ggsave(plot = plot, paste0("exposure_treemap_dakar_NOSF", Sys.Date(), ".png"), dpi = 300, width = 7, height = 6, units = "in")
 

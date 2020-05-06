@@ -5,9 +5,9 @@ account: csiesel
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 2023356
-bundleId: 2967032
+bundleId: 3082023
 url: https://csiesel.shinyapps.io/SaniPath_MulticityDashboard/
-when: 1585967107.87157
+when: 1588176192.72909
 asMultiple: FALSE
 asStatic: FALSE
 ignoredFiles: app.R
