@@ -26,15 +26,32 @@ ec_data_es %>%
             min = min(log10(ec_conc), na.rm=T), 
             max = max(log10(ec_conc), na.rm=T))
 
+#### ES Plots ####
+pdf(paste("~/Desktop/SaniPath/SPT/output/","es_ec_", Sys.Date(),".pdf",sep=""), width = 11, height=8.5)
 ec_data_es %>% 
   filter(!is.na(count1)) %>% 
-  group_by(sample_type) %>% 
-  ggplot(., aes(x=ec_conc, y=sample_type)) +
-  geom_density_ridges()
+  mutate(sample_type_name = ifelse(sample_type==11, "Pooled Latrine",
+                            ifelse(sample_type==12, "Moore Swab",
+                            ifelse(sample_type==16, "Pumping Station - UF",
+                            ifelse(sample_type==99, "Field Blank", "??"))))) %>%
+  ggplot(., aes(y=factor(sample_type_name, levels=(unique(sample_type_name)), labels=), x=log10(ec_conc))) +
+  geom_density_ridges(quantile_lines=TRUE, quantiles=2
+                      #comment this chunk out to get rid of lines: from here
+                      ,
+                      jittered_points = TRUE,
+                      # position = position_points_jitter(width = 0.05, height = 0),
+                      # point_shape = '|',
+                      point_size = 0.75,
+                      point_alpha = 0.5,
+                      alpha = 0.7
+                      #to here
+  ) +
+  # scale_x_continuous(breaks = c(0,2,4,6,8,10,12), limits=c(-1,12)) +
+  labs(title="Environmental Surveillance: E. coli Concentration by Sample Type", x="log10 E. Coli Concentration", y="Sample Type")
+dev.off()
 
-
-pdf(paste("~/Desktop/SaniPath/SPT/output/","spt_ec_", Sys.Date(),".pdf",sep=""), width = 10, height=8)
-
+#### SPT Plots ####
+pdf(paste("~/Desktop/SaniPath/SPT/output/","spt_ec_", Sys.Date(),".pdf",sep=""), width = 11, height=8.5)
 ec_data_spt %>%
   filter(!is.na(count1)) %>% 
   mutate(sample_type_name = ifelse(sample_type==1, "Open Drain",
@@ -48,7 +65,7 @@ ec_data_spt %>%
                             ifelse(sample_type==10, "Street Food",
                             ifelse(sample_type==99, "Field Blank",
                             "??"))))))))))) %>%
-    ggplot(., aes(y=factor(sample_type_name, levels=(unique(sample_type_name)), labels=), x=log10(ec_conc))) +
+  ggplot(., aes(y=factor(sample_type_name, levels=(unique(sample_type_name)), labels=), x=log10(ec_conc))) +
   geom_density_ridges(quantile_lines=TRUE, quantiles=2
                       #comment this chunk out to get rid of lines: from here
                       ,
@@ -60,9 +77,37 @@ ec_data_spt %>%
                       alpha = 0.7
                       #to here
   ) +
-  labs(title="E. coli Concentration by Sample Type", x="log10 E. Coli Concentration", y="Sample Type")
+  # scale_x_continuous(breaks = c(0,2,4,6,8,10,12), limits=c(-1,12)) +
+  labs(title="Exposure Assessment: E. coli Concentration by Sample Type", x="log10 E. Coli Concentration", y="Sample Type")
   
 dev.off()
 
 
+#### SO Plots ####
+pdf(paste("~/Desktop/SaniPath/SPT/output/","so_ec_", Sys.Date(),".pdf",sep=""), width = 11, height=8.5)
+ec_data_so %>% 
+  filter(!is.na(count1)) %>% 
+  mutate(sample_type_name = ifelse(sample_type==141, "Cutting /Grinding Surface (FPa)",
+                            ifelse(sample_type==142, "Storage/Preparation Bowl (FPb)",
+                            ifelse(sample_type==143, "Food Preparation Area (FPc)",
+                            ifelse(sample_type==144, "Cooking/Preparation Water (FPd)",
+                            ifelse(sample_type==145, "Cooking/Preparation Utensil (FPe)",
+                            ifelse(sample_type==151, "Child Obs - Floor",
+                            ifelse(sample_type==152, "Child Obs - Off Ground",
+                                                    "??")))))))) %>%
+  ggplot(., aes(y=factor(sample_type_name, levels=(unique(sample_type_name)), labels=), x=log10(ec_conc))) +
+  geom_density_ridges(quantile_lines=TRUE, quantiles=2
+                      #comment this chunk out to get rid of lines: from here
+                      ,
+                      jittered_points = TRUE,
+                      # position = position_points_jitter(width = 0.05, height = 0),
+                      # point_shape = '|',
+                      point_size = 0.75,
+                      point_alpha = 0.5,
+                      alpha = 0.7
+                      #to here
+  ) +
+  # scale_x_continuous(breaks = c(0,2,4,6,8,10,12), limits=c(-1,12)) +
+  labs(title="Structured Observation: E. coli Concentration by Sample Type", x="log10 E. Coli Concentration", y="Sample Type")
+dev.off()
 

@@ -64,9 +64,9 @@ ec_merge_so <- function(collection_data, lab_data) {
   ec_data <- merge(collection_data, lab_data, by.y="so_index", by.x="_index")
   names(ec_data)[which(names(ec_data)=="lab_id")]<-"sampleid"  
   ec_data <- ec_data %>%
-    mutate(sample_type = ifelse(is.na(col_sample_type_fp),
-                                col_sample_type_co,
-                                col_sample_type_fp))
+    mutate(sample_type = ifelse(lab_sample_type==14,
+                                lab_sample_type_fp,
+                                lab_sample_type_co))
   
  
   ec_data$sample_type<-as.numeric(ec_data$sample_type)
