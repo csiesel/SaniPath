@@ -132,14 +132,85 @@ fix_2.1 <- sample(fix_2.1, clean_2.1) %>%
 
 
 #### Form 2.2 ####
+# This one has some special cleaning going on...
 raw_2.2 <- read_sheet(url, sheet = "2.2.raw")
-clean_2.2 <- read_sheet(url, sheet = "2.2.clean")
-clean_2.2 <- clean_2.2[complete.cases(clean_2.2$col_id),]
-dup_2.2 <- raw_2.2$col_id[raw_2.2$col_id %in% raw_2.2$col_id[duplicated(raw_2.2$col_id)]]
-fix_2.2 <- raw_2.2 %>%
-  filter(col_id %in% dup_2.2)
 
+form_2.2 <- raw_2.2[-c(1:12),]
 
+#renaming to match further code
+so <- form_2.2
+
+#creating variables for fourth COb sample (1 observation had 4 COb samples)
+so$col_cob_col4 <- as.character(NA)
+so$col_cob_ids4 <- as.character(NA)
+so$col_cob4 <- as.character(NA)
+so$col_cob_other4 <- as.character(NA)
+so$col_cob14 <- as.character(NA)
+so$col_cob1_other4 <- as.character(NA)
+
+#splitting into food prep and child obs samples
+fp <- so %>% filter(col_sample_type==14)
+co <- so %>% filter(col_sample_type==15)
+
+## Food Prep ##
+#creating col_id_so variable to match with MF lab_id
+foodprep <- fp %>%
+  mutate(col_id_so = ifelse(!is.na(col_fpa_id),
+                            toupper(col_fpa_id),
+                            ifelse(!is.na(col_pfb_id),
+                                   toupper(col_pfb_id),
+                                   ifelse(!is.na(col_fpc_id),
+                                          toupper(col_fpc_id),
+                                          ifelse(!is.na(col_fpd_id),
+                                                 toupper(col_fpd_id),
+                                                 toupper(col_fpe_id))))))
+
+## Child Obs ##
+#get unique codes for HH's
+ids <- unique(co$col_id)
+#setting up temp2 dataframe
+childobs <-data.frame()
+
+for(p in 1:length(ids)){
+  #obs references that have the same hh id
+  refs <- which(co$col_id==ids[p])
+  #temporary dataframe for all data with same hh id
+  temp <- co[c(refs),]
+  #getting unique COb sample names - used in {for} loop below
+  cob1 <- unique(na.omit(str_extract(c(temp$col_cob_ids, temp$col_cob_ids2, temp$col_cob_ids3), "^COb....")))
+  #getting obs number that has COa data - all COb's will be added to this row
+  v <- which(!is.na(temp$col_coa_id))
+  for(i in 1:length(cob1)){
+    print(paste0("num cob: ", i))
+    #Getting which column has the COb sample id
+    z <- which(apply(temp, 2, function(x) any(grepl(cob1[i],x))))
+    #gets which obs has the COb id
+    w <- which(temp[z]==cob1[i])
+    #all of the below if/else loops set the COb id's from the separate observations
+    # to the same columns with the observation containing the COa sample
+    # essentially collapsing all CObs into the same COa row
+    if(i==1){temp[v,103:108] <- temp[w,z:(z+5)]}
+    else if(i==2){temp[v,109:114] <- temp[w,z:(z+5)]}
+    else if(i==3){temp[v,115:120] <- temp[w,z:(z+5)]}
+    else if(i==4){temp[v,145:149] <- temp[w,z:(z+4)]}
+  }
+  #building the final dataset
+  childobs <- rbind(childobs, temp)
+}
+
+#filtering to only the rows with full data (i.e. those with COa id's)
+childobs <- childobs %>% filter(!is.na(col_coa_id)) %>%
+  mutate(col_coa_id=toupper(col_coa_id),
+         col_cob_ids=toupper(col_cob_ids),
+         col_cob_ids2=toupper(col_cob_ids2),
+         col_cob_ids3=toupper(col_cob_ids3),
+         col_cob_ids4=toupper(col_cob_ids4),
+         col_id_so=NA)
+
+#combining child and foodprep again
+so_full <- rbind(childobs, foodprep)
+
+raw_2.2 <- so_full
 
 
 #### Form 2.4 ####
@@ -309,6 +380,7 @@ any(duplicated(raw_3.5$lab_id))
 
 
 write_excel_csv(raw_2.1, paste0("SPT/data/raw_2.1_", Sys.Date(), ".csv"))
+write_excel_csv(raw_2.2, paste0("SPT/data/raw_2.2_", Sys.Date(), ".csv"))
 write_excel_csv(raw_2.4, paste0("SPT/data/raw_2.4_", Sys.Date(), ".csv"))
 write_excel_csv(raw_3.1, paste0("SPT/data/raw_3.1_", Sys.Date(), ".csv"))
 write_excel_csv(raw_3.2, paste0("SPT/data/raw_3.2_", Sys.Date(), ".csv"))
@@ -317,6 +389,7 @@ write_excel_csv(raw_3.4, paste0("SPT/data/raw_3.4_", Sys.Date(), ".csv"))
 write_excel_csv(raw_3.5, paste0("SPT/data/raw_3.5_", Sys.Date(), ".csv"))
 
 
-rm(dup_2.1, dup_2.2, dup_2.4, dup_3.1, dup_3.2, dup_3.3, dup_3.4, dup_3.5,
-   clean_2.1, clean_2.2, clean_2.4, clean_3.1, clean_3.2, clean_3.3, clean_3.4, clean_3.5,
-   fix_2.1, fix_2.2, fix_2.4, fix_3.1, fix_3.2, fix_3.3, fix_3.4, fix_3.5)
+rm(dup_2.1, dup_2.4, dup_3.1, dup_3.2, dup_3.3, dup_3.4, dup_3.5,
+   clean_2.1, clean_2.4, clean_3.1, clean_3.2, clean_3.3, clean_3.4, clean_3.5,
+   fix_2.1, fix_2.4, fix_3.1, fix_3.2, fix_3.3, fix_3.4, fix_3.5,
+   temp)

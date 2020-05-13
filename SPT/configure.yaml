@@ -21,14 +21,16 @@ membrane_value:
 denoms:
   default: 100.0
   p: 500.0
+  #should swabs be 40? they add 2x 20ml for a total of 40ml elute
   l: 20.0
+  #added so swab denoms
   coa: 20.0
   cob: 20.0
   fpa: 20.0
   fpc: 20.0
   pa: 2.0
-  # should this be 12 ^^^ instead of 2.0
-  sf: 10.0
+  #changed from 10 to 25
+  sf: 25.0
 #####CASEY ADDED
 sample_type_code:
   d: 1
@@ -43,6 +45,7 @@ sample_type_code:
   sf: 10
   pl: 11
   ms: 12
+  uf: 16
   fb: 99
   nc: 98
   pc: 97

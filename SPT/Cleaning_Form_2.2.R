@@ -14,11 +14,11 @@ so <- form_2.2
 
 #creating variables for fourth COb sample (1 observation had 4 COb samples)
 so$col_cob_col4 <- as.character(NA)
-so$col_cob_ids4 <- as.integer(NA)
+so$col_cob_ids4 <- as.character(NA)
 so$col_cob4 <- as.character(NA)
-so$col_cob_other4 <- as.integer(NA)
+so$col_cob_other4 <- as.character(NA)
 so$col_cob14 <- as.character(NA)
-so$col_cob1_other4 <- as.integer(NA)
+so$col_cob1_other4 <- as.character(NA)
 
 #splitting into food prep and child obs samples
 fp <- so %>% filter(col_sample_type==14)
@@ -32,9 +32,22 @@ coalesce_by_column <- function(df) {
   return(dplyr::coalesce(!!! as.list(df)))
 }
 #group by HH code and then collapse to one row
-foodprep <- fp %>% 
-  group_by(col_id) %>% 
-  summarise_all(coalesce_by_column)
+# foodprep <- fp %>% 
+#   group_by(col_id) %>% 
+#   summarise_all(coalesce_by_column)
+
+#creating col_id_so variable to match with MF lab_id
+foodprep <- fp %>%
+  mutate(col_id_so = ifelse(!is.na(col_fpa_id),
+                            toupper(col_fpa_id),
+                            ifelse(!is.na(col_pfb_id),
+                                   toupper(col_pfb_id),
+                                   ifelse(!is.na(col_fpc_id),
+                                          toupper(col_fpc_id),
+                                          ifelse(!is.na(col_fpd_id),
+                                                 toupper(col_fpd_id),
+                                                 toupper(col_fpe_id))))))
+
 
 
 #### Child Obs ####
@@ -44,6 +57,7 @@ ids <- unique(co$col_id)
 
 #setting up temp2 dataframe
 childobs <-data.frame()
+
 
 for(p in 1:length(ids)){
   #obs references that have the same hh id
@@ -74,7 +88,7 @@ for(p in 1:length(ids)){
       temp[v,115:120] <- temp[w,z:(z+5)]
     }
     else if(i==4){
-      temp[v,144:149] <- temp[w,z:(z+5)]
+      temp[v,145:149] <- temp[w,z:(z+4)]
     }
   }
   #building the final dataset
@@ -82,10 +96,18 @@ for(p in 1:length(ids)){
 }
 
 #filtering to only the rows with full data (i.e. those with COa id's)
-childobs <- childobs %>% filter(!is.na(col_coa_id))
+childobs <- childobs %>% filter(!is.na(col_coa_id)) %>%
+  mutate(col_coa_id=toupper(col_coa_id),
+         col_cob_ids=toupper(col_cob_ids),
+         col_cob_ids2=toupper(col_cob_ids2),
+         col_cob_ids3=toupper(col_cob_ids3),
+         col_cob_ids4=toupper(col_cob_ids4),
+         col_id_so=NA)
 
 #combining child and foodprep again
 so_full <- rbind(childobs, foodprep)
+
+
 
 #writing csv
 write_csv(so_full, paste0(path,"2.2_cleaned_22Apr2020_cs.csv"))
