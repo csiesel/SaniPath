@@ -22,15 +22,15 @@ denoms:
   default: 100.0
   p: 500.0
   #should swabs be 40? they add 2x 20ml for a total of 40ml elute
-  l: 20.0
+  l: 40.0
   #added so swab denoms
-  coa: 20.0
-  cob: 20.0
-  fpa: 20.0
-  fpc: 20.0
+  coa: 40.0
+  cob: 40.0
+  fpa: 40.0
+  fpc: 40.0
   pa: 2.0
-  #changed from 10 to 25
-  sf: 25.0
+  #changed from 10 to 9.0 (using 225mL and 25g so 225mL/25g=9)
+  sf: 9.0
 #####CASEY ADDED
 sample_type_code:
   d: 1

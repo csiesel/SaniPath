@@ -2,7 +2,7 @@ source("~/Desktop/SaniPath/SPT/3_SPT_Merge.R")
 
 # Loading in the model files and config.yaml
 sapply(grep('.R$', list.files('SPT/model', full.names = T), value=T), source)
-configure <- yaml::yaml.load_file('SPT/configure.yaml')
+configure <- yaml::yaml.load_file('SPT/model/configure.yaml')
 
 #### SPT EC ####
 ec_data_spt <- create_ecData(col_spt, mf, mpn_tbl = NULL, configure$membrane_reading, configure$membrane_value, configure$denoms, MF=T)
@@ -25,7 +25,7 @@ conc_data_spt <- compute_concentrations(col_spt, mf, configure=configure, pathwa
                                     pathway_labels = pathway_labels,
                                     neighborhood_mapping = neighbs)
 
-make_plots(conc_data_spt, type='hist', output_dir="SPT/plots/spt/", width=NA, height=NA, units='in', dpi=72, convert_px=T, parallel=F, nc=detectCores(), lab_MF=T, save=T, .return_plots=T)
+# make_plots(conc_data_spt, type='hist', output_dir="SPT/plots/spt/", width=NA, height=NA, units='in', dpi=72, convert_px=T, parallel=F, nc=detectCores(), lab_MF=T, save=T, .return_plots=T)
 
 
 #### ES EC ####
@@ -37,7 +37,7 @@ conc_data_es <- compute_concentrationsES(col_es, mf, configure=configure, pathwa
                                        pathway_labels = pathway_labels,
                                        neighborhood_mapping = wards)
 
-make_plots(conc_data_es, type='hist', output_dir="SPT/plots/es/", width=NA, height=NA, units='in', dpi=72, convert_px=T, parallel=F, nc=detectCores(), lab_MF=T, save=T, .return_plots=T)
+# make_plots(conc_data_es, type='hist', output_dir="SPT/plots/es/", width=NA, height=NA, units='in', dpi=72, convert_px=T, parallel=F, nc=detectCores(), lab_MF=T, save=T, .return_plots=T)
 
 
 #### SO EC ####
