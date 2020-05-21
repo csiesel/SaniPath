@@ -64,7 +64,7 @@ compute_report <- function(params = list(city_name = 'Atlanta, GA',
 
   # make a dataframe of results for use throughout the report
   params$rpt_results <- report_results(ps_freq, freq_thresh)
-  
+
   params$pop_rpt_results <- params$rpt_results %>% filter(age == ifelse(populations$adults==TRUE,'Adults','Children'))
   # make the summary pathway information for executive summary
   params$top_pathways <- summary.top_pathways(params$rpt_results, top_n=3)
@@ -261,7 +261,7 @@ discussion.high_exposure_neighborhood <- function(rpt_results) {
 
   hdn <- rpt_results %>%
     filter(neighborhood == exposure$neighborhood & age == exposure$age)
-  
+
   return(hdn)
 }
 
@@ -275,10 +275,10 @@ discussion.high_exposure_neighborhood_table_data <- function(rpt_results) {
   # neighborhood and population is the max
   exposure <- discussion.mark_exposure(rpt_results) %>%
     filter(maxE)
-  
+
   hdn2 <- rpt_results%>%
     filter(neighborhood == exposure$neighborhood)
-  
+
   return(hdn2)
 }
 
@@ -331,8 +331,17 @@ discussion.exposure_plot <- function(exposure_data, lab_MF=F) {
   exposure_data %<>%
     rename('sample' = 'pathway')
   plots <- lapply(1:nrow(exposure_data),  function(x) {
-    x <- exposure_data[x,]
-    make_pplplot(as.list(x), lab_MF = lab_MF)
+    x <- as.list(exposure_data[x,])
+    make_pplplot(x,
+                 title= x$sample,
+                 subtitle = sprintf('%s exposed\n%s %s',
+                                    scales::percent(round(x$n/100, 3)),
+                                    paste('Log10',round(if_else(is_null(x$dose), 0, x$dose), 1)),
+                                    lab_label(lab_MF)),
+                 caption = '',
+                 lab_MF = lab_MF) +
+      theme(plot.title = element_text(size=8),
+            plot.subtitle = element_text(size=6))
   })
 
 
@@ -349,7 +358,11 @@ discussion.exposure_plot <- function(exposure_data, lab_MF=F) {
   return(arrangeGrob(grobs=plots,
                nrow=nrows,
                ncol=ncols,
-               left=unique(exposure_data$neighborhood)))
+               left=sprintf("%s, %s",
+                            unique(exposure_data$neighborhood),
+                            unique(exposure_data$age)),
+               bottom =  grid::textGrob("Note - Dose values are displayed in log scale", gp=grid::gpar(fontsize=6))
+               ))
 }
 
 discussion.high_exposure_neighborhood_plot <- function(hdn, lab_MF=F) {
@@ -405,22 +418,22 @@ determine_discussion <- function(pop_rpt_results, neighborhood, n=3) {
               nonlogE = sum(nonlogE),
               n_neighborhoods = n_distinct(neighborhood),
               high_freq = n_distinct(neighborhood[freq == 1]),
-              low_freq = n_distinct(neighborhood[freq == 0]), 
-              high_dose = sum(dominant == 1), 
+              low_freq = n_distinct(neighborhood[freq == 0]),
+              high_dose = sum(dominant == 1),
               low_dose = sum(dominant == 0)) %>%
     arrange(desc(n_dom), desc(nonlogE))
-  
+
   pop_rpt_results <- r
   if(nrow(pop_rpt_results)>n){
     pop_rpt_results %<>% .[1:n,]
   }
-  
+
   return(pop_rpt_results)
-  
+
 }
-  
-  
-  
+
+
+
 discussion.blocks <- function(pop_rpt_results, params, n=3, disc_dir='report_sections/discussion_paragraphs/') {
   # Generate the discussion paragraphs
   # will pull file based on pathway code in the file name
@@ -584,7 +597,7 @@ adults_and_children_study <- function(params){
   }
   return(y)
 }
-  
+
 household_community_meetings <- function(household_data=NULL, community_data=NULL) {
   # a utility to make phrases related to household and community meetings if
   # data are available
@@ -632,7 +645,7 @@ proper_number <- function(number) {
   return(number)
 }
 
-conditional_paragraph <- function(blockvals, 
+conditional_paragraph <- function(blockvals,
                                   intro_sentence = '',
                                  high_dose_high_freq = '',
                                  high_dose_mixed_freq = '',
@@ -658,7 +671,7 @@ conditional_paragraph <- function(blockvals,
   # returns a sentence
   dose_dom <- test_dominance(blockvals$high_dose, blockvals$low_dose)
   freq_dom <- test_dominance(blockvals$high_freq, blockvals$low_freq)
-  
+
   mid_sent <- case_when(
     dose_dom == 'high' & freq_dom == 'high' ~ high_dose_high_freq,
     dose_dom == 'high' & freq_dom == 'mixed' ~ high_dose_mixed_freq,
@@ -672,9 +685,9 @@ conditional_paragraph <- function(blockvals,
 }
 
 test_dominance <- function(high, low) {
-  return(case_when(high > 0 & low == 0 ~ 'high', 
+  return(case_when(high > 0 & low == 0 ~ 'high',
                    high > 0 & low > 0 ~ 'mixed',
-                   high == 0 & low > 0 ~ 'low', 
+                   high == 0 & low > 0 ~ 'low',
                    TRUE ~ 'low')) # the default case if all else fails
 }
 

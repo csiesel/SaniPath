@@ -10,6 +10,83 @@ dna <- raw_3.3
 pcr <- raw_3.4
 enr <- raw_3.5
 
+#### Cleaning mf data for PLc/PL volume issues ####
+probs <-
+  toupper(c(
+    "PLc1025",
+    "PLc1036",
+    "PLc1038",
+    "PLc1039",
+    "PLc1040",
+    "PLc1041",
+    "PLc1042",
+    "PLc1043",
+    "PLc1049",
+    "PLc1050",
+    "PLc1051",
+    "PLc1052",
+    "PLc1053",
+    "PLc1054",
+    "PLc1055",
+    "PLc1056",
+    "PLc1057",
+    "PLc1058",
+    "PLc1059",
+    "PLc1062",
+    "PLc1063",
+    "PLc1065",
+    'PLc1073',
+    'PLc1074',
+    'PLc1075',
+    'PLc1077',
+    'PLc1078',
+    'PLc1079',
+    'PLc1080',
+    'PLc1095',
+    'PLc1096',
+    'PLc1097',
+    'PLc1098',
+    'PLc1099',
+    'PLc1107',
+    'PLc1108',
+    'PLc1109',
+    'PLc1110',
+    'PLc1111',
+    'PLc1112',
+    'PLc1113',
+    'PLc1114',
+    'PLc1115',
+    'PLc1116',
+    'PLc1117',
+    'PLc1135',
+    'PLc1136',
+    'PLc1137',
+    'PLc1138',
+    'PLc1139',
+    'PLc1142',
+    'PLc1143',
+    'PLc1144',
+    'PLc1145',
+    'PLc1173',
+    'PLc1174',
+    'PLc1175',
+    'PLc1176',
+    'PLc1177',
+    'PLc1178',
+    'PLc1180',
+    'PLc1181',
+    'PLc1182',
+    'PLc1183',
+    'PL1021',
+    'PL1022',
+    'PL1023'
+  ))
+
+mf$lab_1_volume[which(mf$lab_id %in% probs)] <- 10
+mf$lab_2_volume[which(mf$lab_id %in% probs)] <- 10
+mf$lab_3_volume[which(mf$lab_id %in% probs)] <- 10
+
+
 #### SPT Merge ####
 spt_sample <- merge(spt, raw_2.1, by.x="sample_index", by.y="_index", all.x=TRUE)
 spt_mf <- merge(spt_sample, raw_3.1, by.x="mf_index", by.y="_index", all.x = TRUE)

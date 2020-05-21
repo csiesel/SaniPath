@@ -18,7 +18,7 @@ PS_Plot<-function(ps_freq_observation){
 
   person_images <- .imgs
 
-  ramp1 <- colorRamp(c("#ffefef","red2"))
+  ramp1 <- colorRamp(c("ivory2","red1"))
   person_images[[1]] %<>% as.raster()
   colorramp <- ramp((rgb(ramp1(seq(0, 1, length = 101)), max = 255)[c+1]))
 

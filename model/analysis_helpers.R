@@ -12,107 +12,42 @@ library(rjags)
 
 
 # CONCENTRATIONS ---------------------------------------------
-####### CASEY EDITED #####
 compute_concentrations <- function(collection_data, lab_data,
-                                   configure = configure,
-                                   pathway_codes,
-                                   pathway_labels,
+                                   config = config,
+                                   pathway_codes = config$pathway_codes,
+                                   pathway_labels = config$pathway_labels,
                                    neighborhood_mapping = list(),
-                                   lab_MF= T) {
-  if (is.null(configure)) stop('Missing configure object!')
+                                   lab_MF= F) {
+  if (is.null(config)) stop('Missing config object!')
   if (length(pathway_codes) < 1 | length(pathway_labels) < 1) stop('Pathway data missing!')
   if (length(neighborhood_mapping) < 1) stop('Neighborhood data map missing!')
 
   # lab_analysis_method <- unique(lab_data$lab_analysis)
   if (!lab_MF) {
-    reading = configure$idexx_reading
-    value = configure$idexx_value
+    reading = config$idexx_reading
+    value = config$idexx_value
     MF = F
   } else {
-    reading = configure$membrane_reading
-    value = configure$membrane_value
+    reading = config$membrane_reading
+    value = config$membrane_value
     MF = T
   }
-  denoms = configure$denoms
+  denoms = config$denoms
   # lab_data %<>% filter(lab_id %in% collection_data$col_id[1:500])
   collection_data %<>% filter(!is.na(col_id))
   lab_data %<>% filter(!is.na(lab_id))
   # Calculate the e coli combined dataframe
   ec_data <- create_ecData(collection_data = collection_data,
                            lab_data = lab_data,
-                           mpn_tbl = configure$mpn_tbl,
+                           mpn_tbl = config$mpn_tbl,
                            reading = reading,
                            value = value,
                            denoms = denoms,
                            MF = MF)
-  #############~~~~~ CASEY ADDED THE LINE BELOW #####
-  ec_data <- filter(ec_data, !is.na(col_neighborhood))
+
   # now build our output of concentration values
   pathway_selected_vector <- suppressWarnings(as.integer(pathway_codes) %>% .[!is.na(.)])
 
-  found_pathways <- unique(ec_data$sample_type)
-  conc<-list()
-  for (i in unique(factor_to_numeric(ec_data$neighbor))) {
-    print(i)
-    # sample type 1=drain water, 2=produce, 3=piped water, 4=ocean water, 5=surface water, 6=flood water, 7=Public Latrine Surfaces, 8=particulate, 9=bathing
-    for (j in 1:length(pathway_selected_vector)) {
-      if (pathway_selected_vector[j] %in% found_pathways) {
-        s = names(pathway_codes[j])
-        x <-list(s = s,
-                 neighb = i,
-                 sample = pathway_labels[[s]],
-                 neighborhood = lookup_neighborhood(neighborhood_mapping, i),# The neighborhood information should change based on the configuration before deployment.
-                 data = ec_data$ec_conc[which(ec_data$neighbor == i
-                                              & ec_data$sample_type == pathway_selected_vector[j])])
-
-        x$plot_name <- paste0(x$neighborhood,", ", x$sample, '\n(N=',length(x$data),")")
-        x$fn <- sprintf('%s_%s.png', i, x$s)
-        conc <- append(conc, list(x))
-      }
-    }
-  }
-  return(conc)
-}
-
-
-############### CASEY CHANGED THIS #####################
-compute_concentrationsES <- function(collection_data, lab_data,
-                                   configure = configure,
-                                   pathway_codes,
-                                   pathway_labels,
-                                   neighborhood_mapping = list(),
-                                   lab_MF= T) {
-  if (is.null(configure)) stop('Missing configure object!')
-  if (length(pathway_codes) < 1 | length(pathway_labels) < 1) stop('Pathway data missing!')
-  if (length(neighborhood_mapping) < 1) stop('Neighborhood data map missing!')
-  
-  # lab_analysis_method <- unique(lab_data$lab_analysis)
-  if (!lab_MF) {
-    reading = configure$idexx_reading
-    value = configure$idexx_value
-    MF = F
-  } else {
-    reading = configure$membrane_reading
-    value = configure$membrane_value
-    MF = T
-  }
-  denoms = configure$denoms
-  # lab_data %<>% filter(lab_id %in% collection_data$col_id[1:500])
-  collection_data %<>% filter(!is.na(col_id))
-  lab_data %<>% filter(!is.na(lab_id))
-  # Calculate the e coli combined dataframe
-  ec_data <- create_ecDataES(collection_data = collection_data,
-                           lab_data = lab_data,
-                           mpn_tbl = configure$mpn_tbl,
-                           reading = reading,
-                           value = value,
-                           denoms = denoms,
-                           MF = MF)
-  ######~~~~~ Added this to show results for all surveillance by one neighborhood
-  #ec_data$neighbor<-999
-  # now build our output of concentration values
-  pathway_selected_vector <- suppressWarnings(as.integer(pathway_codes) %>% .[!is.na(.)])
-  
   found_pathways <- unique(ec_data$sample_type)
   conc<-list()
   for (i in unique(factor_to_numeric(ec_data$neighbor))) {
@@ -126,7 +61,7 @@ compute_concentrationsES <- function(collection_data, lab_data,
                  neighborhood = lookup_neighborhood(neighborhood_mapping, i),# The neighborhood information should change based on the configuration before deployment.
                  data = ec_data$ec_conc[which(ec_data$neighbor == i
                                               & ec_data$sample_type == pathway_selected_vector[j])])
-        
+
         x$plot_name <- paste0(x$neighborhood,", ", x$sample, '\n(N=',length(x$data),")")
         x$fn <- sprintf('%s_%s.png', i, x$s)
         conc <- append(conc, list(x))
@@ -139,8 +74,8 @@ compute_concentrationsES <- function(collection_data, lab_data,
 
 # master create_ecData
 create_ecData <- function(collection_data, lab_data, mpn_tbl,
-                          reading, value,
-                          denoms,
+                          reading = config$idexx_reading, value = config$idexx_value,
+                          denoms = config$denoms,
                           MF = F # defaults to IDEXX method
                           ) {
   #logic to decide whether the function recieves IDEXX data or MF data;
@@ -168,58 +103,19 @@ create_ecData <- function(collection_data, lab_data, mpn_tbl,
 
   ec_data %<>% cond_func(value)
 
-  #FOR SPT
-  # ec_data$neighbor <- as.factor(ec_data$col_ward)
-  #FOR SP
   ec_data$neighbor <- as.factor(ec_data$col_neighborhood)
+
   return(ec_data)
 
 
-}
-
-create_ecDataES <- function(collection_data, lab_data, mpn_tbl,
-                          reading = configure$idexx_reading, value = configure$idexx_value,
-                          denoms = configure$denoms,
-                          MF = F # defaults to IDEXX method
-) {
-  #logic to decide whether the function recieves IDEXX data or MF data;
-  #This is assuming all the samples will be tested in one of the method: either IDEXX or MF.
-  #This field will be filled based on configuration of the project.
-  
-  if (!MF) {
-    # idexx specific value manipulation
-    lab_data %<>% ec_prepare_idexx(reading, mpn_tbl)
-  } else {
-    lab_data %<>% ec_prepare_mf(reading, value)
-  }
-  
-  # These steps are the same for both methods
-  ec_data <- ec_merge(collection_data, lab_data)
-  
-  # add denominators
-  ec_data %<>% ec_add_denoms(denoms)
-  
-  # calculate the swaps
-  ec_data %<>% ec_calc_swaps()
-  
-  # calculate the conditions
-  cond_func <- if (MF) ec_mf_conditions else ec_idexx_conditions
-  
-  ec_data %<>% cond_func(value)
-  
-  ec_data$neighbor <- as.factor(ec_data$col_ward)
-  
-  return(ec_data)
-  
-  
 }
 
 # FREQUENCIES ----------------------------------------------------------------
 compute_frequencies <- function(..., type='pie',
                                 analysis_type=NULL,
-                                configure=NULL,
-                                pathway_labels = configure$pathway_labels,
-                                pathway_codes = configure$pathway_codes,
+                                config=NULL,
+                                pathway_labels = config$pathway_labels,
+                                pathway_codes = config$pathway_codes,
                                 neighborhood_mapping = list()
                                 ) {
   # calculate the appropriate factors for plotting pie charts
@@ -247,7 +143,7 @@ compute_frequencies <- function(..., type='pie',
   # Or Ex.
   # > calculate_freq(hh, sch, comm)
 
-  if (is.null(configure)) stop('Missing configure object!')
+  if (is.null(config)) stop('Missing config object!')
   if (length(pathway_codes) < 1 | length(pathway_labels) < 1) stop('Pathway data missing!')
   if (length(neighborhood_mapping) < 1) stop('Neighborhood data map missing!')
   # this allows us to pass multiple data objects without having to explictly
@@ -292,6 +188,7 @@ compute_frequencies <- function(..., type='pie',
     df_for_analysis <- eval(parse(text=paste0(analysis_type, '_data')))
   }
 
+
   freq <- find_pathways(df_for_analysis,
                         analysis_type,
                         pathway_labels = pathway_labels,
@@ -316,7 +213,7 @@ compute_frequencies <- function(..., type='pie',
 }
 
 find_pathways <- function(df, analysis_type,
-                          pathway_labels=configure$pathway_labels,
+                          pathway_labels=config$pathway_labels,
                           neighborhood_mapping) {
   neighborhoods <- unique(unlist(df[,grep('neighborhood$', names(df))])) %>% .[!is.na(.)]
   # this is ugly, but it works
@@ -366,7 +263,6 @@ find_pathway <- function(df, neighb,
                          neighborhood_mapping) {
   neighb_subset <- df[,grepl('(h|c|s)_neighborhood$', names(df)), drop=F]
   neighb_subset <- apply(neighb_subset, 1, function(x) any(x == neighb))
-
   return(list(sample = unname(pathway_type),
               age = switch(population_type, 'a' = 'Adults', 'c' = 'Children'),
               neighborhood = lookup_neighborhood(neighborhood_mapping, neighb),
@@ -428,7 +324,7 @@ find_freq <- function(df, pathway_type, population_type) {
 # EXPOSURE -----------------------------------------------------
 compute_exposure <- function(freq,
                              conc,
-                             configure = configure,
+                             config = config,
                              pathway_codes = pathway_codes,
                              pathway_labels = pathway_labels,
                              neighborhood_mapping = list(),
@@ -441,11 +337,11 @@ compute_exposure <- function(freq,
   # then calculates the final statistics for plotting
   # nburn=1000, niter=10000, thin=1, cutpoint=c(0, 5, 10)
   # run the Bayesian analyses
-  if (is.null(configure)) stop('Missing configure object!')
+  if (is.null(config)) stop('Missing config object!')
   if (length(pathway_codes) < 1 | length(pathway_labels) < 1) stop('Pathway data missing!')
   if (length(neighborhood_mapping) < 1) stop('Neighborhood data map missing!')
 
-  attach(configure)
+  attach(config)
   pathway_codes = pathway_codes
 
   freq <- bayesian_behavior_estimates(freq,
@@ -525,7 +421,7 @@ bayesian_environmental_estimates <- function(conc, nburn=1000, niter=10000, thin
     log_ec<-log10(as.numeric(conc[[k]]$data))
     env_data<-list(lnconc=log_ec,N=length(log_ec))
 
-    modelpos <- jags.model(file="model/env_model.jags.orig",data=env_data,n.chains=3);
+    modelpos <- jags.model(file="./model/env_model.jags",data=env_data,n.chains=3);
     update(modelpos,n.burn=nburn);
     env_mcmcpos <- coda.samples(modelpos,tomonitor,n.iter=niter,thin=thin);
     #Bayesian estimators of mu and sigma
@@ -582,7 +478,7 @@ bayesian_behavior_estimates <- function(freq, nburn=1000, niter=10000, thin=1,
     init<-list(freq=init_freq_be,r= init_freq$r,p= init_freq$p)
 
     # Jags model runs
-    modelpos <- jags.model(file="model/be_model.jags.orig",data=be_data,n.chains=3,inits=init)
+    modelpos <- jags.model(file="./model/be_model.jags",data=be_data,n.chains=3,inits=init)
     update(modelpos,n.burn=nburn)
     cat('Coda Samples\n\n')
     be_mcmcpos <- coda.samples(modelpos, bemonitor, n.iter=niter, thin=thin)
@@ -603,7 +499,7 @@ bayesian_behavior_estimates <- function(freq, nburn=1000, niter=10000, thin=1,
   return(freq)
 }
 
-calculate_exposure <- function(behavior_data, concentration_data, smp, nsim = 1000, intake = configure$intake, pathway_codes = configure$pathway_codes) {
+calculate_exposure <- function(behavior_data, concentration_data, smp, nsim = 1000, intake = config$intake, pathway_codes = config$pathway_codes) {
   # used for people plot generation.  this is for a single pathway
   # and assumes the data are already subset to the appropriate level
   intake %<>% as.matrix()
@@ -645,257 +541,4 @@ calculate_exposure <- function(behavior_data, concentration_data, smp, nsim = 10
   # give the updated object back
   return(behavior_data)
 
-}
-
-
-make_spt_sample <- function(sample, es, mf, mst, enrichment, dna, pcr){
-
-  sample <- filter(sample, col_neighborhood=="1", col_id!="DWa1001(UF)", col_id!="DWa1002(UF)")
-  sample <- subset(sample, select=-c(subscriberid, simserial, deviceid))
-  
-  sample$col_id <- with(sample, make.unique(as.character(col_id)))
-  sample$col_id_val <- with(sample, make.unique(as.character(col_id_val)))
-  sample$col_sample_type <- as.numeric(sample$col_sample_type)
-
-  es$col_id <- with(es, make.unique(as.character(col_id)))
-
-  mf$lab_id_val <- with(mf, make.unique(as.character(lab_id_val)))
-  mf$lab_id <- with(mf, make.unique(as.character(lab_id)))
-  
-  pathway_codes = list('d' = 1, 'p' = 2, 'dw' = 3, 'o' = 4, 's' = 5, 'f' = 6, 'l' = 7,
-                       'pa' = 8, 'bw' = 9, 'sf' = 10, 'pl'=11, 'ms'=12, 'fb'=99, 'nc'=98, 'pc'=97)
-  pathway_labels =list('d' = 'Drain Water', 'p' = 'Produce', 'dw' = 'Municipal and Piped Water', 'o' = 'Ocean Water',
-                       's' = 'Surface Water', 'f' = 'Flood Water', 'l' = 'Public Latrine',
-                       'pa' = 'Particulate', 'bw' = 'Bathing Water', 'sf' = 'Street Food',
-                       'pl' = 'Pooled Latrine', 'ms' = 'Moore Swab', 'fb' = 'Field Blank',
-                       'nc' = 'Negative Control', 'pc' = 'Positive Control')
-  neighbs = list("Neighborhood 1" = 1)
-  
-  
-  ##### importing mst data #####
-  mst$lab_id <- with(mst, make.unique(as.character(lab_id)))
-  
-  ##### importing enrichment data #####
-  enrichment$lab_id <- with(enrichment, make.unique(as.character(lab_id)))
-  
-  ###### importing dna data #####
-  dna$lab_id <- with(dna, make.unique(as.character(lab_id)))
-  
-  ##### importing pcr data #####
-  pcr$lab_id <- with(pcr, make.unique(as.character(lab_id)))
-  
-  
-  ##### cleaning all id's of random spaces #####
-  sample$col_id <- sub(' ', '', sample$col_id)
-  es$col_id <- sub(' ', '', es$col_id)
-  mf$lab_id <- sub(' ', '', mf$lab_id)
-  mst$lab_id <- sub(' ', '', mst$lab_id)
-  enrichment$lab_id <- sub(' ', '', enrichment$lab_id)
-  dna$lab_id <- sub(' ', '', dna$lab_id)
-  pcr$lab_id <- sub(' ', '', pcr$lab_id)
-  
-  
-  
-  
-  #this is renaming the drinking water from hood 2 that was mislabeled
-  dwrow <- which(grepl("DW2002", sample$col_id))
-  sample$col_id[dwrow] <- "DWa2005"
-  dwrow <- which(grepl("DW2002", mf$lab_id))
-  mf$lab_id[dwrow] <- "DWa2005"
-  dwrow <- which(grepl("DW2002", mst$lab_id))
-  mst$lab_id[dwrow] <- "DWa2005"
-  dwrow <- which(grepl("DW2002", dna$lab_id))
-  dna$lab_id[dwrow] <- "DWa2005"
-  dwrow <- which(grepl("DW2002", pcr$lab_id))
-  pcr$lab_id[dwrow] <- "DWa2005"
-  dwrow <- which(grepl("DW2002", enrichment$lab_id))
-  enrichment$lab_id[dwrow] <- "DWa2005"
-  
-  
-  # merging SPT samples
-  
-  #NOTE FOR CASEY: NEED TO FIND WAY TO ONLY KEEP ONE ENTRY WHEN THERE ARE DUPLICATE SAMPLE IDS
-  
-  
-  ##### Merging SPT Sample Files
-  spt_sample5 <- merge(sample, mf, by.x="col_id", by.y="lab_id", all.x=TRUE)
-  spt_sample4 <- merge (spt_sample5, mst, by.x="col_id", by.y="lab_id", all.x=TRUE)
-  spt_sample3 <- merge (spt_sample4, dna, by.x="col_id", by.y="lab_id", all.x=TRUE)
-  spt_sample2 <- merge (spt_sample3, enrichment, by.x="col_id", by.y="lab_id", all.x=TRUE)
-  spt_sample <- merge (spt_sample2, pcr, by.x="col_id", by.y="lab_id", all.x=TRUE)
-  
-  
-  spt_sample$MF_done <- 0
-  for(i in 1:nrow(spt_sample)){
-    if(is.na(spt_sample$lab_1_dil_tested[i])){
-      spt_sample$MF_done[i]=0
-    }
-    else{
-      spt_sample$MF_done[i]=1
-    }
-  }
-  
-  spt_sample$pcr_done <- 0
-  for(h in 1:nrow(spt_sample)){
-    if(is.na(spt_sample$lab_pcr_date.y[h])){
-      spt_sample$pcr_done[h]=0
-    }
-    else{
-      spt_sample$pcr_done[h]=1
-    }
-  }
-  
-  spt_sample$pcr_valid <- 0
-  for(a in 1:nrow(spt_sample)){
-    if(is.na(spt_sample$lab_pcr[a])){
-      spt_sample$pcr_valid[a]=NA
-    }
-    else if(spt_sample$lab_pcr[a]=="0"){
-      spt_sample$pcr_valid[a]=0
-    }
-    else{
-      spt_sample$pcr_valid[a]=1
-    }
-  }
-  
-  spt_sample$dna_extracted <- 0
-  for(a in 1:nrow(spt_sample)){
-    if(is.na(spt_sample$lab_dna_yn[a])){
-      spt_sample$dna_extracted[a]=0
-    }
-    else if(spt_sample$lab_dna_yn[a]=="0"){
-      spt_sample$dna_extracted[a]=0
-    }
-    else{
-      spt_sample$dna_extracted[a]=1
-    }
-  }
-  
-return(spt_sample)
-}
-
-
-
-make_es_sample <- function(es, mf, mst, enrichment, dna, pcr){
-
-
-  es$col_id <- with(es, make.unique(as.character(col_id)))
-
-  mf$lab_id_val <- with(mf, make.unique(as.character(lab_id_val)))
-  mf$lab_id <- with(mf, make.unique(as.character(lab_id)))
-  
-  pathway_codes = list('d' = 1, 'p' = 2, 'dw' = 3, 'o' = 4, 's' = 5, 'f' = 6, 'l' = 7,
-                       'pa' = 8, 'bw' = 9, 'sf' = 10, 'pl'=11, 'ms'=12, 'fb'=99, 'nc'=98, 'pc'=97)
-  pathway_labels =list('d' = 'Drain Water', 'p' = 'Produce', 'dw' = 'Municipal and Piped Water', 'o' = 'Ocean Water',
-                       's' = 'Surface Water', 'f' = 'Flood Water', 'l' = 'Public Latrine',
-                       'pa' = 'Particulate', 'bw' = 'Bathing Water', 'sf' = 'Street Food',
-                       'pl' = 'Pooled Latrine', 'ms' = 'Moore Swab', 'fb' = 'Field Blank',
-                       'nc' = 'Negative Control', 'pc' = 'Positive Control')
-  neighbs = list("Neighborhood 1" = 1)
-  
-  
-  ##### importing mst data #####
-
-  mst$lab_id <- with(mst, make.unique(as.character(lab_id)))
-  
-  ##### importing enrichment data #####
-
-  enrichment$lab_id <- with(enrichment, make.unique(as.character(lab_id)))
-  
-  ###### importing dna data #####
-
-  dna$lab_id <- with(dna, make.unique(as.character(lab_id)))
-  
-  ##### importing pcr data #####
-
-  pcr$lab_id <- with(pcr, make.unique(as.character(lab_id)))
-  
-  
-  ##### cleaning all id's of random spaces #####
-  sample$col_id <- sub(' ', '', sample$col_id)
-  es$col_id <- sub(' ', '', es$col_id)
-  mf$lab_id <- sub(' ', '', mf$lab_id)
-  mst$lab_id <- sub(' ', '', mst$lab_id)
-  enrichment$lab_id <- sub(' ', '', enrichment$lab_id)
-  dna$lab_id <- sub(' ', '', dna$lab_id)
-  pcr$lab_id <- sub(' ', '', pcr$lab_id)
-  
-  
-  
-  
-  #this is renaming the drinking water from hood 2 that was mislabeled
-  dwrow <- which(grepl("DW2002", sample$col_id))
-  sample$col_id[dwrow] <- "DWa2005"
-  dwrow <- which(grepl("DW2002", mf$lab_id))
-  mf$lab_id[dwrow] <- "DWa2005"
-  dwrow <- which(grepl("DW2002", mst$lab_id))
-  mst$lab_id[dwrow] <- "DWa2005"
-  dwrow <- which(grepl("DW2002", dna$lab_id))
-  dna$lab_id[dwrow] <- "DWa2005"
-  dwrow <- which(grepl("DW2002", pcr$lab_id))
-  pcr$lab_id[dwrow] <- "DWa2005"
-  dwrow <- which(grepl("DW2002", enrichment$lab_id))
-  enrichment$lab_id[dwrow] <- "DWa2005"
-  
-  
-  # merging SPT samples
-  
-  #NOTE FOR CASEY: NEED TO FIND WAY TO ONLY KEEP ONE ENTRY WHEN THERE ARE DUPLICATE SAMPLE IDS
-  
-  
-  ##### Merging SPT Sample Files
-  es_sample5 <- merge(es, mf, by.x="col_id", by.y="lab_id", all.x=TRUE)
-  es_sample4 <- merge (es_sample5, mst, by.x="col_id", by.y="lab_id", all.x=TRUE)
-  es_sample3 <- merge (es_sample4, dna, by.x="col_id", by.y="lab_id", all.x=TRUE)
-  es_sample2 <- merge (es_sample3, enrichment, by.x="col_id", by.y="lab_id", all.x=TRUE)
-  es_sample <- merge (es_sample2, pcr, by.x="col_id", by.y="lab_id", all.x=TRUE)
-  
-  
-  es_sample$MF_done <- 0
-  for(i in 1:nrow(es_sample)){
-    if(is.na(es_sample$lab_1_dil_tested[i])){
-      es_sample$MF_done[i]=0
-    }
-    else{
-      es_sample$MF_done[i]=1
-    }
-  }
-  
-  es_sample$pcr_done <- 0
-  for(h in 1:nrow(es_sample)){
-    if(is.na(es_sample$lab_pcr_date.y[h])){
-      es_sample$pcr_done[h]=0
-    }
-    else{
-      es_sample$pcr_done[h]=1
-    }
-  }
-  
-  es_sample$pcr_valid <- 0
-  for(a in 1:nrow(es_sample)){
-    if(is.na(es_sample$lab_pcr[a])){
-      es_sample$pcr_valid[a]=NA
-    }
-    else if(es_sample$lab_pcr[a]=="0"){
-      es_sample$pcr_valid[a]=0
-    }
-    else{
-      es_sample$pcr_valid[a]=1
-    }
-  }
-  
-  es_sample$dna_extracted <- 0
-  for(a in 1:nrow(es_sample)){
-    if(is.na(es_sample$lab_dna_yn[a])){
-      es_sample$dna_extracted[a]=0
-    }
-    else if(es_sample$lab_dna_yn[a]=="0"){
-      es_sample$dna_extracted[a]=0
-    }
-    else{
-      es_sample$dna_extracted[a]=1
-    }
-  }
-  
-  return(es_sample)
 }

@@ -28,6 +28,7 @@ make_plots <- function(obj,
   types <- c('pie', 'hist', 'ppl')
   if (!(type %in% types)) stop(sprintf('Invalid plot type "%s".  Options: %s',type, paste0(types, collapse=', ')))
   if (!parallel) nc <- 1
+  print(nc)
   plot_func <- switch(type,
                 'pie' = make_pie,
                 'hist' = partial(make_histogram, lab_MF=lab_MF),
@@ -141,14 +142,15 @@ make_pie <- function(freq, title=NULL, subtitle=NULL, caption=NULL) {
   }
   return(tbl)
 }
+
 make_histogram <- function(conc, title=NULL, subtitle=NULL, caption=NULL, lab_MF=F) {
   # make a histogram with a specific path data
   d <- data.frame(x= log10(as.numeric(conc$data)), stringsAsFactors = F)
-  
+ 
   if (is.null(title)) title = sprintf("%s", conc$sample) %>% add_breaks_to_title()
-  if (is.null(subtitle)) subtitle = sprintf("%s (N=%s)",
+  if (is.null(subtitle)) subtitle = sprintf("%s (N=%s)\n",
                                             conc$neighborhood,
-                                            length(conc$data))
+                                            length(which(!is.null(conc$data) & !is.na(conc$data))))
   if (is.null(caption) & lab_MF==T) {
     caption= ifelse(conc$s %in% c('p','sf'),expression(paste("log10 ", italic("E. coli "), "concentration (CFU/serving)")),
                     ifelse(conc$s=='l',expression(paste("log10 ", italic("E. coli "), "concentration (CFU/swab)")),
@@ -160,7 +162,7 @@ make_histogram <- function(conc, title=NULL, subtitle=NULL, caption=NULL, lab_MF
                            ifelse(conc$s=='pa',expression(paste("log10 ", italic("E. coli "), "concentration (MPN/gram)")),
                                   expression(paste("log10 ", italic("E. coli "), "concentration (MPN/100mL)")))))
   }
-  
+ 
   histogram <- ggplot(d, aes(x)) +
     geom_histogram(aes(y=(..count..)/sum(..count..)),
                    binwidth = 1, fill='skyblue', colour='black') +
@@ -192,8 +194,7 @@ make_pplplot <- function(ps.freq, title=NULL, subtitle=NULL, caption=NULL, lab_M
   ppl_plot <- PS_Plot(ps.freq) +
     labs(title= title,
          subtitle= subtitle,
-         caption= caption) +
-    theme(plot.caption = element_text(face="bold", size=6))
+         caption= caption)
   
   
   return(ppl_plot)
