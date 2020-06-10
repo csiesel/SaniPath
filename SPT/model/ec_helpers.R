@@ -22,7 +22,7 @@ ec_merge <- function(collection_data, lab_data) {
   lab_data$lab_id<-gsub(" ","",lab_data$lab_id)
   
   #Casey - changed to all.x=TRUE instead of all=TRUE (that was giving all ES samples as well)
-  ec_data<-merge(collection_data,lab_data,by.x=c("col_sample_type","col_id"),by.y=c("lab_sample_type","lab_id"), all.x=TRUE)
+  ec_data<-merge(collection_data,lab_data,by.x=c("col_sample_type","col_id"),by.y=c("lab_sample_type","lab_id"), all=TRUE)
   names(ec_data)[which(names(ec_data)=="col_sample_type")]<-"sample_type"
   names(ec_data)[which(names(ec_data)=="col_id")]<-"sampleid"
   

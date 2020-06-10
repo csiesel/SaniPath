@@ -19,6 +19,7 @@ library(RColorBrewer)
 library(ggplot2)
 library(forcats)
 library(ggridges)
+library(ggtext)
 
 
 # load data
@@ -803,7 +804,7 @@ server <- function(input, output, session) {
               na.omit(value) %>%
               # ggplot(aes(x = factor(neighb_UID), y = value, fill = variable)) +
               ggplot(., aes(x = neighborhood, y = value, fill = variable)) + #add value labels, add linetype=SES if interested
-              geom_bar(stat = "identity", colour="black") +
+              geom_bar(stat = "identity") +
               geom_point(aes(x= neighborhood, y=-.01, shape=SES)) +
               # geom_text(aes(label=SES), stat="identity", position=position_stack(0.5)) +
               coord_flip() +
@@ -931,13 +932,41 @@ server <- function(input, output, session) {
               return(NULL)
             }
             
-            df.ecdata <- df.ecdata %>% filter(., city %in% citychoice() & sample_type_name %in% samplechoice())
+            df.ecdata <- df.ecdata %>% 
+              filter(city %in% citychoice() & sample_type_name %in% samplechoice())
+              
             df2 <- df.ecdata %>%
               group_by(sample_type_name) %>%
               summarise(mean.cont = mean(log10(ec_conc), na.rm=TRUE))
             
+            
+            
+            
+            
+            
+            df.ecdata <- df.ecdata %>% mutate(hood =ifelse(df.ecdata$SES=="very low income", glue::glue("<strong style='color:darkred'>{hood}</strong>"),
+                        ifelse(df.ecdata$SES=="low income", glue::glue("<strong style='color:darkblue'>{hood}</strong>"),
+                        ifelse(df.ecdata$SES=="middle income", glue::glue("<strong style='color:darkgreen'>{hood}</strong>"),
+                        ifelse(df.ecdata$SES=="high income", glue::glue("<strong style='color:orange'>{hood}</strong>"), glue::glue("<strong style='color:purple'>{hood}</strong>")))))
+            )
+            
+            # df.ecdata <- df.ecdata %>% mutate(label_color =ifelse(df.ecdata$SES=="very low income", "darkred",
+            #                                                       ifelse(df.ecdata$SES=="middle income", "darkblue",
+            #                                                              ifelse(df.ecdata$SES=="low income", "darkgreen",
+            #                                                                     ifelse(df.ecdata$SES=="high income", "orange", 'purple')))))
+            # 
+            # sesPalette <- c("darkred", "darkblue", "darkgreen", "orange")
+            # numColors <- length(levels(as.factor(df.ecdata$SES))) # How many colors you need
+            # getColors <- brewer_pal('qual') # Create a function that takes a number and returns a qualitative palette of that length (from the scales package)
+            # myPalette <- getColors(numColors)
+            # names(sesPalette) <- levels(as.factor(df.ecdata$SES)) # Give every color an appropriate name
+            # p <- p + theme(axis.text.x = element_text(colour=myPalette[state_data$Region])))
+            
+            
+            
             df.ecdata %>%
-              ggplot(., aes(y=factor(hood, levels=(unique(hood))), x=log10(ec_conc), linetype=SES)) +
+              #add linetype=SES in the below aes to get lines by SES
+              ggplot(., aes(y=factor(hood, levels=unique(hood[order(city)])), x=log10(ec_conc))) +
               geom_density_ridges(aes(fill=city), quantile_lines=TRUE, quantiles=2, panel_scaling=FALSE
                                   #comment this chunk out to get rid of lines: from here
                                   ,
@@ -949,19 +978,22 @@ server <- function(input, output, session) {
                                   alpha = 0.7
                                   #to here
                                   ) +
-              geom_vline(data=df2, aes(xintercept=mean.cont, color="red"), show.legend=FALSE) +
-              # geom_point(aes(color=city) ) +
-              # facet_grid( ~ sample_type_name, scales = "free_x", space = "free_x") +
-              facet_wrap( ~ sample_type_name, scales = "fixed", nrow=4, ncol=3) +
+              geom_point(aes(x=0, colour=SES),size=0, alpha=0) +
+              geom_vline(data=df2, aes(xintercept=mean.cont), color="red", show.legend=FALSE) +
+              facet_wrap(~ sample_type_name, scales = "fixed", nrow=4, ncol=3) +
+              guides(colour = guide_legend(override.aes = list(size=3,linetype=0, alpha=1))) +
               labs(fill = "City",
-                   linetype = "SES",
+                   colour = "SES (neighborhood label color)",
                    x = "E. coli (Log10)",
                    y = "") +
               scale_x_continuous(breaks = c(0,2,4,6,8,10)) +
-              scale_linetype_manual(values=c("solid", "dashed", "dotted", "twodash")) +
+              scale_color_manual(values = c("darkred", "darkblue", "darkgreen", "orange", "purple"), 
+                                 breaks = c("very low income", "low income", "middle income", "high income", "unknown")) +
+              # scale_linetype_manual(values=c("solid", "dashed", "dotted", "twodash")) +
               theme_bw() +
               theme(axis.text.x = element_text(hjust = 0.95, vjust = 0.2),
                     axis.text=element_text(size=8),
+                    axis.text.y = element_markdown(),
                     strip.background = element_rect(fill="white"),
                     legend.position="bottom",
                     legend.justification="center",

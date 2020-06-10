@@ -1,13 +1,13 @@
 library(tidyverse)
 library(readxl)
 path <- "/Users/caseysiesel/Desktop/SaniPath/"
-ec_data_es <- read_csv(paste0(path, "SPT/data/ec_data_es_2020-05-20.csv"))
+ec_data_es <- read_csv(paste0(path, "SPT/data/ec_data_es_2020-05-27.csv"))
 ec_data_es <- ec_data_es[c(1:3, 67, 102:109)]
 
-ec_data_so <- read_csv(paste0(path, "SPT/data/ec_data_so_2020-05-20.csv"))
+ec_data_so <- read_csv(paste0(path, "SPT/data/ec_data_so_2020-05-27.csv"))
 ec_data_so <- ec_data_so[c(2, 162 ,169 ,198 ,205 ,206 ,207, 208 ,209 ,210, 211 ,212)]
 
-ec_data_spt <- read_csv(paste0(path, "SPT/data/ec_data_spt_2020-05-20.csv"))
+ec_data_spt <- read_csv(paste0(path, "SPT/data/ec_data_spt_2020-05-27.csv"))
 ec_data_spt <- ec_data_spt[c(1 ,  2  , 3 ,105, 140, 141, 142 ,143, 144, 145, 146 ,147)]
 
 renuka_spt <- read_xlsx(paste0(path, "SPT/data/checks/renuka_ec.xlsx"), sheet="SPT")

@@ -1,0 +1,445 @@
+---
+title: "SPT_Data_Options"
+author: "Casey Siesel"
+date: "6/9/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(ggridges)
+library(kableExtra)
+
+
+'%!in%' <- function(x,y)!('%in%'(x,y))
+
+colScale <- c("#5F4690", "#1D6996", "#38A6A5","#0F8554","#73AF48","#EDAD08","#E17C05",
+                                "#CC503E","#94346E","#6F4070","#994E95","#666666")
+
+
+load("spt_final.rda")
+spt1_final <- spt1_final %>%
+  mutate(sample_type = ifelse(sample_type==1, "Open Drain",
+                            ifelse(sample_type==2, "Raw Produce",
+                            ifelse(sample_type==3, "Drinking Water",
+                            ifelse(sample_type==5, "Surface Water",
+                            ifelse(sample_type==6, "Floodwater",
+                            ifelse(sample_type==7, "Public Latrine",
+                            ifelse(sample_type==8, "Soil",
+                            ifelse(sample_type==9, "Bathing Water",
+                            ifelse(sample_type==10, "Street Food",
+                            ifelse(sample_type==99, "Field Blank",
+                            "??")))))))))))
+
+
+load("es_final.rda")
+es1_final <- es1_final %>%  mutate(sample_type = ifelse(sample_type==11, "Pooled Latrine",
+                            ifelse(sample_type==12, "Moore Swab",
+                            ifelse(sample_type==16, "Pumping Station - UF",
+                            ifelse(sample_type==99, "Field Blank", "??")))))
+
+load("so_final.rda")
+so_final <- so_final %>% mutate(sample_type = ifelse(sample_type_so==141, "Cutting /Grinding Surface (FPa)",
+                            ifelse(sample_type_so==142, "Storage/Preparation Bowl (FPb)",
+                            ifelse(sample_type_so==143, "Food Preparation Area (FPc)",
+                            ifelse(sample_type_so==144, "Cooking/Preparation Water (FPd)",
+                            ifelse(sample_type_so==145, "Cooking/Preparation Utensil (FPe)",
+                            ifelse(sample_type_so==151, "Child Obs - Floor",
+                            ifelse(sample_type_so==152, "Child Obs - Off Ground",
+                                                    "??"))))))))
+
+
+raw_3.1 <- read_csv("data/clean_3.1_2020-06-09.csv")
+
+
+fb_sample_match <- raw_3.1 %>% filter(lab_sample_type==99) %>% 
+  mutate(fb_id = lab_id, other_id = toupper(str_extract(lab_notes, "[:alpha:]+\\d{4}"))) %>%
+  select(c("fb_id", "other_id"))
+
+
+
+# SPT Data w/ diff FB issues ----------------------------------------------
+#SPT Samples w/ PCR issues in FB
+spt_pcr_fb <- spt1_final$col_id[which((grepl("1", spt1_final$fb_typhi_pos) | 
+                                         grepl("1", spt1_final$fb_typhi_pres) |
+                                         grepl("1", spt1_final$fb_paratyphi_pos) |
+                                         grepl("1", spt1_final$fb_paratyphi_pres)) & 
+                                        spt1_final$sample_type!="Field Blank")]
+
+#SPT Samples w/ EC issues in FB
+spt_ec_fb <- ""
+for(i in 1:nrow(spt1_final)){
+  spt_ec_fb <- append(spt_ec_fb, 
+                     ifelse(unique(unlist(strsplit(str_replace_all(spt1_final$fb_ec[i], ", ", ""), "")))!="0"
+                            & spt1_final$sample_type[i]!="Field Blank", spt1_final$col_id[i], NA))
+}
+spt_ec_fb <- unique(spt_ec_fb[spt_ec_fb %!in% c("", NA)])
+
+#SPT Samples w/ NO FB
+spt_no_fb <- spt1_final$col_id[which(is.na(spt1_final$fb) & spt1_final$sample_type!="Field Blank")]
+
+
+
+# ES Data w/ diff FB issues -----------------------------------------------
+#ES Samples w/ PCR issues in FB
+es_pcr_fb <- es1_final$col_id[which((grepl("1", es1_final$fb_typhi_pos) | 
+                                         grepl("1", es1_final$fb_typhi_pres) |
+                                         grepl("1", es1_final$fb_paratyphi_pos) |
+                                         grepl("1", es1_final$fb_paratyphi_pres)) & 
+                                      es1_final$sample_type!="Field Blank")]
+#ES Samples w/ EC issues in FB
+es_ec_fb <- ""
+for(i in 1:nrow(es1_final)){
+  es_ec_fb <- append(es_ec_fb, 
+                     ifelse(unique(unlist(strsplit(str_replace_all(es1_final$fb_ec[i], ", ", ""), "")))!="0"
+    & es1_final$sample_type[i]!="Field Blank", es1_final$col_id[i], NA))
+}
+es_ec_fb <- unique(es_ec_fb[es_ec_fb %!in% c("", NA)])
+
+#ES Samples w/ NO FB
+es_no_fb <- es1_final$col_id[which(is.na(es1_final$fb) & es1_final$sample_type!="Field Blank")]
+
+
+
+# SO Data w/ diff FB issues -----------------------------------------------
+#SO Samples w/ PCR issues in FB
+so_pcr_fb <- so_final$col_id[which((grepl("1", so_final$fb_typhi_pos) | 
+                                         grepl("1", so_final$fb_typhi_pres) |
+                                         grepl("1", so_final$fb_paratyphi_pos) |
+                                         grepl("1", so_final$fb_paratyphi_pres)) & 
+                                     so_final$sample_type!="Field Blank")]
+#SO Samples w/ EC issues in FB
+so_ec_fb <- ""
+for(i in 1:nrow(so_final)){
+  so_ec_fb <- append(so_ec_fb, 
+                     ifelse(unique(unlist(strsplit(str_replace_all(so_final$fb_ec[i], ", ", ""), "")))!="0"
+                            & so_final$sample_type[i]!="Field Blank", so_final$col_id[i], NA))
+}
+so_ec_fb <- unique(so_ec_fb[so_ec_fb %!in% c("", NA)])
+
+#SO Samples w/ NO FB
+so_no_fb <- so_final$col_id[which(is.na(so_final$fb) & so_final$sample_type!="Field Blank")]
+
+```
+
+```{r setup_data, include=FALSE}
+spt_with_fb <- spt1_final %>% filter(col_id %!in% spt_no_fb)
+spt_with_cleanfb_ec <- spt1_final %>% filter(col_id %!in% c(spt_no_fb, spt_ec_fb))
+spt_with_cleanfb_pcr <- spt1_final %>% filter(col_id %!in% c(spt_no_fb, spt_pcr_fb))
+spt_with_cleanfb_ec_pcr <- spt1_final %>% filter(col_id %!in% c(spt_no_fb, spt_ec_fb, spt_pcr_fb))
+
+es_with_fb <- es1_final %>% filter(col_id %!in% es_no_fb)
+es_with_cleanfb_ec <- es1_final %>% filter(col_id %!in% c(es_no_fb, es_ec_fb))
+es_with_cleanfb_pcr <- es1_final %>% filter(col_id %!in% c(es_no_fb, es_pcr_fb))
+es_with_cleanfb_ec_pcr <- es1_final %>% filter(col_id %!in% c(es_no_fb, es_ec_fb, es_pcr_fb))
+
+so_with_fb <- so_final %>% filter(col_id %!in% so_no_fb)
+so_with_cleanfb_ec <- so_final %>% filter(col_id %!in% c(so_no_fb, so_ec_fb))
+so_with_cleanfb_pcr <- so_final %>% filter(col_id %!in% c(so_no_fb, so_pcr_fb))
+so_with_cleanfb_ec_pcr <- so_final %>% filter(col_id %!in% c(so_no_fb, so_ec_fb, so_pcr_fb))
+```
+
+```{r spt_tables}
+spt_all <- spt1_final %>% 
+  filter(sample_type!="Field Blank") %>% 
+  group_by(sample_type) %>% 
+  dplyr::summarise(count_all = dplyr::n(), 
+            'mean(min-max)'=paste0(round(mean(log10(ec_conc), na.rm=T), 2), 
+                                   "(",round(min(log10(ec_conc), na.rm=T),2),"-", round(max(log10(ec_conc), na.rm=T),2),")"),
+            "Typhi +" = sum(typhi_positive, na.rm=T),
+            "Typhi pres" = sum(typhi_presumptive, na.rm=T),
+            "Paratyphi +" = sum(paratyphi_positive, na.rm=T),
+            "Paratyphi pres" = sum(paratyphi_presumptive, na.rm=T))
+
+spt_option1 <- spt_with_fb %>% 
+  filter(sample_type!="Field Blank") %>% 
+  group_by(sample_type) %>% 
+  dplyr::summarise(count_1 = dplyr::n(), 
+            'mean(min-max)'=paste0(round(mean(log10(ec_conc), na.rm=T), 2), 
+                                   "(",round(min(log10(ec_conc), na.rm=T),2),"-", round(max(log10(ec_conc), na.rm=T),2),")"),
+            "Typhi +" = sum(typhi_positive, na.rm=T),
+            "Typhi pres" = sum(typhi_presumptive, na.rm=T),
+            "Paratyphi +" = sum(paratyphi_positive, na.rm=T),
+            "Paratyphi pres" = sum(paratyphi_presumptive, na.rm=T))
+
+spt_option2 <- spt_with_cleanfb_ec %>% 
+  filter(sample_type!="Field Blank") %>% 
+  group_by(sample_type) %>% 
+  dplyr::summarise(count_2 = dplyr::n(), 
+            'mean(min-max)'=paste0(round(mean(log10(ec_conc), na.rm=T), 2), 
+                                   "(",round(min(log10(ec_conc), na.rm=T),2),"-", round(max(log10(ec_conc), na.rm=T),2),")"),
+            "Typhi +" = sum(typhi_positive, na.rm=T),
+            "Typhi pres" = sum(typhi_presumptive, na.rm=T),
+            "Paratyphi +" = sum(paratyphi_positive, na.rm=T),
+            "Paratyphi pres" = sum(paratyphi_presumptive, na.rm=T))
+
+
+spt_option3 <- spt_with_cleanfb_pcr %>% 
+  filter(sample_type!="Field Blank") %>% 
+  group_by(sample_type) %>% 
+  dplyr::summarise(count_3 = dplyr::n(), 
+            'mean(min-max)'=paste0(round(mean(log10(ec_conc), na.rm=T), 2), 
+                                   "(",round(min(log10(ec_conc), na.rm=T),2),"-", round(max(log10(ec_conc), na.rm=T),2),")"),
+            "Typhi +" = sum(typhi_positive, na.rm=T),
+            "Typhi pres" = sum(typhi_presumptive, na.rm=T),
+            "Paratyphi +" = sum(paratyphi_positive, na.rm=T),
+            "Paratyphi pres" = sum(paratyphi_presumptive, na.rm=T))
+
+
+spt_option4 <- spt_with_cleanfb_ec_pcr %>% 
+  filter(sample_type!="Field Blank") %>% 
+  group_by(sample_type) %>% 
+  dplyr::summarise(count_4 = dplyr::n(), 
+            'mean(min-max)'=paste0(round(mean(log10(ec_conc), na.rm=T), 2), 
+                                   "(",round(min(log10(ec_conc), na.rm=T),2),"-", round(max(log10(ec_conc), na.rm=T),2),")"),
+            "Typhi +" = sum(typhi_positive, na.rm=T),
+            "Typhi pres" = sum(typhi_presumptive, na.rm=T),
+            "Paratyphi +" = sum(paratyphi_positive, na.rm=T),
+            "Paratyphi pres" = sum(paratyphi_presumptive, na.rm=T))
+```
+
+```{r es_tables}
+es_all <- es1_final %>% 
+  filter(!is.na(ec_conc), sample_type!="Field Blank") %>% 
+  group_by(sample_type) %>% 
+  dplyr::summarise(count_all = dplyr::n(), 
+            'mean(min-max)'=paste0(round(mean(log10(ec_conc), na.rm=T), 2), 
+                                   "(",round(min(log10(ec_conc), na.rm=T),2),"-", round(max(log10(ec_conc), na.rm=T),2),")"),
+            "Typhi +" = sum(typhi_positive, na.rm=T),
+            "Typhi pres" = sum(typhi_presumptive, na.rm=T),
+            "Paratyphi +" = sum(paratyphi_positive, na.rm=T),
+            "Paratyphi pres" = sum(paratyphi_presumptive, na.rm=T))
+
+
+es_option1 <- es_with_fb %>% 
+  filter(!is.na(ec_conc), sample_type!="Field Blank") %>% 
+  group_by(sample_type) %>% 
+  dplyr::summarise(count_1 = dplyr::n(), 
+            'mean(min-max)'=paste0(round(mean(log10(ec_conc), na.rm=T), 2), 
+                                   "(",round(min(log10(ec_conc), na.rm=T),2),"-", round(max(log10(ec_conc), na.rm=T),2),")"),
+            "Typhi +" = sum(typhi_positive, na.rm=T),
+            "Typhi pres" = sum(typhi_presumptive, na.rm=T),
+            "Paratyphi +" = sum(paratyphi_positive, na.rm=T),
+            "Paratyphi pres" = sum(paratyphi_presumptive, na.rm=T))
+
+
+es_option2 <- es_with_cleanfb_ec %>% 
+  filter(!is.na(ec_conc), sample_type!="Field Blank") %>% 
+  group_by(sample_type) %>% 
+  dplyr::summarise(count_2 = dplyr::n(), 
+            'mean(min-max)'=paste0(round(mean(log10(ec_conc), na.rm=T), 2), 
+                                   "(",round(min(log10(ec_conc), na.rm=T),2),"-", round(max(log10(ec_conc), na.rm=T),2),")"),
+            "Typhi +" = sum(typhi_positive, na.rm=T),
+            "Typhi pres" = sum(typhi_presumptive, na.rm=T),
+            "Paratyphi +" = sum(paratyphi_positive, na.rm=T),
+            "Paratyphi pres" = sum(paratyphi_presumptive, na.rm=T))
+
+
+es_option3 <- es_with_cleanfb_pcr %>% 
+  filter(!is.na(ec_conc), sample_type!="Field Blank") %>% 
+  group_by(sample_type) %>% 
+  dplyr::summarise(count_3 = dplyr::n(), 
+            'mean(min-max)'=paste0(round(mean(log10(ec_conc), na.rm=T), 2), 
+                                   "(",round(min(log10(ec_conc), na.rm=T),2),"-", round(max(log10(ec_conc), na.rm=T),2),")"),
+            "Typhi +" = sum(typhi_positive, na.rm=T),
+            "Typhi pres" = sum(typhi_presumptive, na.rm=T),
+            "Paratyphi +" = sum(paratyphi_positive, na.rm=T),
+            "Paratyphi pres" = sum(paratyphi_presumptive, na.rm=T))
+
+
+es_option4 <- es_with_cleanfb_ec_pcr %>% 
+  filter(!is.na(ec_conc), sample_type!="Field Blank") %>% 
+  group_by(sample_type) %>% 
+  dplyr::summarise(count_4 = dplyr::n(), 
+            'mean(min-max)'=paste0(round(mean(log10(ec_conc), na.rm=T), 2), 
+                                   "(",round(min(log10(ec_conc), na.rm=T),2),"-", round(max(log10(ec_conc), na.rm=T),2),")"),
+            "Typhi +" = sum(typhi_positive, na.rm=T),
+            "Typhi pres" = sum(typhi_presumptive, na.rm=T),
+            "Paratyphi +" = sum(paratyphi_positive, na.rm=T),
+            "Paratyphi pres" = sum(paratyphi_presumptive, na.rm=T))
+
+```
+
+```{r so_tables}
+so_all <- so_final %>% 
+  filter(!is.na(ec_conc), sample_type!="Field Blank") %>% 
+  group_by(sample_type) %>% 
+  dplyr::summarise(count_all = dplyr::n(), 
+            'mean(min-max)'=paste0(round(mean(log10(ec_conc), na.rm=T), 2), 
+                                   "(",round(min(log10(ec_conc), na.rm=T),2),"-", round(max(log10(ec_conc), na.rm=T),2),")"),
+            "Typhi +" = sum(typhi_positive, na.rm=T),
+            "Typhi pres" = sum(typhi_presumptive, na.rm=T),
+            "Paratyphi +" = sum(paratyphi_positive, na.rm=T),
+            "Paratyphi pres" = sum(paratyphi_presumptive, na.rm=T))
+
+
+so_option1 <- so_with_fb %>% 
+  filter(!is.na(ec_conc), sample_type!="Field Blank") %>% 
+  group_by(sample_type) %>% 
+  dplyr::summarise(count_1 = dplyr::n(), 
+            'mean(min-max)'=paste0(round(mean(log10(ec_conc), na.rm=T), 2), 
+                                   "(",round(min(log10(ec_conc), na.rm=T),2),"-", round(max(log10(ec_conc), na.rm=T),2),")"),
+            "Typhi +" = sum(typhi_positive, na.rm=T),
+            "Typhi pres" = sum(typhi_presumptive, na.rm=T),
+            "Paratyphi +" = sum(paratyphi_positive, na.rm=T),
+            "Paratyphi pres" = sum(paratyphi_presumptive, na.rm=T))
+
+
+so_option2 <- so_with_cleanfb_ec %>% 
+  filter(!is.na(ec_conc), sample_type!="Field Blank") %>% 
+  group_by(sample_type) %>% 
+  dplyr::summarise(count_2 = dplyr::n(), 
+            'mean(min-max)'=paste0(round(mean(log10(ec_conc), na.rm=T), 2), 
+                                   "(",round(min(log10(ec_conc), na.rm=T),2),"-", round(max(log10(ec_conc), na.rm=T),2),")"),
+            "Typhi +" = sum(typhi_positive, na.rm=T),
+            "Typhi pres" = sum(typhi_presumptive, na.rm=T),
+            "Paratyphi +" = sum(paratyphi_positive, na.rm=T),
+            "Paratyphi pres" = sum(paratyphi_presumptive, na.rm=T))
+
+
+so_option3 <- so_with_cleanfb_pcr %>% 
+  filter(!is.na(ec_conc), sample_type!="Field Blank") %>% 
+  group_by(sample_type) %>% 
+  dplyr::summarise(count_3 = dplyr::n(), 
+            'mean(min-max)'=paste0(round(mean(log10(ec_conc), na.rm=T), 2), 
+                                   "(",round(min(log10(ec_conc), na.rm=T),2),"-", round(max(log10(ec_conc), na.rm=T),2),")"),
+            "Typhi +" = sum(typhi_positive, na.rm=T),
+            "Typhi pres" = sum(typhi_presumptive, na.rm=T),
+            "Paratyphi +" = sum(paratyphi_positive, na.rm=T),
+            "Paratyphi pres" = sum(paratyphi_presumptive, na.rm=T))
+
+
+so_option4 <- so_with_cleanfb_ec_pcr %>% 
+  filter(!is.na(ec_conc), sample_type!="Field Blank") %>% 
+  group_by(sample_type) %>% 
+  dplyr::summarise(count_4 = dplyr::n(), 
+            'mean(min-max)'=paste0(round(mean(log10(ec_conc), na.rm=T), 2), 
+                                   "(",round(min(log10(ec_conc), na.rm=T),2),"-", round(max(log10(ec_conc), na.rm=T),2),")"),
+            "Typhi +" = sum(typhi_positive, na.rm=T),
+            "Typhi pres" = sum(typhi_presumptive, na.rm=T),
+            "Paratyphi +" = sum(paratyphi_positive, na.rm=T),
+            "Paratyphi pres" = sum(paratyphi_presumptive, na.rm=T))
+
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r spt, out.width="100%", echo=FALSE}
+m1 <- merge(spt_all, spt_option1, by="sample_type")
+m2 <- merge(m1, spt_option2, by="sample_type")
+m3 <- merge(m2, spt_option3, by="sample_type")
+m4 <- merge(m3, spt_option4, by="sample_type")
+
+# m4 <- m4[c(1,2,4,6,8,10,3,5,7,9,11)]
+
+kable(m4, digits=3) %>%
+  kable_styling(c("striped", "bordered")) %>%
+  add_header_above(c(" ", "All Samples" = 6, 
+                     "All Samples w/ FB" = 6, 
+                     "All Samples w/ no EC FB cont." = 6, 
+                     "All Samples w/ no PCR FB cont." = 6,
+                     "All Samples w/ no PCR or EC FB cont." = 6)) %>%
+  add_footnote("var_all = no removal, var_1 = only samples w/ FB, var_2 = only samples w/ no EC FB, var_3 = only samples w/ no PCR FB, var_4 = only samples with no EC or PCR FB")
+
+df1 <- spt1_final %>% filter(!is.na(ec_conc), sample_type !="Field Blank") %>% mutate(data="All Data")
+df2 <- spt_with_fb %>% filter(!is.na(ec_conc), sample_type !="Field Blank") %>% mutate(data="w/ FB")
+df3 <- spt_with_cleanfb_ec %>% filter(!is.na(ec_conc), sample_type !="Field Blank") %>% mutate(data="w/ FB no EC")
+df4 <- spt_with_cleanfb_pcr %>% filter(!is.na(ec_conc), sample_type !="Field Blank") %>% mutate(data="w/ FB no PCR")
+df5 <- spt_with_cleanfb_ec_pcr %>% 
+  filter(!is.na(ec_conc), sample_type !="Field Blank") %>% mutate(data="w/ FB no cont.")
+
+df <- rbind(df1,df2,df3,df4,df5)
+
+ggplot() +
+  geom_density_ridges(data=df, 
+                      aes(y=factor(sample_type, levels=(unique(sample_type))), 
+                          x=log10(ec_conc), colour=data, fill=data),
+                      quantile_lines=TRUE, quantiles=2,
+                      alpha = 0,
+                      scale=1) +
+  scale_color_manual(values=c("All Data"=colScale[1], "w/ FB"=colScale[2], "w/ FB no EC"=colScale[3], "w/ FB no PCR"=colScale[9], "w/ FB no cont."=colScale[7]), aesthetics=c("colour", "fill")) +
+  labs(title="Exposure Assessment: E. coli Concentration by Sample Type", x="log10 E. Coli Concentration", y="Sample Type")
+  
+```
+
+```{r es, out.width="100%", echo=FALSE}
+m1 <- merge(es_all, es_option1, by="sample_type")
+m2 <- merge(m1, es_option2, by="sample_type")
+m3 <- merge(m2, es_option3, by="sample_type")
+m4 <- merge(m3, es_option4, by="sample_type")
+
+m4 <- m4[c(1,2,6,10,14,18,3,7,11,15,19,4,8,12,16,20,5,9,13,17,21)]
+
+kable(m4) %>%
+  kable_styling(c("striped", "bordered")) %>%
+  add_header_above(c(" ", "Count of Samples" = 5, 
+                     "Mean of Samples" = 5, 
+                     "Min of Samples" = 5, 
+                     "Max of Samples" = 5)) %>%
+  add_footnote("var_all = no removal, var_1 = only samples w/ FB, var_2 = only samples w/ no EC FB, var_3 = only samples w/ no PCR FB, var_4 = only samples with no EC or PCR FB")
+
+df1 <- es1_final %>% filter(!is.na(ec_conc), sample_type !="Field Blank") %>% mutate(data="All Data")
+df2 <- es_with_fb %>% filter(!is.na(ec_conc), sample_type !="Field Blank") %>% mutate(data="w/ FB")
+df3 <- es_with_cleanfb_ec %>% filter(!is.na(ec_conc), sample_type !="Field Blank") %>% mutate(data="w/ FB no EC")
+df4 <- es_with_cleanfb_pcr %>% filter(!is.na(ec_conc), sample_type !="Field Blank") %>% mutate(data="w/ FB no PCR")
+df5 <- es_with_cleanfb_ec_pcr %>% 
+  filter(!is.na(ec_conc), sample_type !="Field Blank") %>% mutate(data="w/ FB no cont.")
+
+df <- rbind(df1,df2,df3,df4,df5)
+
+ggplot() +
+  geom_density_ridges(data=df, 
+                      aes(y=factor(sample_type, levels=(unique(sample_type))), 
+                          x=log10(ec_conc), colour=data, fill=data),
+                      quantile_lines=TRUE, quantiles=2,
+                      alpha = 0,
+                      scale=1) +
+  scale_color_manual(values=c("All Data"=colScale[1], "w/ FB"=colScale[2], "w/ FB no EC"=colScale[3], "w/ FB no PCR"=colScale[9], "w/ FB no cont."=colScale[7]), aesthetics=c("colour", "fill")) +
+  labs(title="Environmental Surveillance: E. coli Concentration by Sample Type", x="log10 E. Coli Concentration", y="Sample Type")
+  
+```
+
+
+
+```{r so, out.width="100%", echo=FALSE}
+m1 <- merge(so_all, so_option1, by="sample_type")
+m2 <- merge(m1, so_option2, by="sample_type")
+m3 <- merge(m2, so_option3, by="sample_type")
+m4 <- merge(m3, so_option4, by="sample_type")
+
+m4 <- m4[c(1,2,6,10,14,18,3,7,11,15,19,4,8,12,16,20,5,9,13,17,21)]
+
+kable(m4) %>%
+  kable_styling(c("striped", "bordered")) %>%
+  add_header_above(c(" ", "Count of Samples" = 5, 
+                     "Mean of Samples" = 5, 
+                     "Min of Samples" = 5, 
+                     "Max of Samples" = 5)) %>%
+  add_footnote("var_all = no removal, var_1 = only samples w/ FB, var_2 = only samples w/ no EC FB, var_3 = only samples w/ no PCR FB, var_4 = only samples with no EC or PCR FB")
+
+df1 <- so_final %>% filter(!is.na(ec_conc), sample_type !="Field Blank") %>% mutate(data="All Data")
+df2 <- so_with_fb %>% filter(!is.na(ec_conc), sample_type !="Field Blank") %>% mutate(data="w/ FB")
+df3 <- so_with_cleanfb_ec %>% filter(!is.na(ec_conc), sample_type !="Field Blank") %>% mutate(data="w/ FB no EC")
+df4 <- so_with_cleanfb_pcr %>% filter(!is.na(ec_conc), sample_type !="Field Blank") %>% mutate(data="w/ FB no PCR")
+df5 <- so_with_cleanfb_ec_pcr %>% 
+  filter(!is.na(ec_conc), sample_type !="Field Blank") %>% mutate(data="w/ FB no cont.")
+
+df <- rbind(df1,df2,df3,df4,df5)
+
+ggplot() +
+  geom_density_ridges(data=df, 
+                      aes(y=factor(sample_type, levels=(unique(sample_type))), 
+                          x=log10(ec_conc), colour=data, fill=data),
+                      quantile_lines=TRUE, quantiles=2,
+                      alpha = 0,
+                      scale=1) +
+  scale_color_manual(values=c("All Data"=colScale[1], "w/ FB"=colScale[2], "w/ FB no EC"=colScale[3], "w/ FB no PCR"=colScale[9], "w/ FB no cont."=colScale[7]), aesthetics=c("colour", "fill")) +
+  labs(title="Structured Observations: E. coli Concentration by Sample Type", x="log10 E. Coli Concentration", y="Sample Type")
+  
+```
+

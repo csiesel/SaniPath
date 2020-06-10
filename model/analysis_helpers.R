@@ -188,7 +188,6 @@ compute_frequencies <- function(..., type='pie',
     df_for_analysis <- eval(parse(text=paste0(analysis_type, '_data')))
   }
 
-
   freq <- find_pathways(df_for_analysis,
                         analysis_type,
                         pathway_labels = pathway_labels,
@@ -263,6 +262,7 @@ find_pathway <- function(df, neighb,
                          neighborhood_mapping) {
   neighb_subset <- df[,grepl('(h|c|s)_neighborhood$', names(df)), drop=F]
   neighb_subset <- apply(neighb_subset, 1, function(x) any(x == neighb))
+
   return(list(sample = unname(pathway_type),
               age = switch(population_type, 'a' = 'Adults', 'c' = 'Children'),
               neighborhood = lookup_neighborhood(neighborhood_mapping, neighb),

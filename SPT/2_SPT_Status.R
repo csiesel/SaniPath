@@ -9,14 +9,14 @@ library(tidyverse)
 
 # # Put files here if you want to read from csv instead of re-running SPT-dupid_fix.R
 path <- "/Users/caseysiesel/Desktop/SaniPath/"
-raw_2.1 <- read_csv(paste0(path, "SPT/data/raw_2.1_2020-05-13.csv"))
-raw_2.2 <- read_csv(paste0(path, "SPT/data/raw_2.2_2020-05-13.csv"))
-raw_2.4 <- read_csv(paste0(path, "SPT/data/raw_2.4_2020-05-13.csv"))
-raw_3.1 <- read_csv(paste0(path, "SPT/data/raw_3.1_2020-05-13.csv"))
-raw_3.2 <- read_csv(paste0(path, "SPT/data/raw_3.2_2020-05-13.csv"))
-raw_3.3 <- read_csv(paste0(path, "SPT/data/raw_3.3_2020-05-13.csv"))
-raw_3.4 <- read_csv(paste0(path, "SPT/data/raw_3.4_2020-05-13.csv"))
-raw_3.5 <- read_csv(paste0(path, "SPT/data/raw_3.5_2020-05-13.csv"))
+raw_2.1 <- read_csv(paste0(path, "SPT/data/raw_2.1_2020-05-27.csv"))
+raw_2.2 <- read_csv(paste0(path, "SPT/data/raw_2.2_2020-05-27.csv"))
+raw_2.4 <- read_csv(paste0(path, "SPT/data/raw_2.4_2020-05-27.csv"))
+raw_3.1 <- read_csv(paste0(path, "SPT/data/raw_3.1_2020-05-27.csv"))
+raw_3.2 <- read_csv(paste0(path, "SPT/data/raw_3.2_2020-05-27.csv"))
+raw_3.3 <- read_csv(paste0(path, "SPT/data/raw_3.3_2020-05-27.csv"))
+raw_3.4 <- read_csv(paste0(path, "SPT/data/raw_3.4_2020-05-27.csv"))
+raw_3.5 <- read_csv(paste0(path, "SPT/data/raw_3.5_2020-05-27.csv"))
 
 
 #### Little fixes ####
@@ -24,10 +24,11 @@ raw_3.5 <- read_csv(paste0(path, "SPT/data/raw_3.5_2020-05-13.csv"))
   #  - also doing special fixes for trigger numbers for PLc and
   #  - making FB####UP to FB so I can match with raw sample for enrichment
 raw_2.1$col_id <- toupper(sub(" ", "", raw_2.1$col_id))
-# raw_2.2$col_id <- toupper(sub(" ", "", raw_2.2$col_id))
+raw_2.2$col_id <- toupper(sub(" ", "", raw_2.2$col_id))
 raw_2.4$col_id <- toupper(sub(" ", "", raw_2.4$col_id))
 raw_2.4$col_sw_trigger_nr <- toupper(gsub(" ' ' | & | ,", "", raw_2.4$col_sw_trigger_nr))
 raw_2.4$col_sw_trigger_nr <- str_split(raw_2.4$col_sw_trigger_nr, "\\,")
+raw_2.4$col_sw_trigger_nr <- as.character(raw_2.4$col_sw_trigger_nr)
 raw_3.1$lab_id <- toupper(sub(" ", "", raw_3.1$lab_id))
 raw_3.2$lab_id <- toupper(sub(" ", "", raw_3.2$lab_id))
 raw_3.3$lab_id <- toupper(sub(" ", "", raw_3.3$lab_id))
@@ -37,7 +38,8 @@ raw_3.5$temp_id <- str_remove_all(raw_3.5$lab_id, "UP$")
 
 #Fixing known issues
 raw_3.1$lab_sample_type[which(raw_3.1$lab_id=="LS1001")] = 7
-raw_3.1$lab_id[which(raw_3.1$lab_id=="RP2002A")] = "RP2002"
+raw_2.1$col_id[which(raw_2.1$col_id=="RP2002")] = "RP2002A"
+raw_3.1$lab_1_ecoli_membrane[which(raw_3.1$lab_sample_type==99 & raw_3.1$lab_1_ecoli_reading_membrane %in% c(1,2))] <- 200
 raw_3.2$lab_sample_type[which(raw_3.2$lab_id=="SF2001")] = 10
 raw_3.4$lab_neighborhood[which(raw_3.4$lab_id=="DWA2003")] = 2
 raw_3.4$lab_neighborhood[which(raw_3.4$lab_id=="DWA1003UF")] = 3
@@ -45,21 +47,34 @@ raw_3.4$lab_neighborhood[which(raw_3.4$lab_id=="DWA1003UF")] = 3
 #### SPT initial run ####
 spt <- raw_2.1 %>%
   mutate(form=2.1,
-         date=as.character(as.Date(col_start)),
+         date=ifelse(!is.na(as.character(as.Date(col_start))), as.character(as.Date(col_start)), as.character(as.Date(col_start_dt))),
+         lat = `_col_location_latitude`, long = `_col_location_longitude`,
          sample_index=`_index`, sample_type=col_sample_type, sample_ward=col_ward, sample_hood=col_neighborhood,
          mf_date="", mf_index="", mf_type="", mf_ward="", mf_hood="",
          mst_date="", mst_index="", mst_type="", mst_ward="", mst_hood="",
          dna_date="", dna_index="", dna_type="", dna_ward="", dna_hood="",
          pcr_date="", pcr_index="", pcr_type="", pcr_ward="", pcr_hood="",
          enr_date="", enr_index="", enr_type="", enr_ward="", enr_hood="",
-         fb="", fb_ec="", fb_up="", ncec="", ncec_ec="", upnc="", upnc_tb="") %>%
-  select(c("col_id", "form", "date", "sample_index", "sample_type", "sample_ward", "sample_hood",
+         fb="", fb_ec="", fb_up="", 
+         fb_pcr="", fb_typhi_pos="", fb_typhi_pres="", fb_paratyphi_pos="", fb_paratyphi_pres="",
+         ncec="", ncec_ec="", upnc="", upnc_tb="") %>%
+  select(c("col_id", "form", "date", "lat", "long", "sample_index", "sample_type", "sample_ward", "sample_hood",
            "mf_date", "mf_index", "mf_type", "mf_ward", "mf_hood",
            "mst_date", "mst_index", "mst_type", "mst_ward", "mst_hood",
            "dna_date", "dna_index", "dna_type", "dna_ward", "dna_hood",
            "pcr_date", "pcr_index", "pcr_type", "pcr_ward", "pcr_hood",
            "enr_date", "enr_index", "enr_type", "enr_ward", "enr_hood",
-           "fb", "fb_ec", "fb_up", "ncec", "ncec_ec", "upnc", "upnc_tb"))
+           "fb", "fb_ec", "fb_up",
+           "fb_pcr", "fb_typhi_pos", "fb_typhi_pres", "fb_paratyphi_pos", "fb_paratyphi_pres",
+           "ncec", "ncec_ec", "upnc", "upnc_tb"))
+
+
+spt$fb_pcr <- ""
+spt$fb_typhi_pos <- 0
+spt$fb_typhi_pres <- 0
+spt$fb_paratyphi_pos <- 0
+spt$fb_paratyphi_pres <- 0
+
 
 #The function below for SPT and the same for ES is duplicating Wolfgang's status page
 # Essentially pulls in a date if the ID has a match in the lab forms
@@ -150,10 +165,10 @@ for(i in 1:nrow(spt)){
                             raw_3.5$lab_neighborhood[which(spt$col_id[i]==raw_3.5$lab_id)])
   
   #FB
-  spt$fb[i] <- ifelse(is_empty(raw_2.1$col_id[which(spt$date[i]==as.character(as.Date(raw_2.1$col_start)) & 
+  spt$fb[i] <- ifelse(is_empty(raw_2.1$col_id[which(spt$date[i]==as.character(as.Date(raw_2.1$col_start_dt)) & 
                                                       grepl("FB", raw_2.1$col_id)==TRUE)]),
                       NA,
-                      strsplit(str_c(raw_2.1$col_id[which(spt$date[i]==as.character(as.Date(raw_2.1$col_start)) & 
+                      strsplit(str_c(raw_2.1$col_id[which(spt$date[i]==as.character(as.Date(raw_2.1$col_start_dt)) & 
                                                    grepl("FB", raw_2.1$col_id)==TRUE)], sep=", ", collapse=", "), ", "))
   
 
@@ -248,21 +263,26 @@ raw_3.5$lab_neighborhood[which(raw_3.5$`_index` %in% enr_diff)] <- sample_hood_e
 #### Re-Running SPT developer to get the final version ####
 spt <- raw_2.1 %>%
   mutate(form=2.1,
-         date=as.character(as.Date(col_start)),
+         date=ifelse(!is.na(as.character(as.Date(col_start))), as.character(as.Date(col_start)), as.character(as.Date(col_start_dt))),
+         lat = `_col_location_latitude`, long = `_col_location_longitude`,
          sample_index=`_index`, sample_type=col_sample_type, sample_ward=col_ward, sample_hood=col_neighborhood,
          mf_date="", mf_index="", mf_type="", mf_ward="", mf_hood="",
          mst_date="", mst_index="", mst_type="", mst_ward="", mst_hood="",
          dna_date="", dna_index="", dna_type="", dna_ward="", dna_hood="",
          pcr_date="", pcr_index="", pcr_type="", pcr_ward="", pcr_hood="",
          enr_date="", enr_index="", enr_type="", enr_ward="", enr_hood="",
-         fb="", fb_ec="", fb_up="", ncec="", ncec_ec="", upnc="", upnc_tb="") %>%
-  select(c("col_id", "form", "date", "sample_index", "sample_type", "sample_ward", "sample_hood",
+         fb="", fb_ec="", fb_up="", 
+         fb_pcr="", fb_typhi_pos="", fb_typhi_pres="", fb_paratyphi_pos="", fb_paratyphi_pres="", 
+         ncec="", ncec_ec="", upnc="", upnc_tb="") %>%
+  select(c("col_id", "form", "date", "lat", "long", "sample_index", "sample_type", "sample_ward", "sample_hood",
            "mf_date", "mf_index", "mf_type", "mf_ward", "mf_hood",
            "mst_date", "mst_index", "mst_type", "mst_ward", "mst_hood",
            "dna_date", "dna_index", "dna_type", "dna_ward", "dna_hood",
            "pcr_date", "pcr_index", "pcr_type", "pcr_ward", "pcr_hood",
            "enr_date", "enr_index", "enr_type", "enr_ward", "enr_hood",
-           "fb", "fb_ec", "fb_up", "ncec", "ncec_ec", "upnc", "upnc_tb"))
+           "fb", "fb_ec", "fb_up",
+           "fb_pcr", "fb_typhi_pos", "fb_typhi_pres", "fb_paratyphi_pos", "fb_paratyphi_pres",
+           "ncec", "ncec_ec", "upnc", "upnc_tb"))
 
 
 for(i in 1:nrow(spt)){
@@ -352,10 +372,10 @@ for(i in 1:nrow(spt)){
                             raw_3.5$lab_neighborhood[which(spt$col_id[i]==raw_3.5$lab_id)])
   
   #FB
-  spt$fb[i] <- ifelse(is_empty(raw_2.1$col_id[which(spt$date[i]==as.character(as.Date(raw_2.1$col_start)) & 
+  spt$fb[i] <- ifelse(is_empty(raw_2.1$col_id[which(spt$date[i]==as.character(as.Date(raw_2.1$col_start_dt)) & 
                                                       grepl("FB", raw_2.1$col_id)==TRUE)]),
                       NA,
-                      strsplit(str_c(raw_2.1$col_id[which(spt$date[i]==as.character(as.Date(raw_2.1$col_start)) & 
+                      strsplit(str_c(raw_2.1$col_id[which(spt$date[i]==as.character(as.Date(raw_2.1$col_start_dt)) & 
                                                             grepl("FB", raw_2.1$col_id)==TRUE)], sep=", ", collapse=", "), ", "))
   
   
@@ -415,21 +435,26 @@ spt$col_id[which(spt$sample_hood != spt$mf_hood |
 
 es <- raw_2.4 %>%
   mutate(form=2.4,
-         date=ifelse(col_sample_type !=12, as.character(as.Date(col_start)), as.character(as.Date(col_ms_in))),
+         date=ifelse(col_sample_type ==12, as.character(as.Date(col_ms_in)), ifelse(!is.na(col_start), as.character(as.Date(col_start)), as.character(as.Date(col_start_dt)))),
+         lat = `_col_location_latitude`, long = `_col_location_longitude`,
          sample_index=`_index`, sample_type=col_sample_type, sample_ward=col_ward, sample_hood=NA,
          mf_date="", mf_index="", mf_type="", mf_ward="", mf_hood="",
          mst_date="", mst_index="", mst_type="", mst_ward="", mst_hood="",
          dna_date="", dna_index="", dna_type="", dna_ward="", dna_hood="",
          pcr_date="", pcr_index="", pcr_type="", pcr_ward="", pcr_hood="",
          enr_date="", enr_index="", enr_type="", enr_ward="", enr_hood="",
-         fb="", fb_ec="", fb_up="", ncec="", ncec_ec="", upnc="", upnc_tb="") %>%
-  select(c("col_id", "form", "date", "sample_index", "sample_type", "sample_ward", "sample_hood",
+         fb="", fb_ec="", fb_up="", 
+         fb_pcr="", fb_typhi_pos="", fb_typhi_pres="", fb_paratyphi_pos="", fb_paratyphi_pres="", 
+         ncec="", ncec_ec="", upnc="", upnc_tb="") %>%
+  select(c("col_id", "form", "date", "lat", "long", "sample_index", "sample_type", "sample_ward", "sample_hood",
            "mf_date", "mf_index", "mf_type", "mf_ward", "mf_hood",
            "mst_date", "mst_index", "mst_type", "mst_ward", "mst_hood",
            "dna_date", "dna_index", "dna_type", "dna_ward", "dna_hood",
            "pcr_date", "pcr_index", "pcr_type", "pcr_ward", "pcr_hood",
            "enr_date", "enr_index", "enr_type", "enr_ward", "enr_hood",
-           "fb", "fb_ec", "fb_up", "ncec", "ncec_ec", "upnc", "upnc_tb"))
+           "fb", "fb_ec", "fb_up",
+           "fb_pcr", "fb_typhi_pos", "fb_typhi_pres", "fb_paratyphi_pos", "fb_paratyphi_pres",
+           "ncec", "ncec_ec", "upnc", "upnc_tb"))
 
 for(i in 1:nrow(es)){
   #MF
@@ -518,10 +543,10 @@ for(i in 1:nrow(es)){
                             raw_3.5$lab_neighborhood[which(es$col_id[i]==raw_3.5$lab_id)])
   
   #FB
-  es$fb[i] <- ifelse(is_empty(raw_2.4$col_id[which(es$date[i]==as.character(as.Date(raw_2.4$col_start)) & 
+  es$fb[i] <- ifelse(is_empty(raw_2.4$col_id[which(es$date[i]==as.character(as.Date(raw_2.4$col_start_dt)) & 
                                                       grepl("FB", raw_2.4$col_id)==TRUE)]),
                       NA,
-                     strsplit(str_c(raw_2.4$col_id[which(es$date[i]==as.character(as.Date(raw_2.4$col_start)) & 
+                     strsplit(str_c(raw_2.4$col_id[which(es$date[i]==as.character(as.Date(raw_2.4$col_start_dt)) & 
                                                    grepl("FB", raw_2.4$col_id)==TRUE)], sep=", ", collapse=", "), ", "))
   
   es$fb_ec[i] <- ifelse(is_empty(raw_3.1$lab_1_ecoli_membrane[which(raw_3.1$lab_id %in% es$fb[[i]])]),
@@ -626,21 +651,26 @@ for(i in 1:nrow(es)){
 #### Re-Running ES developer to get the final version ####
 es <- raw_2.4 %>%
   mutate(form=2.4,
-         date=ifelse(col_sample_type !=12, as.character(as.Date(col_start)), as.character(as.Date(col_ms_in))),
+         date=ifelse(col_sample_type ==12, as.character(as.Date(col_ms_in)), ifelse(!is.na(col_start), as.character(as.Date(col_start)), as.character(as.Date(col_start_dt)))),
+         lat = `_col_location_latitude`, long = `_col_location_longitude`,
          sample_index=`_index`, sample_type=col_sample_type, sample_ward=col_ward, sample_hood=NA,
          mf_date="", mf_index="", mf_type="", mf_ward="", mf_hood="",
          mst_date="", mst_index="", mst_type="", mst_ward="", mst_hood="",
          dna_date="", dna_index="", dna_type="", dna_ward="", dna_hood="",
          pcr_date="", pcr_index="", pcr_type="", pcr_ward="", pcr_hood="",
          enr_date="", enr_index="", enr_type="", enr_ward="", enr_hood="",
-         fb="", fb_ec="", fb_up="", ncec="", ncec_ec="", upnc="", upnc_tb="") %>%
-  select(c("col_id", "form", "date", "sample_index", "sample_type", "sample_ward", "sample_hood",
+         fb="", fb_ec="", fb_up="", 
+         fb_pcr="", fb_typhi_pos="", fb_typhi_pres="", fb_paratyphi_pos="", fb_paratyphi_pres="", 
+         ncec="", ncec_ec="", upnc="", upnc_tb="") %>%
+  select(c("col_id", "form", "date", "lat", "long", "sample_index", "sample_type", "sample_ward", "sample_hood",
            "mf_date", "mf_index", "mf_type", "mf_ward", "mf_hood",
            "mst_date", "mst_index", "mst_type", "mst_ward", "mst_hood",
            "dna_date", "dna_index", "dna_type", "dna_ward", "dna_hood",
            "pcr_date", "pcr_index", "pcr_type", "pcr_ward", "pcr_hood",
            "enr_date", "enr_index", "enr_type", "enr_ward", "enr_hood",
-           "fb", "fb_ec", "fb_up", "ncec", "ncec_ec", "upnc", "upnc_tb"))
+           "fb", "fb_ec", "fb_up",
+           "fb_pcr", "fb_typhi_pos", "fb_typhi_pres", "fb_paratyphi_pos", "fb_paratyphi_pres",
+           "ncec", "ncec_ec", "upnc", "upnc_tb"))
 
 for(i in 1:nrow(es)){
   #MF
@@ -729,10 +759,10 @@ for(i in 1:nrow(es)){
                            raw_3.5$lab_neighborhood[which(es$col_id[i]==raw_3.5$lab_id)])
   
   #FB
-  es$fb[i] <- ifelse(is_empty(raw_2.4$col_id[which(es$date[i]==as.character(as.Date(raw_2.4$col_start)) & 
+  es$fb[i] <- ifelse(is_empty(raw_2.4$col_id[which(es$date[i]==as.character(as.Date(raw_2.4$col_start_dt)) & 
                                                      grepl("FB", raw_2.4$col_id)==TRUE)]),
                      NA,
-                     strsplit(str_c(raw_2.4$col_id[which(es$date[i]==as.character(as.Date(raw_2.4$col_start)) & 
+                     strsplit(str_c(raw_2.4$col_id[which(es$date[i]==as.character(as.Date(raw_2.4$col_start_dt)) & 
                                                            grepl("FB", raw_2.4$col_id)==TRUE)], sep=", ", collapse=", "), ", "))
   
   es$fb_ec[i] <- ifelse(is_empty(raw_3.1$lab_1_ecoli_membrane[which(raw_3.1$lab_id %in% es$fb[[i]])]),
@@ -775,6 +805,9 @@ es$col_id[which(es$sample_type != es$mf_type |
                   es$sample_type !=es$dna_type | 
                   es$sample_type !=es$pcr_type | 
                   es$sample_type !=es$enr_type)]
+
+
+
 
 
 
@@ -834,3 +867,11 @@ message(paste0("ES Neighborhood Issues: ",
                    es$enr_hood
                )], collapse = ", ")))
 
+write_excel_csv(raw_2.1, paste0(path, "SPT/data/clean_2.1_", Sys.Date(), ".csv"))
+write_excel_csv(raw_2.2, paste0(path, "SPT/data/clean_2.2_", Sys.Date(), ".csv"))
+write_excel_csv(raw_2.4, paste0(path, "SPT/data/clean_2.4_", Sys.Date(), ".csv"))
+write_excel_csv(raw_3.1, paste0(path, "SPT/data/clean_3.1_", Sys.Date(), ".csv"))
+write_excel_csv(raw_3.2, paste0(path, "SPT/data/clean_3.2_", Sys.Date(), ".csv"))
+write_excel_csv(raw_3.3, paste0(path, "SPT/data/clean_3.3_", Sys.Date(), ".csv"))
+write_excel_csv(raw_3.4, paste0(path, "SPT/data/clean_3.4_", Sys.Date(), ".csv"))
+write_excel_csv(raw_3.5, paste0(path, "SPT/data/clean_3.5_", Sys.Date(), ".csv"))

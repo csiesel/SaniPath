@@ -3,6 +3,7 @@ library(googlesheets4)
 
 #url of google spreadsheet
 url <- "https://docs.google.com/spreadsheets/d/13f1QVlxypEKZxy4PVRBZFaHnub3SAYYtupkhtnVW5pQ/edit#gid=1601030900"
+path <- "/Users/caseysiesel/Desktop/SaniPath/"
 
 #### Sample function definition ####
 sample <- function(fix,clean){
@@ -379,14 +380,14 @@ any(duplicated(raw_3.5$lab_id))
 
 
 
-write_excel_csv(raw_2.1, paste0("SPT/data/raw_2.1_", Sys.Date(), ".csv"))
-write_excel_csv(raw_2.2, paste0("SPT/data/raw_2.2_", Sys.Date(), ".csv"))
-write_excel_csv(raw_2.4, paste0("SPT/data/raw_2.4_", Sys.Date(), ".csv"))
-write_excel_csv(raw_3.1, paste0("SPT/data/raw_3.1_", Sys.Date(), ".csv"))
-write_excel_csv(raw_3.2, paste0("SPT/data/raw_3.2_", Sys.Date(), ".csv"))
-write_excel_csv(raw_3.3, paste0("SPT/data/raw_3.3_", Sys.Date(), ".csv"))
-write_excel_csv(raw_3.4, paste0("SPT/data/raw_3.4_", Sys.Date(), ".csv"))
-write_excel_csv(raw_3.5, paste0("SPT/data/raw_3.5_", Sys.Date(), ".csv"))
+write_excel_csv(raw_2.1, paste0(path, "SPT/data/raw_2.1_", Sys.Date(), ".csv"))
+write_excel_csv(raw_2.2, paste0(path, "SPT/data/raw_2.2_", Sys.Date(), ".csv"))
+write_excel_csv(raw_2.4, paste0(path, "SPT/data/raw_2.4_", Sys.Date(), ".csv"))
+write_excel_csv(raw_3.1, paste0(path, "SPT/data/raw_3.1_", Sys.Date(), ".csv"))
+write_excel_csv(raw_3.2, paste0(path, "SPT/data/raw_3.2_", Sys.Date(), ".csv"))
+write_excel_csv(raw_3.3, paste0(path, "SPT/data/raw_3.3_", Sys.Date(), ".csv"))
+write_excel_csv(raw_3.4, paste0(path, "SPT/data/raw_3.4_", Sys.Date(), ".csv"))
+write_excel_csv(raw_3.5, paste0(path, "SPT/data/raw_3.5_", Sys.Date(), ".csv"))
 
 
 rm(dup_2.1, dup_2.4, dup_3.1, dup_3.2, dup_3.3, dup_3.4, dup_3.5,

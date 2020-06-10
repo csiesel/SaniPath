@@ -38,8 +38,12 @@ ec_prepare_mf <- function(lab_data, reading, value) {
 
 ec_merge <- function(collection_data, lab_data) {
   #Capitalized and remove missings in ID and sample types for merge purpose;
-  collection_data[,c("col_sample_type","col_id")] <- apply(collection_data[,c("col_sample_type","col_id")], 2, function(x) toupper(x))
-  lab_data[,c("lab_sample_type","lab_id")] <- apply(lab_data[,c("lab_sample_type","lab_id")], 2, function(x) toupper(x))
+  collection_data[,c("col_sample_type")] <- apply(collection_data[,c("col_sample_type")], 2, function(x) toupper(x))
+  collection_data[,c("col_id")] <- apply(collection_data[,c("col_id")], 2, function(x) toupper(x))
+  
+  lab_data[,c("lab_sample_type")] <- apply(lab_data[,c("lab_sample_type")], 2, function(x) toupper(x))
+  lab_data[,c("lab_id")] <- apply(lab_data[,c("lab_id")], 2, function(x) toupper(x))
+  
   collection_data$col_id<-gsub(" ","",collection_data$col_id)
   lab_data$lab_id<-gsub(" ","",lab_data$lab_id)
 

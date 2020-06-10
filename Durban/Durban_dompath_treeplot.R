@@ -198,4 +198,64 @@ plot <- arrangeGrob(plot.adults, plot.children + theme(legend.position = "none")
 
 ggsave(plot = plot, paste0("~/Desktop/SaniPath/Durban/exposure_treemap_Durban_noremoval", Sys.Date(), ".png"), dpi = 300, width = 7, height = 6, units = "in")
 
+######### STACKED BOX POT ########
 
+load("~/Desktop/SaniPath/Durban/expo_durban.rda")
+
+durban <- dat.expo
+
+durban$neighb_pop <- paste0(durban$neighborhood, " ", durban$age)
+durban <- durban %>% group_by(neighb_pop) %>% mutate(perDose = log10(sum(popDose)),
+                                                     perDose = popDose/sum(popDose)*log10(sum(popDose)) )
+
+durban$pathway <- durban$sample
+durban$city <- "Durban"
+durban$pathway[which(durban$sample=="Municipal and Piped Water")] <- "Municipal Drinking Water"
+durban$pathway[which(durban$sample=="Flood Water")] <- "Floodwater"
+durban$pathway[which(durban$sample=="Drain Water")] <- "Open Drain Water"
+durban$pathway[which(durban$sample=="Produce")] <- "Raw Produce"
+
+durban <- durban %>% select(c("neighborhood", "perDose", "pathway", "city", "age"))
+durban <- durban %>% ungroup() %>% select(-c("neighb_pop"))
+
+load("~/Desktop/SaniPath/Durban/dhaka.exp.RDA")
+
+dhaka <- df.exposure.dhaka
+
+
+dhaka <- dhaka %>% select(c("neighborhood", "perDose", "pathway","city", "age"))
+
+
+df.exposure <- bind_rows(dhaka, durban)
+
+
+
+  colors <- c("Open Drain Water" = '#0F8554',
+              "Municipal Drinking Water" = '#1D6996',
+              "Raw Produce" = '#38A6A5',
+              "Floodwater" = '#5F4690',
+              "Bathing Water" = '#EDD808',
+              "Ocean Water" = '#994E95',
+              "Surface Water" = '#E17C05',
+              "Public Latrine" = '#74202D',
+              "Street Food" = '#CC503E')
+  
+  
+ durban_dhaka <- df.exposure %>% 
+    ggplot(., aes(x=factor(neighborhood), y=perDose, fill=pathway) ) +
+    geom_bar(stat="identity") +
+    facet_grid(age~ city, scales = "free_x", space = "free_x") +
+    labs(fill = "Pathway",
+         x = "Neighborhood",
+         y = "Total Exposure (log10)") +
+    theme_bw() +
+    theme(#legend.position="bottom",
+      strip.text.x = element_text(size = 12),
+      axis.text.x = element_text(angle = 90, hjust = 0.95, vjust = 0.2),
+      # strip.text.y = element_text(size = 12),
+      strip.background = element_rect(fill="white")) +
+    scale_fill_manual(values = colors)
+
+
+  ggsave(plot = durban_dhaka, paste0("~/Desktop/SaniPath/Durban/durban_dhaka_exp", Sys.Date(), ".png"), dpi = 300, width = 14, height = 8.5, units = "in")
+  

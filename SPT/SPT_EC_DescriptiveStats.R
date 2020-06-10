@@ -1,5 +1,3 @@
-source("~/Desktop/SaniPath/SPT/4_SPT_Ecoli.R")
-
 library(ggridges)
 
 ec_data_spt %>% 
@@ -28,8 +26,8 @@ ec_data_es %>%
 
 #### ES Plots ####
 pdf(paste("~/Desktop/SaniPath/SPT/output/","es_ec_", Sys.Date(),".pdf",sep=""), width = 11, height=8.5)
-ec_data_es %>% 
-  filter(!is.na(count1)) %>% 
+es %>% 
+  filter(!is.na(ec_conc), sample_type != 99) %>% 
   mutate(sample_type_name = ifelse(sample_type==11, "Pooled Latrine",
                             ifelse(sample_type==12, "Moore Swab",
                             ifelse(sample_type==16, "Pumping Station - UF",
@@ -52,8 +50,8 @@ dev.off()
 
 #### SPT Plots ####
 pdf(paste("~/Desktop/SaniPath/SPT/output/","spt_ec_", Sys.Date(),".pdf",sep=""), width = 11, height=8.5)
-ec_data_spt %>%
-  filter(!is.na(count1)) %>% 
+spt %>%
+  filter(!is.na(ec_conc), sample_type !=99) %>% 
   mutate(sample_type_name = ifelse(sample_type==1, "Open Drain",
                             ifelse(sample_type==2, "Raw Produce",
                             ifelse(sample_type==3, "Drinking Water",
@@ -85,15 +83,15 @@ dev.off()
 
 #### SO Plots ####
 pdf(paste("~/Desktop/SaniPath/SPT/output/","so_ec_", Sys.Date(),".pdf",sep=""), width = 11, height=8.5)
-ec_data_so %>% 
-  filter(!is.na(count1)) %>% 
-  mutate(sample_type_name = ifelse(sample_type==141, "Cutting /Grinding Surface (FPa)",
-                            ifelse(sample_type==142, "Storage/Preparation Bowl (FPb)",
-                            ifelse(sample_type==143, "Food Preparation Area (FPc)",
-                            ifelse(sample_type==144, "Cooking/Preparation Water (FPd)",
-                            ifelse(sample_type==145, "Cooking/Preparation Utensil (FPe)",
-                            ifelse(sample_type==151, "Child Obs - Floor",
-                            ifelse(sample_type==152, "Child Obs - Off Ground",
+so %>% 
+  filter(!is.na(ec_conc), sample_type !=99) %>% 
+  mutate(sample_type_name = ifelse(sample_type_so==141, "Cutting /Grinding Surface (FPa)",
+                            ifelse(sample_type_so==142, "Storage/Preparation Bowl (FPb)",
+                            ifelse(sample_type_so==143, "Food Preparation Area (FPc)",
+                            ifelse(sample_type_so==144, "Cooking/Preparation Water (FPd)",
+                            ifelse(sample_type_so==145, "Cooking/Preparation Utensil (FPe)",
+                            ifelse(sample_type_so==151, "Child Obs - Floor",
+                            ifelse(sample_type_so==152, "Child Obs - Off Ground",
                                                     "??")))))))) %>%
   ggplot(., aes(y=factor(sample_type_name, levels=(unique(sample_type_name)), labels=), x=log10(ec_conc))) +
   geom_density_ridges(quantile_lines=TRUE, quantiles=2
