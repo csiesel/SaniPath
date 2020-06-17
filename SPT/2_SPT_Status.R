@@ -9,14 +9,14 @@ library(tidyverse)
 
 # # Put files here if you want to read from csv instead of re-running SPT-dupid_fix.R
 path <- "/Users/caseysiesel/Desktop/SaniPath/"
-raw_2.1 <- read_csv(paste0(path, "SPT/data/raw_2.1_2020-05-27.csv"))
-raw_2.2 <- read_csv(paste0(path, "SPT/data/raw_2.2_2020-05-27.csv"))
-raw_2.4 <- read_csv(paste0(path, "SPT/data/raw_2.4_2020-05-27.csv"))
-raw_3.1 <- read_csv(paste0(path, "SPT/data/raw_3.1_2020-05-27.csv"))
-raw_3.2 <- read_csv(paste0(path, "SPT/data/raw_3.2_2020-05-27.csv"))
-raw_3.3 <- read_csv(paste0(path, "SPT/data/raw_3.3_2020-05-27.csv"))
-raw_3.4 <- read_csv(paste0(path, "SPT/data/raw_3.4_2020-05-27.csv"))
-raw_3.5 <- read_csv(paste0(path, "SPT/data/raw_3.5_2020-05-27.csv"))
+raw_2.1 <- read_csv(paste0(path, "SPT/data/raw_2.1_2020-06-15.csv"))
+raw_2.2 <- read_csv(paste0(path, "SPT/data/raw_2.2_2020-06-15.csv"))
+raw_2.4 <- read_csv(paste0(path, "SPT/data/raw_2.4_2020-06-15.csv"))
+raw_3.1 <- read_csv(paste0(path, "SPT/data/raw_3.1_2020-06-15.csv"))
+raw_3.2 <- read_csv(paste0(path, "SPT/data/raw_3.2_2020-06-15.csv"))
+raw_3.3 <- read_csv(paste0(path, "SPT/data/raw_3.3_2020-06-15.csv"))
+raw_3.4 <- read_csv(paste0(path, "SPT/data/raw_3.4_2020-06-15.csv"))
+raw_3.5 <- read_csv(paste0(path, "SPT/data/raw_3.5_2020-06-15.csv"))
 
 
 #### Little fixes ####

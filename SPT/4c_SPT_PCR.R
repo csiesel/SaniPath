@@ -18,7 +18,8 @@ for(i in 1:nrow(pcr)){
                                     abs(pcr$lab_pcr_para_results1[i] - pcr$lab_pcr_para_results2[i]) <=1.5,
                                   1, 0)
   
-  pcr$typhi_presumptive[i] <- ifelse((pcr$lab_pcr_ty_results1[i] <=33 | pcr$lab_pcr_ty_results2[i] <=33) & pcr$typhi_positive[i] != 1,
+  pcr$typhi_presumptive[i] <- ifelse((pcr$lab_pcr_ty_results1[i] <=33 | pcr$lab_pcr_ty_results2[i] <=33) & 
+                                       pcr$typhi_positive[i] != 1,
                                      1, 0)
   pcr$paratyphi_presumptive[i] <- ifelse((pcr$lab_pcr_para_results1[i] <=33 | pcr$lab_pcr_para_results2[i] <=33) & pcr$paratyphi_positive[i] != 1,
                                      1, 0)

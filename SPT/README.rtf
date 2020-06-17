@@ -1,0 +1,55 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2511
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fswiss\fcharset0 Helvetica-Oblique;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+{\*\listtable{\list\listtemplateid1\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid1\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid1}
+{\list\listtemplateid2\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid101\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid2}}
+{\*\listoverridetable{\listoverride\listid1\listoverridecount0\ls1}{\listoverride\listid2\listoverridecount0\ls2}}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 R Scripts\
+\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+* To run the analysis and get the final files (spt1_final.rda, es1_final.rda, so_final.rda), you can open \'916_SPT_ALLDATA_Combine.R\'92 and run the entire script. This will source all previous files [1-5] and produce the final datasets. An explanation of individual files are as follows\
+\pard\tx220\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li720\fi-720\pardirnatural\partightenfactor0
+\ls1\ilvl0\cf0 {\listtext	\uc0\u8226 	}1_SPT_Dupid_Fix.R: this files loads in all data from a collaborative google doc and fixes duplicate ID\'92s\
+{\listtext	\uc0\u8226 	}2_SPT_Status.R: this file generates a basic 
+\f1\i status
+\f0\i0  data frame for each of three data types (spt, es, so) to be used in generating the final datasets\
+{\listtext	\uc0\u8226 	}3_SPT_Merge.R: this merges all sample and lab datasets and fixes some lab volume issues\
+{\listtext	\uc0\u8226 	}4a_SPT_Ecoli.R: this calculates ec_conc\'92s for all three datasets. This could also be used to plot histograms if you uncomment a few lines\
+{\listtext	\uc0\u8226 	}4b_SPT_MST.R: this calculates mst_conc\'92s for the different assays. Also fixes some lab results issues for samples with duplicate runs or repeats in analysis\
+{\listtext	\uc0\u8226 	}4c_SPT_PCR.R: this classifies PCR positives and presumptives for typhoid and paratyphoid\
+{\listtext	\uc0\u8226 	}5_SPT_Final_Status.R: this is setting up the final status data frame for each of the three data types\
+{\listtext	\uc0\u8226 	}6_SPT_ALLDATA_Combine.R: this combines all lab results with sample information for the three datasets\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+Other scripts of interest:\
+\pard\tx220\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li720\fi-720\pardirnatural\partightenfactor0
+\ls2\ilvl0\cf0 {\listtext	\uc0\u8226 	}SPT_Data_Options.Rmd: this is a first look at how data would look when we consider field blank contamination and removing some data based on contamination\
+{\listtext	\uc0\u8226 	}SPT_Dilution_Checking.R: this checks to see if dilutions performed in the lab match what Renuka wanted them to perform\
+{\listtext	\uc0\u8226 	}SPT_EC_DescriptiveStats.R: this performs basic graphing of ec_conc\'92s by dataset (so, spt, es)\
+{\listtext	\uc0\u8226 	}SPT_FB_Check.R: this is checking for various field blank contamination issues. Used also in the \'91SPT_Data_Options.Rmd\'92 file\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+Data\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \'97\'97\'97\'97\'97\'97\'97\'97\'97\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 spt1_final.rda: this is the exposure assessment final dataset with lab results by sample\
+es1_final.rda: this is the environmental surveillance final dataset\
+so_final.rda: this is the structured observation final dataset\
+\
+Other important data files include the raw data (loaded in script 2_SPT_Status.R)\
+\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 Model\
+\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+This folder contains the basic E. coli model scripts from our regular SaniPath Tool\
+\
+\
+Output and Plots\
+\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+These folders are where plots would be saved after running some of the R scripts\
+}

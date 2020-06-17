@@ -444,3 +444,11 @@ for(i in 1:nrow(es1)){
 es1_final <- es1 %>% select(-c("mf_ward", "mf_hood", "mst_ward", "mst_hood", "dna_ward", "dna_hood", "enr_ward", "enr_hood",
                                "pcr_ward", "pcr_hood"))
 
+
+save(spt1_final, file="~/Desktop/SaniPath/SPT/data/spt1_final.rda")
+save(es1_final, file="~/Desktop/SaniPath/SPT/data/es1_final.rda")
+save(so_final, file="~/Desktop/SaniPath/SPT/data/so_final.rda")
+
+
+
+

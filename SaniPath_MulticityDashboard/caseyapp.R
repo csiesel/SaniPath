@@ -29,7 +29,9 @@ source("themes.R")
 # Define UI for application that draws a histogram
 #### UI ####
 ui <-
-  fluidPage(dashboardPage(
+  fluidPage(
+    tags$head(includeHTML("google-analytics.html")),
+    dashboardPage(
     dashboardHeader(title = logo_sanipath),
     dashboardSidebar(
       sidebarMenu(
@@ -103,6 +105,8 @@ ui <-
       ),
     
     dashboardBody(
+      # tags$head(includeScript("google-analytics.js")),
+      
       #THis is loading the custom theme
       sanipath,
       tabItems(

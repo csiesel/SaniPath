@@ -45,7 +45,9 @@ es %>%
                       #to here
   ) +
   # scale_x_continuous(breaks = c(0,2,4,6,8,10,12), limits=c(-1,12)) +
-  labs(title="Environmental Surveillance: E. coli Concentration by Sample Type", x="log10 E. Coli Concentration", y="Sample Type")
+  labs(title="Environmental Surveillance: E. coli Concentration by Sample Type", 
+       x="log10 E. Coli Concentration", 
+       y="Sample Type")
 dev.off()
 
 #### SPT Plots ####

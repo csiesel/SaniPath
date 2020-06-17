@@ -1,21 +1,31 @@
 ---
 title: "SPT_Data_Options"
 author: "Casey Siesel"
-date: "6/9/2020"
+date: "6/11/2020"
 output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+
+
 library(tidyverse)
 library(ggridges)
 library(kableExtra)
+library(plotly)
 
 
 '%!in%' <- function(x,y)!('%in%'(x,y))
 
 colScale <- c("#5F4690", "#1D6996", "#38A6A5","#0F8554","#73AF48","#EDAD08","#E17C05",
                                 "#CC503E","#94346E","#6F4070","#994E95","#666666")
+
+colourCount = 5
+getPalette = colorRampPalette(c("#5F4690", "#1D6996", "#38A6A5","#0F8554","#73AF48","#EDAD08","#E17C05",
+                                "#CC503E","#94346E","#6F4070","#994E95","#666666"))
+colScale2 <- scale_fill_manual(values=getPalette(colourCount))
 
 
 load("spt_final.rda")
@@ -30,14 +40,15 @@ spt1_final <- spt1_final %>%
                             ifelse(sample_type==9, "Bathing Water",
                             ifelse(sample_type==10, "Street Food",
                             ifelse(sample_type==99, "Field Blank",
-                            "??")))))))))))
+                            "??"))))))))))) %>% filter(date >= "2019-09-06")
 
 
 load("es_final.rda")
-es1_final <- es1_final %>%  mutate(sample_type = ifelse(sample_type==11, "Pooled Latrine",
+es1_final <- es1_final %>%  mutate(sample_type = ifelse(sample_type==11, ifelse(grepl("PLC", col_id),"Pooled Latrine Case", "Pooled Latrine"),
                             ifelse(sample_type==12, "Moore Swab",
                             ifelse(sample_type==16, "Pumping Station - UF",
-                            ifelse(sample_type==99, "Field Blank", "??")))))
+                            ifelse(sample_type==99, "Field Blank", "??"))))) %>% 
+  filter(date >= "2019-09-06", col_id %!in% c("UF1005", "UF1006", "UF1007"))
 
 load("so_final.rda")
 so_final <- so_final %>% mutate(sample_type = ifelse(sample_type_so==141, "Cutting /Grinding Surface (FPa)",
@@ -47,7 +58,7 @@ so_final <- so_final %>% mutate(sample_type = ifelse(sample_type_so==141, "Cutti
                             ifelse(sample_type_so==145, "Cooking/Preparation Utensil (FPe)",
                             ifelse(sample_type_so==151, "Child Obs - Floor",
                             ifelse(sample_type_so==152, "Child Obs - Off Ground",
-                                                    "??"))))))))
+                                                    "??")))))))) %>% filter(date >= "2019-09-06")
 
 
 raw_3.1 <- read_csv("data/clean_3.1_2020-06-09.csv")
@@ -140,205 +151,263 @@ so_with_cleanfb_pcr <- so_final %>% filter(col_id %!in% c(so_no_fb, so_pcr_fb))
 so_with_cleanfb_ec_pcr <- so_final %>% filter(col_id %!in% c(so_no_fb, so_ec_fb, so_pcr_fb))
 ```
 
-```{r spt_tables}
+```{r spt_tables, warning=FALSE, echo=FALSE}
 spt_all <- spt1_final %>% 
   filter(sample_type!="Field Blank") %>% 
   group_by(sample_type) %>% 
   dplyr::summarise(count_all = dplyr::n(), 
-            'mean(min-max)'=paste0(round(mean(log10(ec_conc), na.rm=T), 2), 
+            'mean ec_conc (min-max)'=paste0(round(mean(log10(ec_conc), na.rm=T), 2), 
                                    "(",round(min(log10(ec_conc), na.rm=T),2),"-", round(max(log10(ec_conc), na.rm=T),2),")"),
             "Typhi +" = sum(typhi_positive, na.rm=T),
             "Typhi pres" = sum(typhi_presumptive, na.rm=T),
             "Paratyphi +" = sum(paratyphi_positive, na.rm=T),
-            "Paratyphi pres" = sum(paratyphi_presumptive, na.rm=T))
+            "Paratyphi pres" = sum(paratyphi_presumptive, na.rm=T),
+            "Typhi + %" = round((sum(typhi_positive, na.rm=T)/dplyr::n())*100, 2),
+            "Typhi pres %" = round((sum(typhi_presumptive, na.rm=T)/dplyr::n())*100, 2),
+            "Paratyphi + %" = round((sum(paratyphi_positive, na.rm=T)/dplyr::n())*100, 2),
+            "Paratyphi pres %" = round((sum(paratyphi_presumptive, na.rm=T)/dplyr::n())*100, 2))
 
 spt_option1 <- spt_with_fb %>% 
   filter(sample_type!="Field Blank") %>% 
   group_by(sample_type) %>% 
   dplyr::summarise(count_1 = dplyr::n(), 
-            'mean(min-max)'=paste0(round(mean(log10(ec_conc), na.rm=T), 2), 
+            'mean ec_conc (min-max)'=paste0(round(mean(log10(ec_conc), na.rm=T), 2), 
                                    "(",round(min(log10(ec_conc), na.rm=T),2),"-", round(max(log10(ec_conc), na.rm=T),2),")"),
             "Typhi +" = sum(typhi_positive, na.rm=T),
             "Typhi pres" = sum(typhi_presumptive, na.rm=T),
             "Paratyphi +" = sum(paratyphi_positive, na.rm=T),
-            "Paratyphi pres" = sum(paratyphi_presumptive, na.rm=T))
+            "Paratyphi pres" = sum(paratyphi_presumptive, na.rm=T),
+            "Typhi + %" = round((sum(typhi_positive, na.rm=T)/dplyr::n())*100, 2),
+            "Typhi pres %" = round((sum(typhi_presumptive, na.rm=T)/dplyr::n())*100, 2),
+            "Paratyphi + %" = round((sum(paratyphi_positive, na.rm=T)/dplyr::n())*100, 2),
+            "Paratyphi pres %" = round((sum(paratyphi_presumptive, na.rm=T)/dplyr::n())*100, 2))
 
 spt_option2 <- spt_with_cleanfb_ec %>% 
   filter(sample_type!="Field Blank") %>% 
   group_by(sample_type) %>% 
   dplyr::summarise(count_2 = dplyr::n(), 
-            'mean(min-max)'=paste0(round(mean(log10(ec_conc), na.rm=T), 2), 
+            'mean ec_conc (min-max)'=paste0(round(mean(log10(ec_conc), na.rm=T), 2), 
                                    "(",round(min(log10(ec_conc), na.rm=T),2),"-", round(max(log10(ec_conc), na.rm=T),2),")"),
             "Typhi +" = sum(typhi_positive, na.rm=T),
             "Typhi pres" = sum(typhi_presumptive, na.rm=T),
             "Paratyphi +" = sum(paratyphi_positive, na.rm=T),
-            "Paratyphi pres" = sum(paratyphi_presumptive, na.rm=T))
+            "Paratyphi pres" = sum(paratyphi_presumptive, na.rm=T),
+            "Typhi + %" = round((sum(typhi_positive, na.rm=T)/dplyr::n())*100, 2),
+            "Typhi pres %" = round((sum(typhi_presumptive, na.rm=T)/dplyr::n())*100, 2),
+            "Paratyphi + %" = round((sum(paratyphi_positive, na.rm=T)/dplyr::n())*100, 2),
+            "Paratyphi pres %" = round((sum(paratyphi_presumptive, na.rm=T)/dplyr::n())*100, 2))
 
 
 spt_option3 <- spt_with_cleanfb_pcr %>% 
   filter(sample_type!="Field Blank") %>% 
   group_by(sample_type) %>% 
   dplyr::summarise(count_3 = dplyr::n(), 
-            'mean(min-max)'=paste0(round(mean(log10(ec_conc), na.rm=T), 2), 
+            'mean ec_conc (min-max)'=paste0(round(mean(log10(ec_conc), na.rm=T), 2), 
                                    "(",round(min(log10(ec_conc), na.rm=T),2),"-", round(max(log10(ec_conc), na.rm=T),2),")"),
             "Typhi +" = sum(typhi_positive, na.rm=T),
             "Typhi pres" = sum(typhi_presumptive, na.rm=T),
             "Paratyphi +" = sum(paratyphi_positive, na.rm=T),
-            "Paratyphi pres" = sum(paratyphi_presumptive, na.rm=T))
+            "Paratyphi pres" = sum(paratyphi_presumptive, na.rm=T),
+            "Typhi + %" = round((sum(typhi_positive, na.rm=T)/dplyr::n())*100, 2),
+            "Typhi pres %" = round((sum(typhi_presumptive, na.rm=T)/dplyr::n())*100, 2),
+            "Paratyphi + %" = round((sum(paratyphi_positive, na.rm=T)/dplyr::n())*100, 2),
+            "Paratyphi pres %" = round((sum(paratyphi_presumptive, na.rm=T)/dplyr::n())*100, 2))
 
 
 spt_option4 <- spt_with_cleanfb_ec_pcr %>% 
   filter(sample_type!="Field Blank") %>% 
   group_by(sample_type) %>% 
   dplyr::summarise(count_4 = dplyr::n(), 
-            'mean(min-max)'=paste0(round(mean(log10(ec_conc), na.rm=T), 2), 
+            'mean ec_conc (min-max)'=paste0(round(mean(log10(ec_conc), na.rm=T), 2), 
                                    "(",round(min(log10(ec_conc), na.rm=T),2),"-", round(max(log10(ec_conc), na.rm=T),2),")"),
             "Typhi +" = sum(typhi_positive, na.rm=T),
             "Typhi pres" = sum(typhi_presumptive, na.rm=T),
             "Paratyphi +" = sum(paratyphi_positive, na.rm=T),
-            "Paratyphi pres" = sum(paratyphi_presumptive, na.rm=T))
+            "Paratyphi pres" = sum(paratyphi_presumptive, na.rm=T),
+            "Typhi + %" = round((sum(typhi_positive, na.rm=T)/dplyr::n())*100, 2),
+            "Typhi pres %" = round((sum(typhi_presumptive, na.rm=T)/dplyr::n())*100, 2),
+            "Paratyphi + %" = round((sum(paratyphi_positive, na.rm=T)/dplyr::n())*100, 2),
+            "Paratyphi pres %" = round((sum(paratyphi_presumptive, na.rm=T)/dplyr::n())*100, 2))
 ```
 
-```{r es_tables}
+```{r es_tables, warning=FALSE, echo=FALSE}
 es_all <- es1_final %>% 
-  filter(!is.na(ec_conc), sample_type!="Field Blank") %>% 
+  filter(sample_type!="Field Blank") %>% 
   group_by(sample_type) %>% 
   dplyr::summarise(count_all = dplyr::n(), 
-            'mean(min-max)'=paste0(round(mean(log10(ec_conc), na.rm=T), 2), 
+            'mean ec_conc (min-max)'=paste0(round(mean(log10(ec_conc), na.rm=T), 2), 
                                    "(",round(min(log10(ec_conc), na.rm=T),2),"-", round(max(log10(ec_conc), na.rm=T),2),")"),
             "Typhi +" = sum(typhi_positive, na.rm=T),
             "Typhi pres" = sum(typhi_presumptive, na.rm=T),
             "Paratyphi +" = sum(paratyphi_positive, na.rm=T),
-            "Paratyphi pres" = sum(paratyphi_presumptive, na.rm=T))
+            "Paratyphi pres" = sum(paratyphi_presumptive, na.rm=T),
+            "Typhi + %" = round((sum(typhi_positive, na.rm=T)/dplyr::n())*100, 2),
+            "Typhi pres %" = round((sum(typhi_presumptive, na.rm=T)/dplyr::n())*100, 2),
+            "Paratyphi + %" = round((sum(paratyphi_positive, na.rm=T)/dplyr::n())*100, 2),
+            "Paratyphi pres %" = round((sum(paratyphi_presumptive, na.rm=T)/dplyr::n())*100, 2))
 
 
 es_option1 <- es_with_fb %>% 
-  filter(!is.na(ec_conc), sample_type!="Field Blank") %>% 
+  filter(sample_type!="Field Blank") %>% 
   group_by(sample_type) %>% 
   dplyr::summarise(count_1 = dplyr::n(), 
-            'mean(min-max)'=paste0(round(mean(log10(ec_conc), na.rm=T), 2), 
+            'mean ec_conc (min-max)'=paste0(round(mean(log10(ec_conc), na.rm=T), 2), 
                                    "(",round(min(log10(ec_conc), na.rm=T),2),"-", round(max(log10(ec_conc), na.rm=T),2),")"),
             "Typhi +" = sum(typhi_positive, na.rm=T),
             "Typhi pres" = sum(typhi_presumptive, na.rm=T),
             "Paratyphi +" = sum(paratyphi_positive, na.rm=T),
-            "Paratyphi pres" = sum(paratyphi_presumptive, na.rm=T))
+            "Paratyphi pres" = sum(paratyphi_presumptive, na.rm=T),
+            "Typhi + %" = round((sum(typhi_positive, na.rm=T)/dplyr::n())*100, 2),
+            "Typhi pres %" = round((sum(typhi_presumptive, na.rm=T)/dplyr::n())*100, 2),
+            "Paratyphi + %" = round((sum(paratyphi_positive, na.rm=T)/dplyr::n())*100, 2),
+            "Paratyphi pres %" = round((sum(paratyphi_presumptive, na.rm=T)/dplyr::n())*100, 2))
 
 
 es_option2 <- es_with_cleanfb_ec %>% 
-  filter(!is.na(ec_conc), sample_type!="Field Blank") %>% 
+  filter(sample_type!="Field Blank") %>% 
   group_by(sample_type) %>% 
   dplyr::summarise(count_2 = dplyr::n(), 
-            'mean(min-max)'=paste0(round(mean(log10(ec_conc), na.rm=T), 2), 
+            'mean ec_conc (min-max)'=paste0(round(mean(log10(ec_conc), na.rm=T), 2), 
                                    "(",round(min(log10(ec_conc), na.rm=T),2),"-", round(max(log10(ec_conc), na.rm=T),2),")"),
             "Typhi +" = sum(typhi_positive, na.rm=T),
             "Typhi pres" = sum(typhi_presumptive, na.rm=T),
             "Paratyphi +" = sum(paratyphi_positive, na.rm=T),
-            "Paratyphi pres" = sum(paratyphi_presumptive, na.rm=T))
+            "Paratyphi pres" = sum(paratyphi_presumptive, na.rm=T),
+            "Typhi + %" = round((sum(typhi_positive, na.rm=T)/dplyr::n())*100, 2),
+            "Typhi pres %" = round((sum(typhi_presumptive, na.rm=T)/dplyr::n())*100, 2),
+            "Paratyphi + %" = round((sum(paratyphi_positive, na.rm=T)/dplyr::n())*100, 2),
+            "Paratyphi pres %" = round((sum(paratyphi_presumptive, na.rm=T)/dplyr::n())*100, 2))
 
 
 es_option3 <- es_with_cleanfb_pcr %>% 
-  filter(!is.na(ec_conc), sample_type!="Field Blank") %>% 
+  filter(sample_type!="Field Blank") %>% 
   group_by(sample_type) %>% 
   dplyr::summarise(count_3 = dplyr::n(), 
-            'mean(min-max)'=paste0(round(mean(log10(ec_conc), na.rm=T), 2), 
+            'mean ec_conc (min-max)'=paste0(round(mean(log10(ec_conc), na.rm=T), 2), 
                                    "(",round(min(log10(ec_conc), na.rm=T),2),"-", round(max(log10(ec_conc), na.rm=T),2),")"),
             "Typhi +" = sum(typhi_positive, na.rm=T),
             "Typhi pres" = sum(typhi_presumptive, na.rm=T),
             "Paratyphi +" = sum(paratyphi_positive, na.rm=T),
-            "Paratyphi pres" = sum(paratyphi_presumptive, na.rm=T))
+            "Paratyphi pres" = sum(paratyphi_presumptive, na.rm=T),
+            "Typhi + %" = round((sum(typhi_positive, na.rm=T)/dplyr::n())*100, 2),
+            "Typhi pres %" = round((sum(typhi_presumptive, na.rm=T)/dplyr::n())*100, 2),
+            "Paratyphi + %" = round((sum(paratyphi_positive, na.rm=T)/dplyr::n())*100, 2),
+            "Paratyphi pres %" = round((sum(paratyphi_presumptive, na.rm=T)/dplyr::n())*100, 2))
 
 
 es_option4 <- es_with_cleanfb_ec_pcr %>% 
-  filter(!is.na(ec_conc), sample_type!="Field Blank") %>% 
+  filter(sample_type!="Field Blank") %>% 
   group_by(sample_type) %>% 
   dplyr::summarise(count_4 = dplyr::n(), 
-            'mean(min-max)'=paste0(round(mean(log10(ec_conc), na.rm=T), 2), 
+            'mean ec_conc (min-max)'=paste0(round(mean(log10(ec_conc), na.rm=T), 2), 
                                    "(",round(min(log10(ec_conc), na.rm=T),2),"-", round(max(log10(ec_conc), na.rm=T),2),")"),
             "Typhi +" = sum(typhi_positive, na.rm=T),
             "Typhi pres" = sum(typhi_presumptive, na.rm=T),
             "Paratyphi +" = sum(paratyphi_positive, na.rm=T),
-            "Paratyphi pres" = sum(paratyphi_presumptive, na.rm=T))
+            "Paratyphi pres" = sum(paratyphi_presumptive, na.rm=T),
+            "Typhi + %" = round((sum(typhi_positive, na.rm=T)/dplyr::n())*100, 2),
+            "Typhi pres %" = round((sum(typhi_presumptive, na.rm=T)/dplyr::n())*100, 2),
+            "Paratyphi + %" = round((sum(paratyphi_positive, na.rm=T)/dplyr::n())*100, 2),
+            "Paratyphi pres %" = round((sum(paratyphi_presumptive, na.rm=T)/dplyr::n())*100, 2))
 
 ```
 
-```{r so_tables}
+```{r so_tables, warning=FALSE, echo=FALSE}
 so_all <- so_final %>% 
-  filter(!is.na(ec_conc), sample_type!="Field Blank") %>% 
+  filter(sample_type!="Field Blank") %>% 
   group_by(sample_type) %>% 
   dplyr::summarise(count_all = dplyr::n(), 
-            'mean(min-max)'=paste0(round(mean(log10(ec_conc), na.rm=T), 2), 
+            'mean ec_conc (min-max)'=paste0(round(mean(log10(ec_conc), na.rm=T), 2), 
                                    "(",round(min(log10(ec_conc), na.rm=T),2),"-", round(max(log10(ec_conc), na.rm=T),2),")"),
             "Typhi +" = sum(typhi_positive, na.rm=T),
             "Typhi pres" = sum(typhi_presumptive, na.rm=T),
             "Paratyphi +" = sum(paratyphi_positive, na.rm=T),
-            "Paratyphi pres" = sum(paratyphi_presumptive, na.rm=T))
+            "Paratyphi pres" = sum(paratyphi_presumptive, na.rm=T),
+            "Typhi + %" = round((sum(typhi_positive, na.rm=T)/dplyr::n())*100, 2),
+            "Typhi pres %" = round((sum(typhi_presumptive, na.rm=T)/dplyr::n())*100, 2),
+            "Paratyphi + %" = round((sum(paratyphi_positive, na.rm=T)/dplyr::n())*100, 2),
+            "Paratyphi pres %" = round((sum(paratyphi_presumptive, na.rm=T)/dplyr::n())*100, 2))
 
 
 so_option1 <- so_with_fb %>% 
-  filter(!is.na(ec_conc), sample_type!="Field Blank") %>% 
+  filter(sample_type!="Field Blank") %>% 
   group_by(sample_type) %>% 
   dplyr::summarise(count_1 = dplyr::n(), 
-            'mean(min-max)'=paste0(round(mean(log10(ec_conc), na.rm=T), 2), 
+            'mean ec_conc (min-max)'=paste0(round(mean(log10(ec_conc), na.rm=T), 2), 
                                    "(",round(min(log10(ec_conc), na.rm=T),2),"-", round(max(log10(ec_conc), na.rm=T),2),")"),
             "Typhi +" = sum(typhi_positive, na.rm=T),
             "Typhi pres" = sum(typhi_presumptive, na.rm=T),
             "Paratyphi +" = sum(paratyphi_positive, na.rm=T),
-            "Paratyphi pres" = sum(paratyphi_presumptive, na.rm=T))
+            "Paratyphi pres" = sum(paratyphi_presumptive, na.rm=T),
+            "Typhi + %" = round((sum(typhi_positive, na.rm=T)/dplyr::n())*100, 2),
+            "Typhi pres %" = round((sum(typhi_presumptive, na.rm=T)/dplyr::n())*100, 2),
+            "Paratyphi + %" = round((sum(paratyphi_positive, na.rm=T)/dplyr::n())*100, 2),
+            "Paratyphi pres %" = round((sum(paratyphi_presumptive, na.rm=T)/dplyr::n())*100, 2))
 
 
 so_option2 <- so_with_cleanfb_ec %>% 
-  filter(!is.na(ec_conc), sample_type!="Field Blank") %>% 
+  filter(sample_type!="Field Blank") %>% 
   group_by(sample_type) %>% 
   dplyr::summarise(count_2 = dplyr::n(), 
-            'mean(min-max)'=paste0(round(mean(log10(ec_conc), na.rm=T), 2), 
+            'mean ec_conc (min-max)'=paste0(round(mean(log10(ec_conc), na.rm=T), 2), 
                                    "(",round(min(log10(ec_conc), na.rm=T),2),"-", round(max(log10(ec_conc), na.rm=T),2),")"),
             "Typhi +" = sum(typhi_positive, na.rm=T),
             "Typhi pres" = sum(typhi_presumptive, na.rm=T),
             "Paratyphi +" = sum(paratyphi_positive, na.rm=T),
-            "Paratyphi pres" = sum(paratyphi_presumptive, na.rm=T))
+            "Paratyphi pres" = sum(paratyphi_presumptive, na.rm=T),
+            "Typhi + %" = round((sum(typhi_positive, na.rm=T)/dplyr::n())*100, 2),
+            "Typhi pres %" = round((sum(typhi_presumptive, na.rm=T)/dplyr::n())*100, 2),
+            "Paratyphi + %" = round((sum(paratyphi_positive, na.rm=T)/dplyr::n())*100, 2),
+            "Paratyphi pres %" = round((sum(paratyphi_presumptive, na.rm=T)/dplyr::n())*100, 2))
 
 
 so_option3 <- so_with_cleanfb_pcr %>% 
-  filter(!is.na(ec_conc), sample_type!="Field Blank") %>% 
+  filter(sample_type!="Field Blank") %>% 
   group_by(sample_type) %>% 
   dplyr::summarise(count_3 = dplyr::n(), 
-            'mean(min-max)'=paste0(round(mean(log10(ec_conc), na.rm=T), 2), 
+            'mean ec_conc (min-max)'=paste0(round(mean(log10(ec_conc), na.rm=T), 2), 
                                    "(",round(min(log10(ec_conc), na.rm=T),2),"-", round(max(log10(ec_conc), na.rm=T),2),")"),
             "Typhi +" = sum(typhi_positive, na.rm=T),
             "Typhi pres" = sum(typhi_presumptive, na.rm=T),
             "Paratyphi +" = sum(paratyphi_positive, na.rm=T),
-            "Paratyphi pres" = sum(paratyphi_presumptive, na.rm=T))
+            "Paratyphi pres" = sum(paratyphi_presumptive, na.rm=T),
+            "Typhi + %" = round((sum(typhi_positive, na.rm=T)/dplyr::n())*100, 2),
+            "Typhi pres %" = round((sum(typhi_presumptive, na.rm=T)/dplyr::n())*100, 2),
+            "Paratyphi + %" = round((sum(paratyphi_positive, na.rm=T)/dplyr::n())*100, 2),
+            "Paratyphi pres %" = round((sum(paratyphi_presumptive, na.rm=T)/dplyr::n())*100, 2))
 
 
 so_option4 <- so_with_cleanfb_ec_pcr %>% 
-  filter(!is.na(ec_conc), sample_type!="Field Blank") %>% 
+  filter(sample_type!="Field Blank") %>% 
   group_by(sample_type) %>% 
   dplyr::summarise(count_4 = dplyr::n(), 
-            'mean(min-max)'=paste0(round(mean(log10(ec_conc), na.rm=T), 2), 
+            'mean ec_conc (min-max)'=paste0(round(mean(log10(ec_conc), na.rm=T), 2), 
                                    "(",round(min(log10(ec_conc), na.rm=T),2),"-", round(max(log10(ec_conc), na.rm=T),2),")"),
             "Typhi +" = sum(typhi_positive, na.rm=T),
             "Typhi pres" = sum(typhi_presumptive, na.rm=T),
             "Paratyphi +" = sum(paratyphi_positive, na.rm=T),
-            "Paratyphi pres" = sum(paratyphi_presumptive, na.rm=T))
+            "Paratyphi pres" = sum(paratyphi_presumptive, na.rm=T),
+            "Typhi + %" = round((sum(typhi_positive, na.rm=T)/dplyr::n())*100, 2),
+            "Typhi pres %" = round((sum(typhi_presumptive, na.rm=T)/dplyr::n())*100, 2),
+            "Paratyphi + %" = round((sum(paratyphi_positive, na.rm=T)/dplyr::n())*100, 2),
+            "Paratyphi pres %" = round((sum(paratyphi_presumptive, na.rm=T)/dplyr::n())*100, 2))
 
 ```
 
-## R Markdown
+## SPT Data by FB classification
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r spt, out.width="100%", echo=FALSE}
+```{r spt, out.width="100%"}
 m1 <- merge(spt_all, spt_option1, by="sample_type")
 m2 <- merge(m1, spt_option2, by="sample_type")
 m3 <- merge(m2, spt_option3, by="sample_type")
 m4 <- merge(m3, spt_option4, by="sample_type")
 
 # m4 <- m4[c(1,2,4,6,8,10,3,5,7,9,11)]
+m4 <- m4[-c(4,5,6,7,14,15,16,17,24,25,26,27,34,35,36,37,44,45,46,47)]
 
 kable(m4, digits=3) %>%
-  kable_styling(c("striped", "bordered")) %>%
+  kable_styling(c("striped", "bordered"), font_size=10) %>%
   add_header_above(c(" ", "All Samples" = 6, 
                      "All Samples w/ FB" = 6, 
                      "All Samples w/ no EC FB cont." = 6, 
@@ -346,12 +415,12 @@ kable(m4, digits=3) %>%
                      "All Samples w/ no PCR or EC FB cont." = 6)) %>%
   add_footnote("var_all = no removal, var_1 = only samples w/ FB, var_2 = only samples w/ no EC FB, var_3 = only samples w/ no PCR FB, var_4 = only samples with no EC or PCR FB")
 
-df1 <- spt1_final %>% filter(!is.na(ec_conc), sample_type !="Field Blank") %>% mutate(data="All Data")
-df2 <- spt_with_fb %>% filter(!is.na(ec_conc), sample_type !="Field Blank") %>% mutate(data="w/ FB")
-df3 <- spt_with_cleanfb_ec %>% filter(!is.na(ec_conc), sample_type !="Field Blank") %>% mutate(data="w/ FB no EC")
-df4 <- spt_with_cleanfb_pcr %>% filter(!is.na(ec_conc), sample_type !="Field Blank") %>% mutate(data="w/ FB no PCR")
+df1 <- spt1_final %>% filter(sample_type !="Field Blank") %>% mutate(data="All Data")
+df2 <- spt_with_fb %>% filter(sample_type !="Field Blank") %>% mutate(data="w/ FB")
+df3 <- spt_with_cleanfb_ec %>% filter(sample_type !="Field Blank") %>% mutate(data="w/ FB no EC")
+df4 <- spt_with_cleanfb_pcr %>% filter(sample_type !="Field Blank") %>% mutate(data="w/ FB no PCR")
 df5 <- spt_with_cleanfb_ec_pcr %>% 
-  filter(!is.na(ec_conc), sample_type !="Field Blank") %>% mutate(data="w/ FB no cont.")
+  filter(sample_type !="Field Blank") %>% mutate(data="w/ FB no cont.")
 
 df <- rbind(df1,df2,df3,df4,df5)
 
@@ -365,7 +434,75 @@ ggplot() +
   scale_color_manual(values=c("All Data"=colScale[1], "w/ FB"=colScale[2], "w/ FB no EC"=colScale[3], "w/ FB no PCR"=colScale[9], "w/ FB no cont."=colScale[7]), aesthetics=c("colour", "fill")) +
   labs(title="Exposure Assessment: E. coli Concentration by Sample Type", x="log10 E. Coli Concentration", y="Sample Type")
   
+df_sum <- df %>% group_by(sample_type, data) %>%
+  summarise(typhi_positive=sum(typhi_positive, na.rm=T),
+            typhi_presumptive=sum(typhi_presumptive, na.rm=T),
+            paratyphi_positive=sum(paratyphi_positive, na.rm=T),
+            paratyphi_presumptive=sum(paratyphi_presumptive, na.rm=T))
+
+ty1 <-  ggplot(df_sum) +
+  geom_bar(aes(y=typhi_positive, x=sample_type, fill=data), stat="identity", position="dodge", show.legend = FALSE) +
+  # geom_col(data=df, aes(y=typhi_presumptive, x=data, fill=data), position = position_dodge()) +
+  colScale2 +
+  labs(title="Typhi Positive", x="Sample Type", y="Count Pos") +
+  theme(axis.text.x=element_text(angle=90),
+        legend.title=element_text(size=10),
+        legend.text=element_text(size=5),
+        title=element_text(size=10))
+ty1 <- ggplotly(ty1)
+
+
+ty2 <-  ggplot(df_sum) +
+  geom_bar(aes(y=typhi_presumptive, x=sample_type, fill=data), stat="identity", position="dodge", show.legend = FALSE) +
+  # geom_col(data=df, aes(y=typhi_presumptive, x=data, fill=data), position = position_dodge()) +
+  colScale2 +
+  labs(title="Typhi Presumptive", x="Sample Type", y="Count Pres") +
+  theme(axis.text.x=element_text(angle=90),
+        legend.title=element_text(size=10),
+        legend.text=element_text(size=5),
+        title=element_text(size=10))
+ty2 <- ggplotly(ty2)
+
+
+pty1 <-  ggplot(df_sum) +
+  geom_bar(aes(y=paratyphi_positive, x=sample_type, fill=data), stat="identity", position="dodge", show.legend = FALSE) +
+  # geom_col(data=df, aes(y=typhi_presumptive, x=data, fill=data), position = position_dodge()) +
+  colScale2 +
+  labs(title="Paratyphi Positive", x="Sample Type", y="Count Pos") +
+  theme(axis.text.x=element_text(angle=90),
+        legend.title=element_text(size=10),
+        legend.text=element_text(size=5),
+        title=element_text(size=10))
+pty1 <- ggplotly(pty1)
+
+
+pty2 <-  ggplot(df_sum) +
+  geom_bar(aes(y=paratyphi_presumptive, x=sample_type, fill=data), stat="identity", position="dodge") +
+  # geom_col(data=df, aes(y=typhi_presumptive, x=data, fill=data), position = position_dodge()) +
+  colScale2 +
+  labs(title="Paratyphi Presumptive", x="Sample Type", y="Count Pres") +
+  theme(axis.text.x=element_text(angle=90),
+        legend.title=element_text(size=10),
+        legend.text=element_text(size=5),
+        title=element_text(size=10))
+pty2 <- ggplotly(pty2)
+
+# cowplot::plot_grid(ty1,ty2)
+# 
+# subplot(ty1,ty2,pty1,pty2, nrow=2, ncol=2)
+# subplot(ty1, ty2, pty1, pty2, nrows=2, margin=0.05, shareX=TRUE)
+
 ```
+
+```{r spt_plots, echo=FALSE, fig.hold='hold', out.width="100%"}
+ty1
+ty2
+pty1
+pty2
+```
+
+## ES Data by FB classification
+
 
 ```{r es, out.width="100%", echo=FALSE}
 m1 <- merge(es_all, es_option1, by="sample_type")
@@ -373,22 +510,23 @@ m2 <- merge(m1, es_option2, by="sample_type")
 m3 <- merge(m2, es_option3, by="sample_type")
 m4 <- merge(m3, es_option4, by="sample_type")
 
-m4 <- m4[c(1,2,6,10,14,18,3,7,11,15,19,4,8,12,16,20,5,9,13,17,21)]
+m4 <- m4[-c(4,5,6,7,14,15,16,17,24,25,26,27,34,35,36,37,44,45,46,47)]
 
-kable(m4) %>%
-  kable_styling(c("striped", "bordered")) %>%
-  add_header_above(c(" ", "Count of Samples" = 5, 
-                     "Mean of Samples" = 5, 
-                     "Min of Samples" = 5, 
-                     "Max of Samples" = 5)) %>%
+kable(m4, digits=3) %>%
+  kable_styling(c("striped", "bordered"), font_size=10) %>%
+  add_header_above(c(" ", "All Samples" = 6, 
+                     "All Samples w/ FB" = 6, 
+                     "All Samples w/ no EC FB cont." = 6, 
+                     "All Samples w/ no PCR FB cont." = 6,
+                     "All Samples w/ no PCR or EC FB cont." = 6)) %>%
   add_footnote("var_all = no removal, var_1 = only samples w/ FB, var_2 = only samples w/ no EC FB, var_3 = only samples w/ no PCR FB, var_4 = only samples with no EC or PCR FB")
 
-df1 <- es1_final %>% filter(!is.na(ec_conc), sample_type !="Field Blank") %>% mutate(data="All Data")
-df2 <- es_with_fb %>% filter(!is.na(ec_conc), sample_type !="Field Blank") %>% mutate(data="w/ FB")
-df3 <- es_with_cleanfb_ec %>% filter(!is.na(ec_conc), sample_type !="Field Blank") %>% mutate(data="w/ FB no EC")
-df4 <- es_with_cleanfb_pcr %>% filter(!is.na(ec_conc), sample_type !="Field Blank") %>% mutate(data="w/ FB no PCR")
+df1 <- es1_final %>% filter(sample_type !="Field Blank") %>% mutate(data="All Data")
+df2 <- es_with_fb %>% filter(sample_type !="Field Blank") %>% mutate(data="w/ FB")
+df3 <- es_with_cleanfb_ec %>% filter(sample_type !="Field Blank") %>% mutate(data="w/ FB no EC")
+df4 <- es_with_cleanfb_pcr %>% filter(sample_type !="Field Blank") %>% mutate(data="w/ FB no PCR")
 df5 <- es_with_cleanfb_ec_pcr %>% 
-  filter(!is.na(ec_conc), sample_type !="Field Blank") %>% mutate(data="w/ FB no cont.")
+  filter(sample_type !="Field Blank") %>% mutate(data="w/ FB no cont.")
 
 df <- rbind(df1,df2,df3,df4,df5)
 
@@ -400,9 +538,72 @@ ggplot() +
                       alpha = 0,
                       scale=1) +
   scale_color_manual(values=c("All Data"=colScale[1], "w/ FB"=colScale[2], "w/ FB no EC"=colScale[3], "w/ FB no PCR"=colScale[9], "w/ FB no cont."=colScale[7]), aesthetics=c("colour", "fill")) +
-  labs(title="Environmental Surveillance: E. coli Concentration by Sample Type", x="log10 E. Coli Concentration", y="Sample Type")
+  labs(title="Exposure Assessment: E. coli Concentration by Sample Type", x="log10 E. Coli Concentration", y="Sample Type")
   
+df_sum <- df %>% group_by(sample_type, data) %>%
+  summarise(typhi_positive=sum(typhi_positive, na.rm=T),
+            typhi_presumptive=sum(typhi_presumptive, na.rm=T),
+            paratyphi_positive=sum(paratyphi_positive, na.rm=T),
+            paratyphi_presumptive=sum(paratyphi_presumptive, na.rm=T))
+
+ty1 <-  ggplot(df_sum) +
+  geom_bar(aes(y=typhi_positive, x=sample_type, fill=data), stat="identity", position="dodge") +
+  # geom_col(data=df, aes(y=typhi_presumptive, x=data, fill=data), position = position_dodge()) +
+  colScale2 +
+  labs(title="Typhi Positive", x="Sample Type", y="Count Pos") +
+  theme(axis.text.x=element_text(angle=90),
+        legend.title=element_text(size=10),
+        legend.text=element_text(size=5),
+        title=element_text(size=10))
+ty1 <- ggplotly(ty1)
+
+ty2 <-  ggplot(df_sum) +
+  geom_bar(aes(y=typhi_presumptive, x=sample_type, fill=data), stat="identity", position="dodge") +
+  # geom_col(data=df, aes(y=typhi_presumptive, x=data, fill=data), position = position_dodge()) +
+  colScale2 +
+  labs(title="Typhi Presumptive", x="Sample Type", y="Count Pres") +
+  theme(axis.text.x=element_text(angle=90),
+        legend.title=element_text(size=10),
+        legend.text=element_text(size=5),
+        title=element_text(size=10))
+ty2 <- ggplotly(ty2)
+
+
+pty1 <-  ggplot(df_sum) +
+  geom_bar(aes(y=paratyphi_positive, x=sample_type, fill=data), stat="identity", position="dodge") +
+  # geom_col(data=df, aes(y=typhi_presumptive, x=data, fill=data), position = position_dodge()) +
+  colScale2 +
+  labs(title="Paratyphi Positive", x="Sample Type", y="Count Pos") +
+  theme(axis.text.x=element_text(angle=90),
+        legend.title=element_text(size=10),
+        legend.text=element_text(size=5),
+        title=element_text(size=10))
+pty1 <- ggplotly(pty1)
+
+
+pty2 <-  ggplot(df_sum) +
+  geom_bar(aes(y=paratyphi_presumptive, x=factor(sample_type), fill=data), stat="identity", position="dodge") +
+  # geom_col(data=df, aes(y=typhi_presumptive, x=data, fill=data), position = position_dodge()) +
+  colScale2 +
+  labs(title="Paratyphi Presumptive", x="Sample Type", y="Count Pres") +
+  scale_x_discrete(breaks=df_sum$sample_type) +
+  theme(axis.text.x=element_text(angle=90),
+        legend.title=element_text(size=10),
+        legend.text=element_text(size=5),
+        title=element_text(size=10))
+pty2 <- ggplotly(pty2)
+
+
 ```
+
+```{r es_plots, echo=FALSE, fig.show='hold', out.width="100%"}
+ty1
+ty2
+pty1
+pty2
+```
+
+## SO Data by FB classification
 
 
 
@@ -412,22 +613,23 @@ m2 <- merge(m1, so_option2, by="sample_type")
 m3 <- merge(m2, so_option3, by="sample_type")
 m4 <- merge(m3, so_option4, by="sample_type")
 
-m4 <- m4[c(1,2,6,10,14,18,3,7,11,15,19,4,8,12,16,20,5,9,13,17,21)]
+m4 <- m4[-c(4,5,6,7,14,15,16,17,24,25,26,27,34,35,36,37,44,45,46,47)]
 
-kable(m4) %>%
-  kable_styling(c("striped", "bordered")) %>%
-  add_header_above(c(" ", "Count of Samples" = 5, 
-                     "Mean of Samples" = 5, 
-                     "Min of Samples" = 5, 
-                     "Max of Samples" = 5)) %>%
+kable(m4, digits=3) %>%
+  kable_styling(c("striped", "bordered"), font_size=10) %>%
+  add_header_above(c(" ", "All Samples" = 6, 
+                     "All Samples w/ FB" = 6, 
+                     "All Samples w/ no EC FB cont." = 6, 
+                     "All Samples w/ no PCR FB cont." = 6,
+                     "All Samples w/ no PCR or EC FB cont." = 6)) %>%
   add_footnote("var_all = no removal, var_1 = only samples w/ FB, var_2 = only samples w/ no EC FB, var_3 = only samples w/ no PCR FB, var_4 = only samples with no EC or PCR FB")
 
-df1 <- so_final %>% filter(!is.na(ec_conc), sample_type !="Field Blank") %>% mutate(data="All Data")
-df2 <- so_with_fb %>% filter(!is.na(ec_conc), sample_type !="Field Blank") %>% mutate(data="w/ FB")
-df3 <- so_with_cleanfb_ec %>% filter(!is.na(ec_conc), sample_type !="Field Blank") %>% mutate(data="w/ FB no EC")
-df4 <- so_with_cleanfb_pcr %>% filter(!is.na(ec_conc), sample_type !="Field Blank") %>% mutate(data="w/ FB no PCR")
+df1 <- so_final %>% filter(sample_type !="Field Blank") %>% mutate(data="All Data")
+df2 <- so_with_fb %>% filter(sample_type !="Field Blank") %>% mutate(data="w/ FB")
+df3 <- so_with_cleanfb_ec %>% filter(sample_type !="Field Blank") %>% mutate(data="w/ FB no EC")
+df4 <- so_with_cleanfb_pcr %>% filter(sample_type !="Field Blank") %>% mutate(data="w/ FB no PCR")
 df5 <- so_with_cleanfb_ec_pcr %>% 
-  filter(!is.na(ec_conc), sample_type !="Field Blank") %>% mutate(data="w/ FB no cont.")
+  filter(sample_type !="Field Blank") %>% mutate(data="w/ FB no cont.")
 
 df <- rbind(df1,df2,df3,df4,df5)
 
@@ -439,7 +641,72 @@ ggplot() +
                       alpha = 0,
                       scale=1) +
   scale_color_manual(values=c("All Data"=colScale[1], "w/ FB"=colScale[2], "w/ FB no EC"=colScale[3], "w/ FB no PCR"=colScale[9], "w/ FB no cont."=colScale[7]), aesthetics=c("colour", "fill")) +
-  labs(title="Structured Observations: E. coli Concentration by Sample Type", x="log10 E. Coli Concentration", y="Sample Type")
+  labs(title="Exposure Assessment: E. coli Concentration by Sample Type", x="log10 E. Coli Concentration", y="Sample Type")
   
+df_sum <- df %>% group_by(sample_type, data) %>%
+  summarise(typhi_positive=sum(typhi_positive, na.rm=T),
+            typhi_presumptive=sum(typhi_presumptive, na.rm=T),
+            paratyphi_positive=sum(paratyphi_positive, na.rm=T),
+            paratyphi_presumptive=sum(paratyphi_presumptive, na.rm=T))
+
+ty1 <-  ggplot(df_sum) +
+  geom_bar(aes(y=typhi_positive, x=sample_type, fill=data), stat="identity", position="dodge", show.legend = FALSE) +
+  # geom_col(data=df, aes(y=typhi_presumptive, x=data, fill=data), position = position_dodge()) +
+  colScale2 +
+  labs(title="Typhi Positive", x="Sample Type", y="Count Pos") +
+  theme(axis.text.x=element_text(angle=90),
+        legend.title=element_text(size=10),
+        legend.text=element_text(size=5),
+        title=element_text(size=10))
+ty1 <- ggplotly(ty1)
+
+
+ty2 <-  ggplot(df_sum) +
+  geom_bar(aes(y=typhi_presumptive, x=sample_type, fill=data), stat="identity", position="dodge", show.legend = FALSE) +
+  # geom_col(data=df, aes(y=typhi_presumptive, x=data, fill=data), position = position_dodge()) +
+  colScale2 +
+  labs(title="Typhi Presumptive", x="Sample Type", y="Count Pres") +
+  theme(axis.text.x=element_text(angle=90),
+        legend.title=element_text(size=10),
+        legend.text=element_text(size=5),
+        title=element_text(size=10))
+ty2 <- ggplotly(ty2)
+
+
+pty1 <-  ggplot(df_sum) +
+  geom_bar(aes(y=paratyphi_positive, x=sample_type, fill=data), stat="identity", position="dodge", show.legend = FALSE) +
+  # geom_col(data=df, aes(y=typhi_presumptive, x=data, fill=data), position = position_dodge()) +
+  colScale2 +
+  labs(title="Paratyphi Positive", x="Sample Type", y="Count Pos") +
+  theme(axis.text.x=element_text(angle=90),
+        legend.title=element_text(size=10),
+        legend.text=element_text(size=5),
+        title=element_text(size=10))
+pty1 <- ggplotly(pty1)
+
+
+pty2 <-  ggplot(df_sum) +
+  geom_bar(aes(y=paratyphi_presumptive, x=sample_type, fill=data), stat="identity", position="dodge") +
+  # geom_col(data=df, aes(y=typhi_presumptive, x=data, fill=data), position = position_dodge()) +
+  colScale2 +
+  labs(title="Paratyphi Presumptive", x="Sample Type", y="Count Pres") +
+  theme(axis.text.x=element_text(angle=90),
+        legend.title=element_text(size=10),
+        legend.text=element_text(size=5),
+        title=element_text(size=10))
+pty2 <- ggplotly(pty2)
+
+# cowplot::plot_grid(ty1,ty2)
+# 
+# subplot(ty1,ty2,pty1,pty2, nrow=2, ncol=2)
+# subplot(ty1, ty2, pty1, pty2, nrows=2, margin=0.05, shareX=TRUE)
+
+```
+
+```{r so_plots, echo=FALSE, fig.hold='hold', out.width="100%"}
+ty1
+ty2
+pty1
+pty2
 ```
 
