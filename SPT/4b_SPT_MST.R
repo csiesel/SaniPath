@@ -145,6 +145,14 @@ calc_3.2$calc_wg5_conc[cond_11] <- calc_3.2$calc_3_wg5_conc[cond_11]
 calc_3.2$calc_wg5_conc[cond_12] <- pmax(calc_3.2$calc_1_wg5_conc[cond_12],calc_3.2$calc_2_wg5_conc[cond_12],calc_3.2$calc_3_wg5_conc[cond_12])
 calc_3.2$calc_wg5_conc[cond_13] <- calc_3.2$calc_2_wg5_conc[cond_13]
 
+
+#Casey's binary addition
+wg5_binary <- rep(NA,length(calc_3.2$lab_1_wg5_plaque_mst))
+wg5_binary[c(cond_2, cond_3, cond_4, cond_5, cond_7, cond_8, cond_9, cond_10, cond_11, cond_12, cond_13)] <- 1
+wg5_binary[c(cond_1, cond_6)] <- 0
+
+calc_3.2$wg5_binary <- wg5_binary
+
 #dilution of SW1002, PLC1027, PLC1028 are different NEED TO CONFIRM WITH RENUKA;
 
 #View(calc_3.2[which(is.na(calc_3.2$calc_wg5_conc) & !is.na(calc_3.2$calc_1_wg5)),c(11,81,89:98)])
@@ -221,6 +229,15 @@ calc_3.2$calc_gb124_conc[cond_13] <- calc_3.2$calc_2_gb124_conc[cond_13]
 calc_3.2$calc_gb124_conc[which(calc_3.2$lab_id %in% c("OD1004","UF1001"))] <- calc_3.2$calc_2_gb124_conc[which(calc_3.2$lab_id %in% c("OD1004","UF1001"))]
 calc_3.2$calc_gb124_conc[which(calc_3.2$lab_id %in% c("OD1005","SW1008"))] <- (calc_3.2$calc_1_gb124_conc[which(calc_3.2$lab_id %in% c("OD1005","SW1008"))] + calc_3.2$calc_2_gb124_conc[which(calc_3.2$lab_id %in% c("OD1005","SW1008"))])/2
 
+
+#Casey's binary addition
+gb124_binary <- rep(NA,length(calc_3.2$lab_1_gb124_plaque_mst))
+gb124_binary[c(cond_2, cond_3, cond_4, cond_5, cond_7, cond_8, cond_9, cond_10, cond_11, cond_12, cond_13)] <- 1
+gb124_binary[c(cond_1, cond_6)] <- 0
+
+calc_3.2$gb124_binary <- gb124_binary
+
+
 #View(calc_3.2[which(is.na(calc_3.2$calc_gb124_conc) & !is.na(calc_3.2$calc_1_gb124)),c(11,81,99:108)])
 
 #"SL1004" "PLC1041" "PLC1073" "UF1011" "PLC1195" "PLC1200" "FPE2004" are still unable to calculate the concentration of GB124;
@@ -289,6 +306,15 @@ calc_3.2$calc_wg5_enr_conc[cond_10] <- (calc_3.2$calc_2_wg5_enr_conc[cond_10] + 
 calc_3.2$calc_wg5_enr_conc[cond_11] <- calc_3.2$calc_3_wg5_enr_conc[cond_11]
 calc_3.2$calc_wg5_enr_conc[cond_12] <- pmax(calc_3.2$calc_1_wg5_enr_conc[cond_12],calc_3.2$calc_2_wg5_enr_conc[cond_12],calc_3.2$calc_3_wg5_enr_conc[cond_12])
 calc_3.2$calc_wg5_enr_conc[cond_13] <- calc_3.2$calc_2_wg5_enr_conc[cond_13]
+
+
+#Casey's binary addition
+wg5_enr_binary <- rep(NA,length(calc_3.2$lab_1_wg5_enr_plaque_mst))
+wg5_enr_binary[c(cond_2, cond_3, cond_4, cond_5, cond_7, cond_8, cond_9, cond_10, cond_11, cond_12, cond_13)] <- 1
+wg5_enr_binary[c(cond_1, cond_6)] <- 0
+
+calc_3.2$wg5_enr_binary <- wg5_enr_binary
+
 
 #View(calc_3.2[which(is.na(calc_3.2$calc_wg5_enr_conc) & !is.na(calc_3.2$calc_1_wg5_enr)),c(11,81,109:118)])
 
@@ -362,6 +388,16 @@ calc_3.2$calc_gb124_enr_conc[cond_13] <- calc_3.2$calc_2_gb124_enr_conc[cond_13]
 
 calc_3.2$calc_gb124_enr_conc[which(calc_3.2$lab_id %in% c("FW1003","UF1001","SL1010"))] <- calc_3.2$calc_2_gb124_enr_conc[which(calc_3.2$lab_id %in% c("FW1003","UF1001","SL1010"))]
 calc_3.2$calc_gb124_enr_conc[which(calc_3.2$lab_id %in% c("DWA1003OLD","OD1006"))] <- (calc_3.2$calc_1_gb124_enr_conc[which(calc_3.2$lab_id %in% c("DWA1003OLD","OD1006"))] + calc_3.2$calc_2_gb124_enr_conc[which(calc_3.2$lab_id %in% c("DWA1003OLD","OD1006"))])/2
+
+
+#Casey's binary addition
+gb124_enr_binary <- rep(NA,length(calc_3.2$lab_1_gb124_enr_plaque_mst))
+gb124_enr_binary[c(cond_2, cond_3, cond_4, cond_5, cond_7, cond_8, cond_9, cond_10, cond_11, cond_12, cond_13)] <- 1
+gb124_enr_binary[c(cond_1, cond_6)] <- 0
+
+calc_3.2$gb124_enr_binary <- gb124_enr_binary
+
+
 
 #View(calc_3.2[which(is.na(calc_3.2$calc_gb124_enr_conc) & !is.na(calc_3.2$calc_1_gb124_enr)),c(11,81,119:128)])
 

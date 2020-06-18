@@ -279,7 +279,15 @@ ec_mf_conditions <- function(ec_data, value) {
   
   ec_con[conditionFB]= ec_data$ec_ecnt1[conditionFB]/ec_data$ec_dil1[conditionFB]*ec_data$ec_denom[conditionFB]
   
+  ec_binary<-rep(NA,length(ec_data$ec_ecnt1))
+  ec_binary[c(condition1, condition2, condition3, condition4, condition5, condition6, condition7, condition8, condition10, condition11,
+              condition12, condition13, condition14, condition15, condition16, condition17, condition18, condition19, condition20,
+              condition21, condition22, condition23, condition24, condition25, condition26, condition27, condition28, condition29,
+              condition30, condition31)] <- 1
+  ec_binary[c(condition9, condition32)] <- 0
+  
   ec_data$ec_conc<-ec_con
+  ec_data$ec_binary <- ec_binary
   
   return(ec_data)
 }

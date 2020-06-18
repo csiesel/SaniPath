@@ -6,10 +6,15 @@ source(paste0(path, "SPT/5_SPT_Final_Status.R"))
 
 #### SPT EC/MST Combine ####
 spt$ec_conc <- 0
+spt$ec_binary <- 0
 spt$calc_wg5_conc <- 0
+spt$wg5_binary <- 0
 spt$calc_gb124_conc <- 0
+spt$gb124_binary <- 0
 spt$calc_wg5_enr_conc <- 0
+spt$wg5_enr_binary <- 0
 spt$calc_gb124_enr_conc <- 0
+spt$gb124_enr_binary <- 0
 spt$typhi_positive <- 0
 spt$typhi_presumptive <- 0
 spt$paratyphi_positive <- 0
@@ -28,14 +33,34 @@ spt$p2 <- 0
 for(i in 1:nrow(spt)){
   spt$ec_conc[i] <- ifelse(is.na(spt$mf_index[i]), NA, 
                            ec_data_spt$ec_conc[which(spt$mf_index[i]==ec_data_spt$`_index.y`)])
+  
+  spt$ec_binary[i] <- ifelse(is.na(spt$mf_index[i]), NA, 
+                           ec_data_spt$ec_binary[which(spt$mf_index[i]==ec_data_spt$`_index.y`)])
+  
   spt$calc_wg5_conc[i] <- ifelse(is.na(spt$mst_index[i]), NA, 
                                  mst_conc$calc_wg5_conc[which(spt$mst_index[i]==mst_conc$`_index`)])
+  
+  spt$wg5_binary[i] <- ifelse(is.na(spt$mst_index[i]), NA, 
+                                 mst_conc$wg5_binary[which(spt$mst_index[i]==mst_conc$`_index`)])
+  
   spt$calc_gb124_conc[i] <- ifelse(is.na(spt$mst_index[i]), NA, 
                                    mst_conc$calc_gb124_conc[which(spt$mst_index[i]==mst_conc$`_index`)])
+  
+  spt$gb124_binary[i] <- ifelse(is.na(spt$mst_index[i]), NA, 
+                                   mst_conc$gb124_binary[which(spt$mst_index[i]==mst_conc$`_index`)])
+  
   spt$calc_wg5_enr_conc[i] <- ifelse(is.na(spt$mst_index[i]), NA, 
                                      mst_conc$calc_wg5_enr_conc[which(spt$mst_index[i]==mst_conc$`_index`)])
+  
+  spt$wg5_enr_binary[i] <- ifelse(is.na(spt$mst_index[i]), NA, 
+                                     mst_conc$wg5_enr_binary[which(spt$mst_index[i]==mst_conc$`_index`)])
+  
   spt$calc_gb124_enr_conc[i] <- ifelse(is.na(spt$mst_index[i]), NA, 
                                        mst_conc$calc_gb124_enr_conc[which(spt$mst_index[i]==mst_conc$`_index`)])
+  
+  spt$gb124_enr_binary[i] <- ifelse(is.na(spt$mst_index[i]), NA, 
+                                       mst_conc$gb124_enr_binary[which(spt$mst_index[i]==mst_conc$`_index`)])
+  
   # spt$ecid[i] <- ifelse(is.na(spt$mf_index[i]), NA, ec_data_spt$sampleid[which(spt$mf_index[i]==ec_data_spt$`_index.y`)])
   # spt$mstid[i] <- ifelse(is.na(spt$mst_index[i]), NA, mst_conc$lab_id[which(spt$mst_index[i]==mst_conc$`_index`)])
 
@@ -95,10 +120,15 @@ spt_final <- spt %>% select(-c("mf_ward", "mf_hood", "mst_ward", "mst_hood", "dn
 
 #### ES EC/MST Combine ####
 es$ec_conc <- 0
+es$ec_binary <- 0
 es$calc_wg5_conc <- 0
+es$wg5_binary <- 0
 es$calc_gb124_conc <- 0
+es$gb124_binary <- 0
 es$calc_wg5_enr_conc <- 0
+es$wg5_enr_binary <- 0
 es$calc_gb124_enr_conc <- 0
+es$gb124_enr_binary <- 0
 es$typhi_positive <- 0
 es$typhi_presumptive <- 0
 es$paratyphi_positive <- 0
@@ -116,15 +146,34 @@ es$p2 <- 0
 # es$mstid <- ""
 for(i in 1:nrow(es)){
   es$ec_conc[i] <- ifelse(is.na(es$mf_index[i]), NA, 
-                          ec_data_es$ec_conc[which(es$mf_index[i]==ec_data_es$`_index.y`)])
+                           ec_data_es$ec_conc[which(es$mf_index[i]==ec_data_es$`_index.y`)])
+  
+  es$ec_binary[i] <- ifelse(is.na(es$mf_index[i]), NA, 
+                             ec_data_es$ec_binary[which(es$mf_index[i]==ec_data_es$`_index.y`)])
+  
   es$calc_wg5_conc[i] <- ifelse(is.na(es$mst_index[i]), NA, 
-                                mst_conc$calc_wg5_conc[which(es$mst_index[i]==mst_conc$`_index`)])
+                                 mst_conc$calc_wg5_conc[which(es$mst_index[i]==mst_conc$`_index`)])
+  
+  es$wg5_binary[i] <- ifelse(is.na(es$mst_index[i]), NA, 
+                              mst_conc$wg5_binary[which(es$mst_index[i]==mst_conc$`_index`)])
+  
   es$calc_gb124_conc[i] <- ifelse(is.na(es$mst_index[i]), NA, 
-                                  mst_conc$calc_gb124_conc[which(es$mst_index[i]==mst_conc$`_index`)])
+                                   mst_conc$calc_gb124_conc[which(es$mst_index[i]==mst_conc$`_index`)])
+  
+  es$gb124_binary[i] <- ifelse(is.na(es$mst_index[i]), NA, 
+                                mst_conc$gb124_binary[which(es$mst_index[i]==mst_conc$`_index`)])
+  
   es$calc_wg5_enr_conc[i] <- ifelse(is.na(es$mst_index[i]), NA, 
-                                    mst_conc$calc_wg5_enr_conc[which(es$mst_index[i]==mst_conc$`_index`)])
+                                     mst_conc$calc_wg5_enr_conc[which(es$mst_index[i]==mst_conc$`_index`)])
+  
+  es$wg5_enr_binary[i] <- ifelse(is.na(es$mst_index[i]), NA, 
+                                  mst_conc$wg5_enr_binary[which(es$mst_index[i]==mst_conc$`_index`)])
+  
   es$calc_gb124_enr_conc[i] <- ifelse(is.na(es$mst_index[i]), NA, 
-                                      mst_conc$calc_gb124_enr_conc[which(es$mst_index[i]==mst_conc$`_index`)])
+                                       mst_conc$calc_gb124_enr_conc[which(es$mst_index[i]==mst_conc$`_index`)])
+  
+  es$gb124_enr_binary[i] <- ifelse(is.na(es$mst_index[i]), NA, 
+                                    mst_conc$gb124_enr_binary[which(es$mst_index[i]==mst_conc$`_index`)])
   # es$ecid[i] <- ifelse(is.na(es$mf_index[i]), NA, ec_data_es$sampleid[which(es$mf_index[i]==ec_data_es$`_index.y`)])
   # es$mstid[i] <- ifelse(is.na(es$mst_index[i]), NA, mst_conc$lab_id[which(es$mst_index[i]==mst_conc$`_index`)])
   
@@ -182,10 +231,19 @@ es_final <- es %>% select(-c("mf_ward", "mf_hood", "mst_ward", "mst_hood", "dna_
 
 #### SO EC/MST Combine ####
 so$ec_conc <- 0
+so$ec_binary <- 0
 so$calc_wg5_conc <- 0
+so$wg5_binary <- 0
 so$calc_gb124_conc <- 0
+so$gb124_binary <- 0
 so$calc_wg5_enr_conc <- 0
+so$wg5_enr_binary <- 0
 so$calc_gb124_enr_conc <- 0
+so$gb124_enr_binary <- 0
+so$typhi_positive <- 0
+so$typhi_presumptive <- 0
+so$paratyphi_positive <- 0
+so$paratyphi_presumptive <- 0
 
 so$typhi_positive <- 0
 so$typhi_presumptive <- 0
@@ -204,14 +262,33 @@ so$p2 <- 0
 for(i in 1:nrow(so)){
   so$ec_conc[i] <- ifelse(is.na(so$mf_index[i]), NA, 
                           ec_data_so$ec_conc[which(so$mf_index[i]==ec_data_so$`_index.y`)])
+  
+  so$ec_binary[i] <- ifelse(is.na(so$mf_index[i]), NA, 
+                            ec_data_so$ec_binary[which(so$mf_index[i]==ec_data_so$`_index.y`)])
+  
   so$calc_wg5_conc[i] <- ifelse(is.na(so$mst_index[i]), NA, 
                                 mst_conc$calc_wg5_conc[which(so$mst_index[i]==mst_conc$`_index`)])
+  
+  so$wg5_binary[i] <- ifelse(is.na(so$mst_index[i]), NA, 
+                             mst_conc$wg5_binary[which(so$mst_index[i]==mst_conc$`_index`)])
+  
   so$calc_gb124_conc[i] <- ifelse(is.na(so$mst_index[i]), NA, 
                                   mst_conc$calc_gb124_conc[which(so$mst_index[i]==mst_conc$`_index`)])
+  
+  so$gb124_binary[i] <- ifelse(is.na(so$mst_index[i]), NA, 
+                               mst_conc$gb124_binary[which(so$mst_index[i]==mst_conc$`_index`)])
+  
   so$calc_wg5_enr_conc[i] <- ifelse(is.na(so$mst_index[i]), NA, 
                                     mst_conc$calc_wg5_enr_conc[which(so$mst_index[i]==mst_conc$`_index`)])
+  
+  so$wg5_enr_binary[i] <- ifelse(is.na(so$mst_index[i]), NA, 
+                                 mst_conc$wg5_enr_binary[which(so$mst_index[i]==mst_conc$`_index`)])
+  
   so$calc_gb124_enr_conc[i] <- ifelse(is.na(so$mst_index[i]), NA, 
                                       mst_conc$calc_gb124_enr_conc[which(so$mst_index[i]==mst_conc$`_index`)])
+  
+  so$gb124_enr_binary[i] <- ifelse(is.na(so$mst_index[i]), NA, 
+                                   mst_conc$gb124_enr_binary[which(so$mst_index[i]==mst_conc$`_index`)])
   # so$ecid[i] <- ifelse(is.na(so$mf_index[i]), NA, ec_data_so$sampleid[which(so$mf_index[i]==ec_data_so$`_index.y`)])
   # so$mstid[i] <- ifelse(is.na(so$mst_index[i]), NA, mst_conc$lab_id[which(so$mst_index[i]==mst_conc$`_index`)])
   
@@ -271,10 +348,15 @@ so_final <- so %>% select(-c("mf_ward", "mf_hood", "mst_ward", "mst_hood", "dna_
 
 #### spt1 EC/MST Combine ####
 spt1$ec_conc <- 0
+spt1$ec_binary <- 0
 spt1$calc_wg5_conc <- 0
+spt1$wg5_binary <- 0
 spt1$calc_gb124_conc <- 0
+spt1$gb124_binary <- 0
 spt1$calc_wg5_enr_conc <- 0
+spt1$wg5_enr_binary <- 0
 spt1$calc_gb124_enr_conc <- 0
+spt1$gb124_enr_binary <- 0
 spt1$typhi_positive <- 0
 spt1$typhi_presumptive <- 0
 spt1$paratyphi_positive <- 0
@@ -292,15 +374,34 @@ spt1$p2 <- 0
 # spt1$mstid <- ""
 for(i in 1:nrow(spt1)){
   spt1$ec_conc[i] <- ifelse(is.na(spt1$mf_index[i]), NA, 
-                            ec_data_spt$ec_conc[which(spt1$mf_index[i]==ec_data_spt$`_index.y`)])
+                           ec_data_spt$ec_conc[which(spt1$mf_index[i]==ec_data_spt$`_index.y`)])
+  
+  spt1$ec_binary[i] <- ifelse(is.na(spt1$mf_index[i]), NA, 
+                             ec_data_spt$ec_binary[which(spt1$mf_index[i]==ec_data_spt$`_index.y`)])
+  
   spt1$calc_wg5_conc[i] <- ifelse(is.na(spt1$mst_index[i]), NA, 
-                                  mst_conc$calc_wg5_conc[which(spt1$mst_index[i]==mst_conc$`_index`)])
+                                 mst_conc$calc_wg5_conc[which(spt1$mst_index[i]==mst_conc$`_index`)])
+  
+  spt1$wg5_binary[i] <- ifelse(is.na(spt1$mst_index[i]), NA, 
+                              mst_conc$wg5_binary[which(spt1$mst_index[i]==mst_conc$`_index`)])
+  
   spt1$calc_gb124_conc[i] <- ifelse(is.na(spt1$mst_index[i]), NA, 
-                                    mst_conc$calc_gb124_conc[which(spt1$mst_index[i]==mst_conc$`_index`)])
+                                   mst_conc$calc_gb124_conc[which(spt1$mst_index[i]==mst_conc$`_index`)])
+  
+  spt1$gb124_binary[i] <- ifelse(is.na(spt1$mst_index[i]), NA, 
+                                mst_conc$gb124_binary[which(spt1$mst_index[i]==mst_conc$`_index`)])
+  
   spt1$calc_wg5_enr_conc[i] <- ifelse(is.na(spt1$mst_index[i]), NA, 
-                                      mst_conc$calc_wg5_enr_conc[which(spt1$mst_index[i]==mst_conc$`_index`)])
+                                     mst_conc$calc_wg5_enr_conc[which(spt1$mst_index[i]==mst_conc$`_index`)])
+  
+  spt1$wg5_enr_binary[i] <- ifelse(is.na(spt1$mst_index[i]), NA, 
+                                  mst_conc$wg5_enr_binary[which(spt1$mst_index[i]==mst_conc$`_index`)])
+  
   spt1$calc_gb124_enr_conc[i] <- ifelse(is.na(spt1$mst_index[i]), NA, 
-                                        mst_conc$calc_gb124_enr_conc[which(spt1$mst_index[i]==mst_conc$`_index`)])
+                                       mst_conc$calc_gb124_enr_conc[which(spt1$mst_index[i]==mst_conc$`_index`)])
+  
+  spt1$gb124_enr_binary[i] <- ifelse(is.na(spt1$mst_index[i]), NA, 
+                                    mst_conc$gb124_enr_binary[which(spt1$mst_index[i]==mst_conc$`_index`)])
   # spt1$ecid[i] <- ifelse(is.na(spt1$mf_index[i]), NA, ec_data_spt$sampleid[which(spt1$mf_index[i]==ec_data_spt$`_index.y`)])
   # spt1$mstid[i] <- ifelse(is.na(spt1$mst_index[i]), NA, mst_conc$lab_id[which(spt1$mst_index[i]==mst_conc$`_index`)])
   
@@ -360,10 +461,15 @@ spt1_final <- spt1 %>% select(-c("mf_ward", "mf_hood", "mst_ward", "mst_hood", "
 
 #### es1 EC/MST Combine ####
 es1$ec_conc <- 0
+es1$ec_binary <- 0
 es1$calc_wg5_conc <- 0
+es1$wg5_binary <- 0
 es1$calc_gb124_conc <- 0
+es1$gb124_binary <- 0
 es1$calc_wg5_enr_conc <- 0
+es1$wg5_enr_binary <- 0
 es1$calc_gb124_enr_conc <- 0
+es1$gb124_enr_binary <- 0
 es1$typhi_positive <- 0
 es1$typhi_presumptive <- 0
 es1$paratyphi_positive <- 0
@@ -381,15 +487,34 @@ es1$p2 <- 0
 # es1$mstid <- ""
 for(i in 1:nrow(es1)){
   es1$ec_conc[i] <- ifelse(is.na(es1$mf_index[i]), NA, 
-                           ec_data_es$ec_conc[which(es1$mf_index[i]==ec_data_es$`_index.y`)])
+                            ec_data_es$ec_conc[which(es1$mf_index[i]==ec_data_es$`_index.y`)])
+  
+  es1$ec_binary[i] <- ifelse(is.na(es1$mf_index[i]), NA, 
+                             ec_data_es$ec_binary[which(es1$mf_index[i]==ec_data_es$`_index.y`)])
+  
   es1$calc_wg5_conc[i] <- ifelse(is.na(es1$mst_index[i]), NA, 
-                                 mst_conc$calc_wg5_conc[which(es1$mst_index[i]==mst_conc$`_index`)])
+                                  mst_conc$calc_wg5_conc[which(es1$mst_index[i]==mst_conc$`_index`)])
+  
+  es1$wg5_binary[i] <- ifelse(is.na(es1$mst_index[i]), NA, 
+                               mst_conc$wg5_binary[which(es1$mst_index[i]==mst_conc$`_index`)])
+  
   es1$calc_gb124_conc[i] <- ifelse(is.na(es1$mst_index[i]), NA, 
-                                   mst_conc$calc_gb124_conc[which(es1$mst_index[i]==mst_conc$`_index`)])
+                                    mst_conc$calc_gb124_conc[which(es1$mst_index[i]==mst_conc$`_index`)])
+  
+  es1$gb124_binary[i] <- ifelse(is.na(es1$mst_index[i]), NA, 
+                                 mst_conc$gb124_binary[which(es1$mst_index[i]==mst_conc$`_index`)])
+  
   es1$calc_wg5_enr_conc[i] <- ifelse(is.na(es1$mst_index[i]), NA, 
-                                     mst_conc$calc_wg5_enr_conc[which(es1$mst_index[i]==mst_conc$`_index`)])
+                                      mst_conc$calc_wg5_enr_conc[which(es1$mst_index[i]==mst_conc$`_index`)])
+  
+  es1$wg5_enr_binary[i] <- ifelse(is.na(es1$mst_index[i]), NA, 
+                                   mst_conc$wg5_enr_binary[which(es1$mst_index[i]==mst_conc$`_index`)])
+  
   es1$calc_gb124_enr_conc[i] <- ifelse(is.na(es1$mst_index[i]), NA, 
-                                       mst_conc$calc_gb124_enr_conc[which(es1$mst_index[i]==mst_conc$`_index`)])
+                                        mst_conc$calc_gb124_enr_conc[which(es1$mst_index[i]==mst_conc$`_index`)])
+  
+  es1$gb124_enr_binary[i] <- ifelse(is.na(es1$mst_index[i]), NA, 
+                                     mst_conc$gb124_enr_binary[which(es1$mst_index[i]==mst_conc$`_index`)])
   # es1$ecid[i] <- ifelse(is.na(es1$mf_index[i]), NA, ec_data_es$sampleid[which(es1$mf_index[i]==ec_data_es$`_index.y`)])
   # es1$mstid[i] <- ifelse(is.na(es1$mst_index[i]), NA, mst_conc$lab_id[which(es1$mst_index[i]==mst_conc$`_index`)])
   
@@ -445,9 +570,9 @@ es1_final <- es1 %>% select(-c("mf_ward", "mf_hood", "mst_ward", "mst_hood", "dn
                                "pcr_ward", "pcr_hood"))
 
 
-save(spt1_final, file="~/Desktop/SaniPath/SPT/data/spt1_final.rda")
-save(es1_final, file="~/Desktop/SaniPath/SPT/data/es1_final.rda")
-save(so_final, file="~/Desktop/SaniPath/SPT/data/so_final.rda")
+save(spt1_final, file=paste0("~/Desktop/SaniPath/SPT/data/spt1_final_", Sys.Date(), ".rda"))
+save(es1_final, file=paste0("~/Desktop/SaniPath/SPT/data/es1_final_", Sys.Date(), ".rda"))
+save(so_final, file=paste0("~/Desktop/SaniPath/SPT/data/so_final_", Sys.Date(), ".rda"))
 
 
 
