@@ -67,10 +67,10 @@ so_no_fb <- so_final$col_id[which(is.na(so_final$fb) & so_final$sample_type!=99)
 
 # Saving final files ------------------------------------------------------
 
-
-save(spt1_final, file="SPT/spt_final.rda")
-save(es1_final, file="SPT/es_final.rda")
-save(so_final, file="SPT/so_final.rda")
+# 
+# save(spt1_final, file="SPT/spt_final.rda")
+# save(es1_final, file="SPT/es_final.rda")
+# save(so_final, file="SPT/so_final.rda")
 
 
 

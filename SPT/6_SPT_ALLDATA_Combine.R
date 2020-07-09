@@ -5,6 +5,11 @@ source(paste0(path, "SPT/5_SPT_Final_Status.R"))
 
 
 #### SPT EC/MST Combine ####
+spt$pcr_nc_typhi_pos <- 0
+spt$pcr_nc_typhi_pres <- 0
+spt$pcr_nc_paratyphi_pos <- 0
+spt$pcr_nc_paratyphi_pres <- 0
+
 spt$ec_conc <- 0
 spt$ec_binary <- 0
 spt$calc_wg5_conc <- 0
@@ -24,7 +29,6 @@ spt$t1 <-0
 spt$t2 <- 0
 spt$p1 <- 0
 spt$p2 <- 0
-
 
 
 
@@ -107,6 +111,25 @@ for(i in 1:nrow(spt)){
   
   
   
+  
+  spt$pcr_nc_typhi_pos[i] <-ifelse(is_empty(pcr$typhi_positive[which(grepl(paste(spt$pcr_nc_typhi[[i]], collapse="|"), pcr$lab_id))]),
+                               NA,
+                               str_c(pcr$typhi_positive[which(grepl(paste(spt$pcr_nc_typhi[[i]], collapse="|"), pcr$lab_id))], sep=", ", collapse=", "))
+  
+  spt$pcr_nc_typhi_pres[i] <-ifelse(is_empty(pcr$typhi_presumptive[which(grepl(paste(spt$pcr_nc_typhi[[i]], collapse="|"), pcr$lab_id))]),
+                                NA,
+                                str_c(pcr$typhi_presumptive[which(grepl(paste(spt$pcr_nc_typhi[[i]], collapse="|"), pcr$lab_id))], sep=", ", collapse=", "))
+  
+  spt$pcr_nc_paratyphi_pos[i] <-ifelse(is_empty(pcr$paratyphi_positive[which(grepl(paste(spt$pcr_nc_paratyphi[[i]], collapse="|"), pcr$lab_id))]),
+                                   NA,
+                                   str_c(pcr$paratyphi_positive[which(grepl(paste(spt$pcr_nc_paratyphi[[i]], collapse="|"), pcr$lab_id))], sep=", ", collapse=", "))
+  
+  spt$pcr_nc_paratyphi_pres[i] <-ifelse(is_empty(pcr$paratyphi_presumptive[which(grepl(paste(spt$pcr_nc_paratyphi[[i]], collapse="|"), pcr$lab_id))]),
+                                    NA,
+                                    str_c(pcr$paratyphi_presumptive[which(grepl(paste(spt$pcr_nc_paratyphi[[i]], collapse="|"), pcr$lab_id))], sep=", ", collapse=", "))
+  
+  
+  
   if (i==1) message("SPT")
   progress(value=(((i-1)/nrow(spt))*100), progress.bar=TRUE)
   if (i==nrow(spt)) message("DONE!")
@@ -119,6 +142,11 @@ spt_final <- spt %>% select(-c("mf_ward", "mf_hood", "mst_ward", "mst_hood", "dn
 
 
 #### ES EC/MST Combine ####
+es$pcr_nc_typhi_pos <- 0
+es$pcr_nc_typhi_pres <- 0
+es$pcr_nc_paratyphi_pos <- 0
+es$pcr_nc_paratyphi_pres <- 0
+
 es$ec_conc <- 0
 es$ec_binary <- 0
 es$calc_wg5_conc <- 0
@@ -218,7 +246,27 @@ for(i in 1:nrow(es)){
                                     NA,
                                     str_c(pcr$paratyphi_presumptive[which(grepl(paste(es$fb[[i]], collapse="|"), pcr$lab_id))], sep=", ", collapse=", "))
   
+ 
   
+  es$pcr_nc_typhi_pos[i] <-ifelse(is_empty(pcr$typhi_positive[which(grepl(paste(es$pcr_nc_typhi[[i]], collapse="|"), pcr$lab_id))]),
+                                   NA,
+                                   str_c(pcr$typhi_positive[which(grepl(paste(es$pcr_nc_typhi[[i]], collapse="|"), pcr$lab_id))], sep=", ", collapse=", "))
+  
+  es$pcr_nc_typhi_pres[i] <-ifelse(is_empty(pcr$typhi_presumptive[which(grepl(paste(es$pcr_nc_typhi[[i]], collapse="|"), pcr$lab_id))]),
+                                    NA,
+                                    str_c(pcr$typhi_presumptive[which(grepl(paste(es$pcr_nc_typhi[[i]], collapse="|"), pcr$lab_id))], sep=", ", collapse=", "))
+  
+  es$pcr_nc_paratyphi_pos[i] <-ifelse(is_empty(pcr$paratyphi_positive[which(grepl(paste(es$pcr_nc_paratyphi[[i]], collapse="|"), pcr$lab_id))]),
+                                       NA,
+                                       str_c(pcr$paratyphi_positive[which(grepl(paste(es$pcr_nc_paratyphi[[i]], collapse="|"), pcr$lab_id))], sep=", ", collapse=", "))
+  
+  es$pcr_nc_paratyphi_pres[i] <-ifelse(is_empty(pcr$paratyphi_presumptive[which(grepl(paste(es$pcr_nc_paratyphi[[i]], collapse="|"), pcr$lab_id))]),
+                                        NA,
+                                        str_c(pcr$paratyphi_presumptive[which(grepl(paste(es$pcr_nc_paratyphi[[i]], collapse="|"), pcr$lab_id))], sep=", ", collapse=", "))
+  
+  
+  
+   
   if (i==1) message("ES")
   progress(value=(((i-1)/nrow(es))*100), progress.bar=TRUE)
   if (i==nrow(es)) message("DONE!")
@@ -230,6 +278,11 @@ es_final <- es %>% select(-c("mf_ward", "mf_hood", "mst_ward", "mst_hood", "dna_
 
 
 #### SO EC/MST Combine ####
+so$pcr_nc_typhi_pos <- 0
+so$pcr_nc_typhi_pres <- 0
+so$pcr_nc_paratyphi_pos <- 0
+so$pcr_nc_paratyphi_pres <- 0
+
 so$ec_conc <- 0
 so$ec_binary <- 0
 so$calc_wg5_conc <- 0
@@ -334,6 +387,27 @@ for(i in 1:nrow(so)){
                                     str_c(pcr$paratyphi_presumptive[which(grepl(paste(so$fb[[i]], collapse="|"), pcr$lab_id))], sep=", ", collapse=", "))
   
   
+  
+  so$pcr_nc_typhi_pos[i] <-ifelse(is_empty(pcr$typhi_positive[which(grepl(paste(so$pcr_nc_typhi[[i]], collapse="|"), pcr$lab_id))]),
+                                   NA,
+                                   str_c(pcr$typhi_positive[which(grepl(paste(so$pcr_nc_typhi[[i]], collapse="|"), pcr$lab_id))], sep=", ", collapse=", "))
+  
+  so$pcr_nc_typhi_pres[i] <-ifelse(is_empty(pcr$typhi_presumptive[which(grepl(paste(so$pcr_nc_typhi[[i]], collapse="|"), pcr$lab_id))]),
+                                    NA,
+                                    str_c(pcr$typhi_presumptive[which(grepl(paste(so$pcr_nc_typhi[[i]], collapse="|"), pcr$lab_id))], sep=", ", collapse=", "))
+  
+  so$pcr_nc_paratyphi_pos[i] <-ifelse(is_empty(pcr$paratyphi_positive[which(grepl(paste(so$pcr_nc_paratyphi[[i]], collapse="|"), pcr$lab_id))]),
+                                       NA,
+                                       str_c(pcr$paratyphi_positive[which(grepl(paste(so$pcr_nc_paratyphi[[i]], collapse="|"), pcr$lab_id))], sep=", ", collapse=", "))
+  
+  so$pcr_nc_paratyphi_pres[i] <-ifelse(is_empty(pcr$paratyphi_presumptive[which(grepl(paste(so$pcr_nc_paratyphi[[i]], collapse="|"), pcr$lab_id))]),
+                                        NA,
+                                        str_c(pcr$paratyphi_presumptive[which(grepl(paste(so$pcr_nc_paratyphi[[i]], collapse="|"), pcr$lab_id))], sep=", ", collapse=", "))
+  
+  
+  
+  
+  
   if (i==1) message("SO")
   progress(value=(((i-1)/nrow(so))*100), progress.bar=TRUE)
   if (i==nrow(so)) message("DONE!")
@@ -347,6 +421,11 @@ so_final <- so %>% select(-c("mf_ward", "mf_hood", "mst_ward", "mst_hood", "dna_
 
 
 #### spt1 EC/MST Combine ####
+spt1$pcr_nc_typhi_pos <- 0
+spt1$pcr_nc_typhi_pres <- 0
+spt1$pcr_nc_paratyphi_pos <- 0
+spt1$pcr_nc_paratyphi_pres <- 0
+
 spt1$ec_conc <- 0
 spt1$ec_binary <- 0
 spt1$calc_wg5_conc <- 0
@@ -448,6 +527,26 @@ for(i in 1:nrow(spt1)){
   
   
   
+  spt1$pcr_nc_typhi_pos[i] <-ifelse(is_empty(pcr$typhi_positive[which(grepl(paste(spt1$pcr_nc_typhi[[i]], collapse="|"), pcr$lab_id))]),
+                                   NA,
+                                   str_c(pcr$typhi_positive[which(grepl(paste(spt1$pcr_nc_typhi[[i]], collapse="|"), pcr$lab_id))], sep=", ", collapse=", "))
+  
+  spt1$pcr_nc_typhi_pres[i] <-ifelse(is_empty(pcr$typhi_presumptive[which(grepl(paste(spt1$pcr_nc_typhi[[i]], collapse="|"), pcr$lab_id))]),
+                                    NA,
+                                    str_c(pcr$typhi_presumptive[which(grepl(paste(spt1$pcr_nc_typhi[[i]], collapse="|"), pcr$lab_id))], sep=", ", collapse=", "))
+  
+  spt1$pcr_nc_paratyphi_pos[i] <-ifelse(is_empty(pcr$paratyphi_positive[which(grepl(paste(spt1$pcr_nc_paratyphi[[i]], collapse="|"), pcr$lab_id))]),
+                                       NA,
+                                       str_c(pcr$paratyphi_positive[which(grepl(paste(spt1$pcr_nc_paratyphi[[i]], collapse="|"), pcr$lab_id))], sep=", ", collapse=", "))
+  
+  spt1$pcr_nc_paratyphi_pres[i] <-ifelse(is_empty(pcr$paratyphi_presumptive[which(grepl(paste(spt1$pcr_nc_paratyphi[[i]], collapse="|"), pcr$lab_id))]),
+                                        NA,
+                                        str_c(pcr$paratyphi_presumptive[which(grepl(paste(spt1$pcr_nc_paratyphi[[i]], collapse="|"), pcr$lab_id))], sep=", ", collapse=", "))
+  
+  
+  
+  
+  
   if (i==1) message("spt1")
   progress(value=(((i-1)/nrow(spt1))*100), progress.bar=TRUE)
   if (i==nrow(spt1)) message("DONE!")
@@ -460,6 +559,11 @@ spt1_final <- spt1 %>% select(-c("mf_ward", "mf_hood", "mst_ward", "mst_hood", "
 
 
 #### es1 EC/MST Combine ####
+es1$pcr_nc_typhi_pos <- 0
+es1$pcr_nc_typhi_pres <- 0
+es1$pcr_nc_paratyphi_pos <- 0
+es1$pcr_nc_paratyphi_pres <- 0
+
 es1$ec_conc <- 0
 es1$ec_binary <- 0
 es1$calc_wg5_conc <- 0
@@ -479,6 +583,9 @@ es1$t1 <-0
 es1$t2 <- 0
 es1$p1 <- 0
 es1$p2 <- 0
+
+es1$ps_id <- ""
+es1$plc_id <- ""
 
 
 
@@ -558,6 +665,34 @@ for(i in 1:nrow(es1)){
   es1$fb_paratyphi_pres[i] <-ifelse(is_empty(pcr$paratyphi_presumptive[which(grepl(paste(es1$fb[[i]], collapse="|"), pcr$lab_id))]),
                                     NA,
                                     str_c(pcr$paratyphi_presumptive[which(grepl(paste(es1$fb[[i]], collapse="|"), pcr$lab_id))], sep=", ", collapse=", "))
+  
+  
+  
+  
+  es1$pcr_nc_typhi_pos[i] <-ifelse(is_empty(pcr$typhi_positive[which(grepl(paste(es1$pcr_nc_typhi[[i]], collapse="|"), pcr$lab_id))]),
+                                   NA,
+                                   str_c(pcr$typhi_positive[which(grepl(paste(es1$pcr_nc_typhi[[i]], collapse="|"), pcr$lab_id))], sep=", ", collapse=", "))
+  
+  es1$pcr_nc_typhi_pres[i] <-ifelse(is_empty(pcr$typhi_presumptive[which(grepl(paste(es1$pcr_nc_typhi[[i]], collapse="|"), pcr$lab_id))]),
+                                    NA,
+                                    str_c(pcr$typhi_presumptive[which(grepl(paste(es1$pcr_nc_typhi[[i]], collapse="|"), pcr$lab_id))], sep=", ", collapse=", "))
+  
+  es1$pcr_nc_paratyphi_pos[i] <-ifelse(is_empty(pcr$paratyphi_positive[which(grepl(paste(es1$pcr_nc_paratyphi[[i]], collapse="|"), pcr$lab_id))]),
+                                       NA,
+                                       str_c(pcr$paratyphi_positive[which(grepl(paste(es1$pcr_nc_paratyphi[[i]], collapse="|"), pcr$lab_id))], sep=", ", collapse=", "))
+  
+  es1$pcr_nc_paratyphi_pres[i] <-ifelse(is_empty(pcr$paratyphi_presumptive[which(grepl(paste(es1$pcr_nc_paratyphi[[i]], collapse="|"), pcr$lab_id))]),
+                                        NA,
+                                        str_c(pcr$paratyphi_presumptive[which(grepl(paste(es1$pcr_nc_paratyphi[[i]], collapse="|"), pcr$lab_id))], sep=", ", collapse=", "))
+  
+  
+  
+  es1$ps_id[i] <- ifelse(es1$sample_type[i]==12, raw_2.4$col_ms_psid[which(raw_2.4$col_id==es1$col_id[i])],
+                         NA)
+  
+  es1$plc_id[i] <- ifelse(es1$sample_type[i]==11, str_c(raw_2.4$col_sw_trigger_nr[which(raw_2.4$col_id==es1$col_id[i])], sep=", ", collapse=", "),
+                          NA)
+  
   
   
   if (i==1) message("es1")

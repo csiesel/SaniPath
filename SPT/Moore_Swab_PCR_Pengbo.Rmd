@@ -1,0 +1,81 @@
+---
+title: "Moore Swab PCR"
+output: pdf_document
+classoption: landscape
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+library(tidyverse)
+library(kableExtra)
+library(htmltools)
+
+load("/Users/caseysiesel/Desktop/SaniPath/SPT/es1_final_2020-07-06.rda")
+
+'%!in%' <- function(x,y)!('%in%'(x,y))
+
+es1_final$ps_id <- as.integer(es1_final$ps_id)
+
+# ES Data w/ diff FB issues -----------------------------------------------
+#ES Samples w/ PCR issues in FB
+es_pcr_fb <- es1_final$col_id[which((grepl("1", es1_final$fb_typhi_pos) | 
+                                         grepl("1", es1_final$fb_typhi_pres) |
+                                         grepl("1", es1_final$fb_paratyphi_pos) |
+                                         grepl("1", es1_final$fb_paratyphi_pres)) & 
+                                      es1_final$sample_type!="Field Blank")]
+#ES Samples w/ EC issues in FB
+es_ec_fb <- ""
+for(i in 1:nrow(es1_final)){
+  es_ec_fb <- append(es_ec_fb, 
+                     ifelse(unique(unlist(strsplit(str_replace_all(es1_final$fb_ec[i], ", ", ""), "")))!="0"
+    & es1_final$sample_type[i]!="Field Blank", es1_final$col_id[i], NA))
+}
+es_ec_fb <- unique(es_ec_fb[es_ec_fb %!in% c("", NA)])
+
+#ES Samples w/ NO FB
+es_no_fb <- es1_final$col_id[which(is.na(es1_final$fb) & es1_final$sample_type!="Field Blank")]
+
+
+
+es_with_cleanfb_ec_pcr <- es1_final %>% filter(col_id %!in% c(es_no_fb, es_ec_fb, es_pcr_fb))
+
+
+
+
+mo_data <- es_with_cleanfb_ec_pcr %>% 
+  filter(sample_type==12, date >= "2019-09-06")
+
+mo_pcr_table <- mo_data %>% 
+  group_by(ps_id) %>% 
+  summarise(count=n(), typhi_pos=sum(typhi_positive, na.rm=T), para_pos=sum(paratyphi_positive, na.rm=T)) %>%
+  arrange(ps_id)
+
+mo_pcr_table <- mo_pcr_table %>%
+  mutate("Typhi Positive (%)"=round((typhi_pos/count)*100, 2),
+         "Paratyphi Positive (%)"=round((para_pos/count)*100, 2)) %>%
+  rename("Pumping Station ID"=ps_id,
+         "Number of Samples"=count,
+         "Typhi Positive Count"=typhi_pos,
+         "Paratyphi Positive Count"=para_pos) %>%
+  select(c("Pumping Station ID", "Number of Samples", "Typhi Positive Count", "Typhi Positive (%)",
+           "Paratyphi Positive Count", "Paratyphi Positive (%)"))
+
+```
+
+
+
+```{r dates, echo=FALSE, results='asis'}
+cat(paste0("Samples from ", min(mo_data$date), " to "), paste0(max(mo_data$date)), sep="")
+```
+
+Samples only include those with a field blank with negative results for both E. coli and PCR.
+
+
+## PCR results for Moore Swab samples collected at sewage pumping stations in Kolkata, India
+```{r table, echo=FALSE, results='asis'}
+kableExtra::kable(mo_pcr_table, "latex", booktabs=T, linesep="") %>%
+  kable_styling(latex_options = "striped", position = "float_left")
+
+```
+

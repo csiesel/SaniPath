@@ -26,7 +26,7 @@ ec_data_es %>%
 
 #### ES Plots ####
 pdf(paste("~/Desktop/SaniPath/SPT/output/","es_ec_", Sys.Date(),".pdf",sep=""), width = 11, height=8.5)
-es %>% 
+es1_final %>% 
   filter(!is.na(ec_conc), sample_type != 99) %>% 
   mutate(sample_type_name = ifelse(sample_type==11, "Pooled Latrine",
                             ifelse(sample_type==12, "Moore Swab",
@@ -52,7 +52,7 @@ dev.off()
 
 #### SPT Plots ####
 pdf(paste("~/Desktop/SaniPath/SPT/output/","spt_ec_", Sys.Date(),".pdf",sep=""), width = 11, height=8.5)
-spt %>%
+spt1_final %>%
   filter(!is.na(ec_conc), sample_type !=99) %>% 
   mutate(sample_type_name = ifelse(sample_type==1, "Open Drain",
                             ifelse(sample_type==2, "Raw Produce",
@@ -85,7 +85,7 @@ dev.off()
 
 #### SO Plots ####
 pdf(paste("~/Desktop/SaniPath/SPT/output/","so_ec_", Sys.Date(),".pdf",sep=""), width = 11, height=8.5)
-so %>% 
+so_final %>% 
   filter(!is.na(ec_conc), sample_type !=99) %>% 
   mutate(sample_type_name = ifelse(sample_type_so==141, "Cutting /Grinding Surface (FPa)",
                             ifelse(sample_type_so==142, "Storage/Preparation Bowl (FPb)",

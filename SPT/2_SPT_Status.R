@@ -9,14 +9,14 @@ library(tidyverse)
 
 # # Put files here if you want to read from csv instead of re-running SPT-dupid_fix.R
 path <- "/Users/caseysiesel/Desktop/SaniPath/"
-raw_2.1 <- read_csv(paste0(path, "SPT/data/raw_2.1_2020-06-15.csv"))
-raw_2.2 <- read_csv(paste0(path, "SPT/data/raw_2.2_2020-06-15.csv"))
-raw_2.4 <- read_csv(paste0(path, "SPT/data/raw_2.4_2020-06-15.csv"))
-raw_3.1 <- read_csv(paste0(path, "SPT/data/raw_3.1_2020-06-15.csv"))
-raw_3.2 <- read_csv(paste0(path, "SPT/data/raw_3.2_2020-06-15.csv"))
-raw_3.3 <- read_csv(paste0(path, "SPT/data/raw_3.3_2020-06-15.csv"))
-raw_3.4 <- read_csv(paste0(path, "SPT/data/raw_3.4_2020-06-15.csv"))
-raw_3.5 <- read_csv(paste0(path, "SPT/data/raw_3.5_2020-06-15.csv"))
+raw_2.1 <- read_csv(paste0(path, "SPT/data/raw_2.1_2020-07-06.csv"))
+raw_2.2 <- read_csv(paste0(path, "SPT/data/raw_2.2_2020-07-06.csv"))
+raw_2.4 <- read_csv(paste0(path, "SPT/data/raw_2.4_2020-07-06.csv"))
+raw_3.1 <- read_csv(paste0(path, "SPT/data/raw_3.1_2020-07-06.csv"))
+raw_3.2 <- read_csv(paste0(path, "SPT/data/raw_3.2_2020-07-06.csv"))
+raw_3.3 <- read_csv(paste0(path, "SPT/data/raw_3.3_2020-07-06.csv"))
+raw_3.4 <- read_csv(paste0(path, "SPT/data/raw_3.4_2020-07-06.csv"))
+raw_3.5 <- read_csv(paste0(path, "SPT/data/raw_3.5_2020-07-06.csv"))
 
 
 #### Little fixes ####
@@ -57,7 +57,7 @@ spt <- raw_2.1 %>%
          enr_date="", enr_index="", enr_type="", enr_ward="", enr_hood="",
          fb="", fb_ec="", fb_up="", 
          fb_pcr="", fb_typhi_pos="", fb_typhi_pres="", fb_paratyphi_pos="", fb_paratyphi_pres="",
-         ncec="", ncec_ec="", upnc="", upnc_tb="") %>%
+         ncec="", ncec_ec="", upnc="", upnc_tb="", pcr_nc_typhi="", pcr_nc_paratyphi="") %>%
   select(c("col_id", "form", "date", "lat", "long", "sample_index", "sample_type", "sample_ward", "sample_hood",
            "mf_date", "mf_index", "mf_type", "mf_ward", "mf_hood",
            "mst_date", "mst_index", "mst_type", "mst_ward", "mst_hood",
@@ -66,7 +66,7 @@ spt <- raw_2.1 %>%
            "enr_date", "enr_index", "enr_type", "enr_ward", "enr_hood",
            "fb", "fb_ec", "fb_up",
            "fb_pcr", "fb_typhi_pos", "fb_typhi_pres", "fb_paratyphi_pos", "fb_paratyphi_pres",
-           "ncec", "ncec_ec", "upnc", "upnc_tb"))
+           "ncec", "ncec_ec", "upnc", "upnc_tb", "pcr_nc_typhi", "pcr_nc_paratyphi"))
 
 
 spt$fb_pcr <- ""
@@ -199,6 +199,19 @@ for(i in 1:nrow(spt)){
                            NA,
                            "Turbid")
   
+  spt$pcr_nc_typhi[i] <- ifelse(is_empty(raw_3.4$lab_id[which(spt$pcr_date[i]==as.character(as.Date(raw_3.4$lab_pcr_ty_date)) & 
+                                                                grepl("^EC", raw_3.4$lab_id)==TRUE)]),
+                                NA,
+                                strsplit(str_c(raw_3.4$lab_id[which(spt$pcr_date[i]==as.character(as.Date(raw_3.4$lab_pcr_ty_date)) & 
+                                                                      grepl("^EC", raw_3.4$lab_id)==TRUE)], sep=", ", collapse=", "), ", "))
+  
+  spt$pcr_nc_paratyphi[i] <- ifelse(is_empty(raw_3.4$lab_id[which(spt$pcr_date[i]==as.character(as.Date(raw_3.4$lab_pcr_para_date)) & 
+                                                                    grepl("^EC", raw_3.4$lab_id)==TRUE)]),
+                                    NA,
+                                    strsplit(str_c(raw_3.4$lab_id[which(spt$pcr_date[i]==as.character(as.Date(raw_3.4$lab_pcr_para_date)) & 
+                                                                          grepl("^EC", raw_3.4$lab_id)==TRUE)], sep=", ", collapse=", "), ", "))
+  
+  
   if (i==1) message("SPT Initial")
   progress(value=(((i-1)/nrow(spt))*100), progress.bar=TRUE)
   if (i==nrow(spt)) message("DONE!")
@@ -273,7 +286,7 @@ spt <- raw_2.1 %>%
          enr_date="", enr_index="", enr_type="", enr_ward="", enr_hood="",
          fb="", fb_ec="", fb_up="", 
          fb_pcr="", fb_typhi_pos="", fb_typhi_pres="", fb_paratyphi_pos="", fb_paratyphi_pres="", 
-         ncec="", ncec_ec="", upnc="", upnc_tb="") %>%
+         ncec="", ncec_ec="", upnc="", upnc_tb="", pcr_nc_typhi="", pcr_nc_paratyphi="") %>%
   select(c("col_id", "form", "date", "lat", "long", "sample_index", "sample_type", "sample_ward", "sample_hood",
            "mf_date", "mf_index", "mf_type", "mf_ward", "mf_hood",
            "mst_date", "mst_index", "mst_type", "mst_ward", "mst_hood",
@@ -282,7 +295,7 @@ spt <- raw_2.1 %>%
            "enr_date", "enr_index", "enr_type", "enr_ward", "enr_hood",
            "fb", "fb_ec", "fb_up",
            "fb_pcr", "fb_typhi_pos", "fb_typhi_pres", "fb_paratyphi_pos", "fb_paratyphi_pres",
-           "ncec", "ncec_ec", "upnc", "upnc_tb"))
+           "ncec", "ncec_ec", "upnc", "upnc_tb", "pcr_nc_typhi", "pcr_nc_paratyphi"))
 
 
 for(i in 1:nrow(spt)){
@@ -406,6 +419,20 @@ for(i in 1:nrow(spt)){
                            NA,
                            "Turbid")
   
+  
+  spt$pcr_nc_typhi[i] <- ifelse(is_empty(raw_3.4$lab_id[which(spt$pcr_date[i]==as.character(as.Date(raw_3.4$lab_pcr_ty_date)) & 
+                                                                 grepl("^EC", raw_3.4$lab_id)==TRUE)]),
+                                 NA,
+                                 strsplit(str_c(raw_3.4$lab_id[which(spt$pcr_date[i]==as.character(as.Date(raw_3.4$lab_pcr_ty_date)) & 
+                                                                       grepl("^EC", raw_3.4$lab_id)==TRUE)], sep=", ", collapse=", "), ", "))
+  
+  spt$pcr_nc_paratyphi[i] <- ifelse(is_empty(raw_3.4$lab_id[which(spt$pcr_date[i]==as.character(as.Date(raw_3.4$lab_pcr_para_date)) & 
+                                                                     grepl("^EC", raw_3.4$lab_id)==TRUE)]),
+                                     NA,
+                                     strsplit(str_c(raw_3.4$lab_id[which(spt$pcr_date[i]==as.character(as.Date(raw_3.4$lab_pcr_para_date)) & 
+                                                                           grepl("^EC", raw_3.4$lab_id)==TRUE)], sep=", ", collapse=", "), ", "))
+  
+  
   if (i==1) message("SPT Final")
   progress(value=(((i-1)/nrow(spt))*100), progress.bar=TRUE)
   if (i==nrow(spt)) message("DONE!")
@@ -445,7 +472,7 @@ es <- raw_2.4 %>%
          enr_date="", enr_index="", enr_type="", enr_ward="", enr_hood="",
          fb="", fb_ec="", fb_up="", 
          fb_pcr="", fb_typhi_pos="", fb_typhi_pres="", fb_paratyphi_pos="", fb_paratyphi_pres="", 
-         ncec="", ncec_ec="", upnc="", upnc_tb="") %>%
+         ncec="", ncec_ec="", upnc="", upnc_tb="", pcr_nc_typhi="", pcr_nc_paratyphi="") %>%
   select(c("col_id", "form", "date", "lat", "long", "sample_index", "sample_type", "sample_ward", "sample_hood",
            "mf_date", "mf_index", "mf_type", "mf_ward", "mf_hood",
            "mst_date", "mst_index", "mst_type", "mst_ward", "mst_hood",
@@ -454,7 +481,7 @@ es <- raw_2.4 %>%
            "enr_date", "enr_index", "enr_type", "enr_ward", "enr_hood",
            "fb", "fb_ec", "fb_up",
            "fb_pcr", "fb_typhi_pos", "fb_typhi_pres", "fb_paratyphi_pos", "fb_paratyphi_pres",
-           "ncec", "ncec_ec", "upnc", "upnc_tb"))
+           "ncec", "ncec_ec", "upnc", "upnc_tb", "pcr_nc_typhi", "pcr_nc_paratyphi"))
 
 for(i in 1:nrow(es)){
   #MF
@@ -576,6 +603,20 @@ for(i in 1:nrow(es)){
                            NA,
                            "Turbid")
   
+  es$pcr_nc_typhi[i] <- ifelse(is_empty(raw_3.4$lab_id[which(es$pcr_date[i]==as.character(as.Date(raw_3.4$lab_pcr_ty_date)) & 
+                                                                grepl("^EC", raw_3.4$lab_id)==TRUE)]),
+                                NA,
+                                strsplit(str_c(raw_3.4$lab_id[which(es$pcr_date[i]==as.character(as.Date(raw_3.4$lab_pcr_ty_date)) & 
+                                                                      grepl("^EC", raw_3.4$lab_id)==TRUE)], sep=", ", collapse=", "), ", "))
+  
+  es$pcr_nc_paratyphi[i] <- ifelse(is_empty(raw_3.4$lab_id[which(es$pcr_date[i]==as.character(as.Date(raw_3.4$lab_pcr_para_date)) & 
+                                                                    grepl("^EC", raw_3.4$lab_id)==TRUE)]),
+                                    NA,
+                                    strsplit(str_c(raw_3.4$lab_id[which(es$pcr_date[i]==as.character(as.Date(raw_3.4$lab_pcr_para_date)) & 
+                                                                          grepl("^EC", raw_3.4$lab_id)==TRUE)], sep=", ", collapse=", "), ", "))
+  
+  
+  
   if (i==1) message("ES Initial")
   progress(value=(((i-1)/nrow(es))*100), progress.bar=TRUE)
   if (i==nrow(es)) message("DONE!")
@@ -661,7 +702,7 @@ es <- raw_2.4 %>%
          enr_date="", enr_index="", enr_type="", enr_ward="", enr_hood="",
          fb="", fb_ec="", fb_up="", 
          fb_pcr="", fb_typhi_pos="", fb_typhi_pres="", fb_paratyphi_pos="", fb_paratyphi_pres="", 
-         ncec="", ncec_ec="", upnc="", upnc_tb="") %>%
+         ncec="", ncec_ec="", upnc="", upnc_tb="", pcr_nc_typhi="", pcr_nc_paratyphi="") %>%
   select(c("col_id", "form", "date", "lat", "long", "sample_index", "sample_type", "sample_ward", "sample_hood",
            "mf_date", "mf_index", "mf_type", "mf_ward", "mf_hood",
            "mst_date", "mst_index", "mst_type", "mst_ward", "mst_hood",
@@ -670,7 +711,7 @@ es <- raw_2.4 %>%
            "enr_date", "enr_index", "enr_type", "enr_ward", "enr_hood",
            "fb", "fb_ec", "fb_up",
            "fb_pcr", "fb_typhi_pos", "fb_typhi_pres", "fb_paratyphi_pos", "fb_paratyphi_pres",
-           "ncec", "ncec_ec", "upnc", "upnc_tb"))
+           "ncec", "ncec_ec", "upnc", "upnc_tb", "pcr_nc_typhi", "pcr_nc_paratyphi"))
 
 for(i in 1:nrow(es)){
   #MF
@@ -791,6 +832,20 @@ for(i in 1:nrow(es)){
                             isTRUE(grepl("not|no", raw_3.5$lab_notes[which(raw_3.5$lab_id %in% es$upnc[[i]])], ignore.case=TRUE)),
                           NA,
                           "Turbid")
+  
+  
+  
+  es$pcr_nc_typhi[i] <- ifelse(is_empty(raw_3.4$lab_id[which(es$pcr_date[i]==as.character(as.Date(raw_3.4$lab_pcr_ty_date)) & 
+                                                               grepl("^EC", raw_3.4$lab_id)==TRUE)]),
+                               NA,
+                               strsplit(str_c(raw_3.4$lab_id[which(es$pcr_date[i]==as.character(as.Date(raw_3.4$lab_pcr_ty_date)) & 
+                                                                     grepl("^EC", raw_3.4$lab_id)==TRUE)], sep=", ", collapse=", "), ", "))
+  
+  es$pcr_nc_paratyphi[i] <- ifelse(is_empty(raw_3.4$lab_id[which(es$pcr_date[i]==as.character(as.Date(raw_3.4$lab_pcr_para_date)) & 
+                                                                   grepl("^EC", raw_3.4$lab_id)==TRUE)]),
+                                   NA,
+                                   strsplit(str_c(raw_3.4$lab_id[which(es$pcr_date[i]==as.character(as.Date(raw_3.4$lab_pcr_para_date)) & 
+                                                                         grepl("^EC", raw_3.4$lab_id)==TRUE)], sep=", ", collapse=", "), ", "))
   
   if (i==1) message("ES Final")
   progress(value=(((i-1)/nrow(es))*100), progress.bar=TRUE)

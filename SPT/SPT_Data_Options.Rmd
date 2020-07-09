@@ -28,7 +28,7 @@ getPalette = colorRampPalette(c("#5F4690", "#1D6996", "#38A6A5","#0F8554","#73AF
 colScale2 <- scale_fill_manual(values=getPalette(colourCount))
 
 
-load("spt_final.rda")
+load("spt1_final_2020-07-06.rda")
 spt1_final <- spt1_final %>%
   mutate(sample_type = ifelse(sample_type==1, "Open Drain",
                             ifelse(sample_type==2, "Raw Produce",
@@ -43,14 +43,14 @@ spt1_final <- spt1_final %>%
                             "??"))))))))))) %>% filter(date >= "2019-09-06")
 
 
-load("es_final.rda")
+load("es1_final_2020-07-06.rda")
 es1_final <- es1_final %>%  mutate(sample_type = ifelse(sample_type==11, ifelse(grepl("PLC", col_id),"Pooled Latrine Case", "Pooled Latrine"),
                             ifelse(sample_type==12, "Moore Swab",
                             ifelse(sample_type==16, "Pumping Station - UF",
                             ifelse(sample_type==99, "Field Blank", "??"))))) %>% 
   filter(date >= "2019-09-06", col_id %!in% c("UF1005", "UF1006", "UF1007"))
 
-load("so_final.rda")
+load("so_final_2020-07-06.rda")
 so_final <- so_final %>% mutate(sample_type = ifelse(sample_type_so==141, "Cutting /Grinding Surface (FPa)",
                             ifelse(sample_type_so==142, "Storage/Preparation Bowl (FPb)",
                             ifelse(sample_type_so==143, "Food Preparation Area (FPc)",
@@ -61,7 +61,7 @@ so_final <- so_final %>% mutate(sample_type = ifelse(sample_type_so==141, "Cutti
                                                     "??")))))))) %>% filter(date >= "2019-09-06")
 
 
-raw_3.1 <- read_csv("data/clean_3.1_2020-06-09.csv")
+raw_3.1 <- read_csv("data/clean_3.1_2020-07-06.csv")
 
 
 fb_sample_match <- raw_3.1 %>% filter(lab_sample_type==99) %>% 
