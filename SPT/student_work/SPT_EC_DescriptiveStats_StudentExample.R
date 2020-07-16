@@ -1,4 +1,10 @@
 library(ggridges)
+library(tidyverse)
+
+#Change these to the directory with the dataframes
+load("~/Desktop/SaniPath/SPT/es1_final_2020-07-06.rda")
+load("~/Desktop/SaniPath/SPT/spt1_final_2020-07-06.rda")
+load("~/Desktop/SaniPath/SPT/so_final_2020-07-06.rda")
 
 #### ES Plots ####
 es1_final %>% 

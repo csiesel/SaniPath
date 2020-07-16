@@ -42,9 +42,9 @@ es_with_cleanfb_ec_pcr <- es1_final %>% filter(col_id %!in% c(es_no_fb, es_ec_fb
 
 
 
-
+#Filtering by date of good data, sample type for moore swab, and pengbo only wants ps_id 4, 5, 6
 mo_data <- es_with_cleanfb_ec_pcr %>% 
-  filter(sample_type==12, date >= "2019-09-06")
+  filter(sample_type==12, date >= "2019-09-06", ps_id %in% c(4,5,6))
 
 mo_pcr_table <- mo_data %>% 
   group_by(ps_id) %>% 
@@ -59,7 +59,10 @@ mo_pcr_table <- mo_pcr_table %>%
          "Typhi Positive Count"=typhi_pos,
          "Paratyphi Positive Count"=para_pos) %>%
   select(c("Pumping Station ID", "Number of Samples", "Typhi Positive Count", "Typhi Positive (%)",
-           "Paratyphi Positive Count", "Paratyphi Positive (%)"))
+           "Paratyphi Positive Count", "Paratyphi Positive (%)")) %>%
+  mutate("Pumping Station ID" = ifelse(`Pumping Station ID`==4, "Palmer Bridge PS",
+                                       ifelse(`Pumping Station ID`==5, "Ambedkar Bridge PS",
+                                              ifelse(`Pumping Station ID`==6, "Topsia PS (Old)", NA))))
 
 ```
 

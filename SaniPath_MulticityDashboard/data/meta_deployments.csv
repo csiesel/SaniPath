@@ -10,5 +10,5 @@ id,country,code,city,citylabel,year,month,date,lat,long,n_neighb,lab_idexx,lab_m
 9,Uganda,UGA,Kampala,Kampala 18,2018,10,10/1/18,0.347596,32.58252,5,0,1,1,1,1,1,1
 10,USA,USA,Atlanta,Atlanta 16,2016,11,11/1/16,33.753746,-84.38633,1,1,0,1,1,1,0,0
 11,India,IND,Vellore,Vellore 14,2014,2,2/1/14,12.934968,79.146881,2,0,1,1,1,1,1,1
-12,Senegal,SEN,Dakar,Dakar 19,2019,11,11/1/19,,,5,0,1,1,1,1,1,1
+12,Senegal,SEN,Dakar,Dakar 19,2019,11,11/1/19,14.716677,-17.467686,5,0,1,1,1,1,1,1
 13,Zambia,ZMB,Lusaka,Lusaka 19,2019,10,10/1/19,-15.40669,28.28713,3,1,0,1,1,1,1,1
